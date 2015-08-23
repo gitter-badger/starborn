@@ -53,6 +53,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\starborn\constants.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
   </ItemGroup>

@@ -15,27 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <SFML/Graphics.hpp>
-
-#include <Thor/Input.hpp>
-
-#include <starborn/constants.hpp>
-
 namespace ss
 {
-	class Starborn
-	{
-		private:
-			sf::RenderWindow window;
-
-			thor::ActionMap<std::string> actions;
-			thor::ActionMap<std::string>::CallbackSystem callbacks;
-
-			void on_exit();
-
-		public:
-			Starborn();
-
-			void run();
-	};
+	#define ACTION_EXIT	"exit"
 }

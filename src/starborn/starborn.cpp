@@ -22,28 +22,22 @@ ss::Starborn::Starborn()
 {
 	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
 	this->window.setVerticalSyncEnabled(true);
+
+	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed) || thor::Action(sf::Keyboard::Escape);
+	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
+}
+
+void ss::Starborn::on_exit()
+{
+	this->window.close();
 }
 
 void ss::Starborn::run()
 {
-	sf::Event event;
-
 	while(this->window.isOpen())
 	{
-
-		while(this->window.pollEvent(event))
-		{
-			switch(event.type)
-			{
-				case sf::Event::Closed:
-					this->window.close();
-
-					break;
-
-				default:
-					break;
-			}
-		}
+		this->actions.update(this->window);
+		this->actions.invokeCallbacks(this->callbacks, nullptr);
 
 		this->window.clear();
 		this->window.display();
