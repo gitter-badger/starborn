@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\constants">
+      <UniqueIdentifier>{499aca94-842c-4498-80af-49d81a64c6bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\entities">
+      <UniqueIdentifier>{eb449fd7-ce30-4be0-9abd-ae68b2475426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\entities">
+      <UniqueIdentifier>{665281f8-376a-4244-b241-421561a06659}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\version.hpp">
@@ -21,8 +30,26 @@
     <ClInclude Include="..\..\src\starborn\starborn.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\starborn\constants.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\src\starborn\constants\actions.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\settings.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\states.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\entities\state.hpp">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\assets.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp">
+      <Filter>Header Files\constants</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +63,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\starborn\main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\starborn\entities\state.cpp">
+      <Filter>Source Files\entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

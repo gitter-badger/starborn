@@ -17,5 +17,8 @@
 
 namespace ss
 {
-	#define ACTION_EXIT	"exit"
+	namespace constants
+	{
+		#define SETTING_ZOOM	3
+	}
 }

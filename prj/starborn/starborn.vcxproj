@@ -42,6 +42,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <DisableSpecificWarnings>4458</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <OptimizeReferences>true</OptimizeReferences>
@@ -51,9 +52,18 @@
       <AdditionalDependencies>advapi32.lib;gdi32.lib;jpeg.lib;opengl32.lib;sfml-graphics-s.lib;sfml-system-s.lib;sfml-window-s.lib;thor-s.lib;user32.lib;winmm.lib</AdditionalDependencies>
       <GenerateDebugInformation>No</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\..\assets ..\..\bin\assets /I /S /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\starborn\constants.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\assets.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\settings.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\states.hpp" />
+    <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp" />
+    <ClInclude Include="..\..\src\starborn\entities\state.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
   </ItemGroup>
@@ -61,6 +71,7 @@
     <ResourceCompile Include="..\..\src\starborn\starborn.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\starborn\entities\state.cpp" />
     <ClCompile Include="..\..\src\starborn\main.cpp" />
     <ClCompile Include="..\..\src\starborn\starborn.cpp" />
   </ItemGroup>

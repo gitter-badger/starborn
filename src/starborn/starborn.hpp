@@ -17,19 +17,33 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <Thor/Animations.hpp>
 #include <Thor/Input.hpp>
+#include <Thor/Resources.hpp>
 
-#include <starborn/constants.hpp>
+#include <starborn/constants/actions.hpp>
+#include <starborn/constants/assets.hpp>
+#include <starborn/constants/drawable_types.hpp>
+#include <starborn/constants/settings.hpp>
+#include <starborn/constants/states.hpp>
+
+#include <starborn/entities/animated_sprite.hpp>
+#include <starborn/entities/state.hpp>
 
 namespace ss
 {
 	class Starborn
 	{
 		private:
+			entities::State state;
+
 			sf::RenderWindow window;
+			sf::View view;
 
 			thor::ActionMap<std::string> actions;
 			thor::ActionMap<std::string>::CallbackSystem callbacks;
+
+			thor::ResourceHolder<sf::Texture, std::string> assets;
 
 			void on_exit();
 
