@@ -23,6 +23,7 @@ namespace ss
 		{
 			sf::Drawable *drawable;
 
+			std::string animation;
 			std::string name;
 			std::string type;
 		};
@@ -52,7 +53,7 @@ namespace ss
 				std::string &get_state();
 				vectors::Drawables &get_drawables();
 
-				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type);
+				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation = "");
 				void switch_state(std::string state);
 				void update(sf::Time &last_frame_time, sf::RenderWindow &window);
 		};

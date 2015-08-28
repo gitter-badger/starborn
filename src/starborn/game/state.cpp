@@ -32,15 +32,16 @@ std::string &ss::game::State::get_state()
 	return this->state;
 }
 
-void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type)
+void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation)
 {
-	structs::Drawable drawable_struct;
+	structs::Drawable new_drawable;
 
-	drawable_struct.drawable = drawable;
-	drawable_struct.name = name;
-	drawable_struct.type = type;
+	new_drawable.animation = animation;
+	new_drawable.drawable = drawable;
+	new_drawable.name = name;
+	new_drawable.type = type;
 
-	this->drawables[state].push_back(drawable_struct);
+	this->drawables[state].push_back(new_drawable);
 }
 
 void ss::game::State::switch_state(std::string state)
@@ -55,11 +56,8 @@ void ss::game::State::switch_state(std::string state)
 
 	for(auto &&drawable : this->drawables[this->state])
 	{
-		if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) && ((drawable.name == SPRITE_SNAILSOFT) || (drawable.name == SPRITE_STARBORN_HORIZONTAL) || (drawable.name == SPRITE_STARBORN_VERTICAL)))
-		{
-			if((this->state == STATE_SNAILSOFT_LOGO) || (this->state == STATE_STARBORN_LOGO))
-				reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation("fade");
-		}
+		if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
+			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(drawable.animation);
 	}
 }
 
@@ -74,8 +72,6 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::RenderWindow &window
 
 			if((this->state == STATE_SNAILSOFT_LOGO) && (drawable.name == SPRITE_SNAILSOFT) && !reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->isPlayingAnimation())
 				this->switch_state(STATE_STARBORN_LOGO);
-
-					break;
 
 			if((this->state == STATE_STARBORN_LOGO) && (drawable.name == SPRITE_STARBORN_VERTICAL) && !reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->isPlayingAnimation())
 				this->switch_state(STATE_MAIN_MENU);
