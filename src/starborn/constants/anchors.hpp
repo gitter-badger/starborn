@@ -17,19 +17,16 @@
 
 namespace ss
 {
-	namespace entities
+	namespace constants
 	{
-		class Sprite : public sf::Sprite
-		{
-			private:
-				bool dynamic_position;
-
-			public:
-				bool &has_dynamic_position();
-
-				Sprite();
-
-				void set_position(std::string anchor, float x, float y);
-		};
+		#define ANCHOR_BOTTOM		"bottom"
+		#define ANCHOR_BOTTOM_LEFT	"bottom_left"
+		#define ANCHOR_BOTTOM_RIGHT	"bottom_right"
+		#define ANCHOR_CENTER		"center"
+		#define ANCHOR_LEFT			"left"
+		#define ANCHOR_RIGHT		"right"
+		#define ANCHOR_TOP			"top"
+		#define ANCHOR_TOP_LEFT		"top_left"
+		#define ANCHOR_TOP_RIGHT	"top_right"
 	}
 }

@@ -25,6 +25,7 @@
 #include <Thor/Resources.hpp>
 
 #include <starborn/constants/actions.hpp>
+#include <starborn/constants/anchors.hpp>
 #include <starborn/constants/animation_types.hpp>
 #include <starborn/constants/drawable_types.hpp>
 #include <starborn/constants/settings.hpp>

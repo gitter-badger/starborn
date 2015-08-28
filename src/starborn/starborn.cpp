@@ -78,7 +78,7 @@ void ss::Starborn::load_sprite(std::string filename)
 
 		reinterpret_cast<entities::Sprite *>(new_sprite)->has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
 		reinterpret_cast<entities::Sprite *>(new_sprite)->setTexture(this->assets.acquire(sprite->value["texture"].GetString(), thor::Resources::fromFile<sf::Texture>(sprite->value["texture"].GetString()), thor::Resources::Reuse));
-		reinterpret_cast<entities::Sprite *>(new_sprite)->setPosition(static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (reinterpret_cast<entities::Sprite *>(new_sprite)->getTexture()->getSize().x / 2)), static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (reinterpret_cast<entities::Sprite *>(new_sprite)->getTexture()->getSize().y / 2)));
+		reinterpret_cast<entities::Sprite *>(new_sprite)->set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble());
 
 		this->state.attach_drawable(sprite->value["state"].GetString(), sprite->name.GetString(), reinterpret_cast<sf::Drawable *>(new_sprite), strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT) ? DRAWABLE_TYPE_ANIMATED_SPRITE : DRAWABLE_TYPE_SPRITE, strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT) ? sprite->value["animation"].GetString() : "");
 	}

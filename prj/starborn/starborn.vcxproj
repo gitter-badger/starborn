@@ -58,6 +58,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\anchors.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\animation_types.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\sprites.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp" />
