@@ -15,11 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace ss
+#include <starborn/starborn.hpp>
+
+bool &ss::entities::Sprite::has_dynamic_position()
 {
-	namespace constants
-	{
-		#define DRAWABLE_TYPE_ANIMATED_SPRITE	"animated_sprite"
-		#define DRAWABLE_TYPE_SPRITE			"sprite"
-	}
+	return this->dynamic_position;
+}
+
+ss::entities::Sprite::Sprite()
+{
+	this->dynamic_position = false;
 }

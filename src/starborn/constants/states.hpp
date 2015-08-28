@@ -19,13 +19,11 @@ namespace ss
 {
 	namespace constants
 	{
-		enum State
-		{
-			STATE_MAIN_MENU,
-			STATE_PAUSED,
-			STATE_RUNNING,
-			STATE_SNAILSOFT_LOGO,
-			STATE_STARBORN_LOGO
-		};
+		#define STATE_DEFAULT			"default"
+		#define STATE_MAIN_MENU			"main_menu"
+		#define STATE_PAUSED			"paused"
+		#define STATE_RUNNING			"running"
+		#define STATE_SNAILSOFT_LOGO	"snailsoft_logo"
+		#define STATE_STARBORN_LOGO		"starborn_logo"
 	}
 }

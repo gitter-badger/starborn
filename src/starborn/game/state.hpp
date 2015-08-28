@@ -17,9 +17,44 @@
 
 namespace ss
 {
-	namespace constants
+	namespace structs
 	{
-		#define DRAWABLE_TYPE_ANIMATED_SPRITE	"animated_sprite"
-		#define DRAWABLE_TYPE_SPRITE			"sprite"
+		struct Drawable
+		{
+			sf::Drawable *drawable;
+
+			std::string name;
+			std::string type;
+		};
+	};
+
+	namespace vectors
+	{
+		typedef std::vector<structs::Drawable> Drawables;
+	};
+
+	namespace maps
+	{
+		typedef std::map<std::string, vectors::Drawables> Drawables;
+	};
+
+	namespace game
+	{
+		class State
+		{
+			private:
+				maps::Drawables drawables;
+				std::string state;
+
+			public:
+				State();
+
+				std::string &get_state();
+				vectors::Drawables &get_drawables();
+
+				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type);
+				void switch_state(std::string state);
+				void update(sf::Time &last_frame_time, sf::RenderWindow &window);
+		};
 	}
 }

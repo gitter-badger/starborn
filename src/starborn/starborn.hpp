@@ -15,6 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <rapidjson/document.h>
+#include <rapidjson/filereadstream.h>
+
 #include <SFML/Graphics.hpp>
 
 #include <Thor/Animations.hpp>
@@ -22,20 +25,41 @@
 #include <Thor/Resources.hpp>
 
 #include <starborn/constants/actions.hpp>
-#include <starborn/constants/assets.hpp>
+#include <starborn/constants/animation_types.hpp>
 #include <starborn/constants/drawable_types.hpp>
 #include <starborn/constants/settings.hpp>
+#include <starborn/constants/sprites.hpp>
+#include <starborn/constants/sprite_types.hpp>
 #include <starborn/constants/states.hpp>
 
+#include <starborn/entities/sprite.hpp>
 #include <starborn/entities/animated_sprite.hpp>
-#include <starborn/entities/state.hpp>
+
+#include <starborn/game/state.hpp>
+
+#include <starborn/utilities/json.hpp>
 
 namespace ss
 {
+	namespace structs
+	{
+		struct Animation
+		{
+			sf::Time duration;
+			std::function<void(sf::Sprite &, float)> animation;
+		};
+	};
+
+	namespace maps
+	{
+		typedef std::map<std::string, structs::Animation> Animations;
+	};
+
 	class Starborn
 	{
 		private:
-			entities::State state;
+			game::State state;
+			maps::Animations animations;
 
 			sf::RenderWindow window;
 			sf::View view;
@@ -44,6 +68,12 @@ namespace ss
 			thor::ActionMap<std::string>::CallbackSystem callbacks;
 
 			thor::ResourceHolder<sf::Texture, std::string> assets;
+
+			void load_animation(std::string filename);
+			void load_animations();
+
+			void load_sprite(std::string filename);
+			void load_sprites();
 
 			void on_exit();
 

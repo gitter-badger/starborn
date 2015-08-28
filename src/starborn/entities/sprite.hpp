@@ -17,11 +17,17 @@
 
 namespace ss
 {
-	namespace constants
+	namespace entities
 	{
-		#define ASSET_SNAILSOFT				"snailsoft"
-		#define ASSET_SNAILSOFT_FILENAME	"assets/textures/general/snailsoft.png"
-		#define ASSET_STARBORN				"starborn"
-		#define ASSET_STARBORN_FILENAME		"assets/textures/general/starborn_vertical.png"
+		class Sprite : public sf::Sprite
+		{
+			private:
+				bool dynamic_position;
+
+			public:
+				bool &has_dynamic_position();
+
+				Sprite();
+		};
 	}
 }

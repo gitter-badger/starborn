@@ -36,21 +36,57 @@ ss::Starborn::Starborn()
 	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed) || thor::Action(sf::Keyboard::Escape);
 	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
 
-	auto attach_logo = [this](constants::State state, std::string name, std::string filename)
+	this->load_animations();
+	this->load_sprites();
+
+	this->state.switch_state(STATE_SNAILSOFT_LOGO);
+}
+
+void ss::Starborn::load_animation(std::string filename)
+{
+	utilities::Json json(filename);
+
+	for(auto animation = json.get_document().MemberBegin(); animation != json.get_document().MemberEnd(); ++animation)
 	{
-		auto *logo = new entities::AnimatedSprite();
+		if(!strcmp(animation->value["type"].GetString(), ANIMATION_TYPE_FADE))
+			this->animations[animation->name.GetString()].animation = thor::FadeAnimation(animation->value["inRatio"].GetDouble(), animation->value["outRatio"].GetDouble());
 
-		logo->addAnimation("fade", thor::FadeAnimation(0.25f, 0.25f), sf::seconds(4.0f));
-		logo->setTexture(this->assets.acquire(name, thor::Resources::fromFile<sf::Texture>(filename), thor::Resources::Reuse));
-		logo->setPosition(static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (logo->getTexture()->getSize().x / 2)), static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (logo->getTexture()->getSize().y / 2)));
+		this->animations[animation->name.GetString()].duration = sf::seconds(animation->value["duration"].GetDouble());
+	}
+}
 
-		this->state.attach_drawable(state, ASSET_SNAILSOFT, logo, constants::DRAWABLE_TYPE_ANIMATED_SPRITE);
-	};
+void ss::Starborn::load_animations()
+{
+	this->load_animation("assets/animations/general.json");
+}
 
-	attach_logo(constants::STATE_SNAILSOFT_LOGO, ASSET_SNAILSOFT, ASSET_SNAILSOFT_FILENAME);
-	attach_logo(constants::STATE_STARBORN_LOGO, ASSET_STARBORN, ASSET_STARBORN_FILENAME);
+void ss::Starborn::load_sprite(std::string filename)
+{
+	utilities::Json json(filename);
 
-	this->state.switch_state(constants::STATE_SNAILSOFT_LOGO);
+	for(auto sprite = json.get_document().MemberBegin(); sprite != json.get_document().MemberEnd(); ++sprite)
+	{
+		void *new_sprite = nullptr;
+
+		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED))
+		{
+			new_sprite = new entities::AnimatedSprite();
+			reinterpret_cast<entities::AnimatedSprite *>(new_sprite)->addAnimation(sprite->value["animation"].GetString(), this->animations[sprite->value["animation"].GetString()].animation, this->animations[sprite->value["animation"].GetString()].duration);
+		}
+		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT))
+			new_sprite = new entities::Sprite();
+
+		reinterpret_cast<entities::Sprite *>(new_sprite)->has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
+		reinterpret_cast<entities::Sprite *>(new_sprite)->setTexture(this->assets.acquire(sprite->value["texture"].GetString(), thor::Resources::fromFile<sf::Texture>(sprite->value["texture"].GetString()), thor::Resources::Reuse));
+		reinterpret_cast<entities::Sprite *>(new_sprite)->setPosition(static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (reinterpret_cast<entities::Sprite *>(new_sprite)->getTexture()->getSize().x / 2)), static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (reinterpret_cast<entities::Sprite *>(new_sprite)->getTexture()->getSize().y / 2)));
+
+		this->state.attach_drawable(sprite->value["state"].GetString(), sprite->name.GetString(), reinterpret_cast<sf::Drawable *>(new_sprite), strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT) ? DRAWABLE_TYPE_ANIMATED_SPRITE : DRAWABLE_TYPE_SPRITE);
+	}
+}
+
+void ss::Starborn::load_sprites()
+{
+	this->load_sprite("assets/sprites/general.json");
 }
 
 void ss::Starborn::on_exit()

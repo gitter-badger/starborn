@@ -17,9 +17,20 @@
 
 namespace ss
 {
-	namespace constants
+	namespace utilities
 	{
-		#define DRAWABLE_TYPE_ANIMATED_SPRITE	"animated_sprite"
-		#define DRAWABLE_TYPE_SPRITE			"sprite"
+		class Json
+		{
+			private:
+				rapidjson::Document document;
+
+			public:
+				Json() = default;
+				Json(std::string filename);
+
+				rapidjson::Document &get_document();
+
+				void parse(std::string filename);
+		};
 	}
 }

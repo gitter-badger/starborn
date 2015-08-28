@@ -55,7 +55,7 @@ void ss::entities::State::switch_state(constants::State state)
 
 	for(auto &&drawable : this->drawables[this->state])
 	{
-		if((drawable.type == constants::DRAWABLE_TYPE_ANIMATED_SPRITE) && ((drawable.name == ASSET_SNAILSOFT) || (drawable.name == ASSET_STARBORN)))
+		if((drawable.type == constants::DRAWABLE_TYPE_ANIMATED_SPRITE) && ((drawable.name == ASSET_SNAILSOFT) || (drawable.name == ASSET_STARBORN_HORIZONTAL) || (drawable.name == ASSET_STARBORN_VERTICAL)))
 		{
 			switch(this->state)
 			{
@@ -90,7 +90,7 @@ void ss::entities::State::update(sf::Time &last_frame_time, sf::RenderWindow &wi
 					break;
 
 				case constants::STATE_STARBORN_LOGO:
-					if((drawable.name == ASSET_STARBORN) && !reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->isPlayingAnimation())
+					if((drawable.name == ASSET_STARBORN_VERTICAL) && !reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->isPlayingAnimation())
 						this->switch_state(constants::STATE_MAIN_MENU);
 
 					break;

@@ -34,7 +34,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>SFML_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;SFML_STATIC</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <AdditionalIncludeDirectories>$(SolutionDir)\src</AdditionalIncludeDirectories>
@@ -58,25 +58,35 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\assets.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\animation_types.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\sprites.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\settings.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\sprite_types.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\states.hpp" />
     <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp" />
-    <ClInclude Include="..\..\src\starborn\entities\state.hpp" />
+    <ClInclude Include="..\..\src\starborn\entities\sprite.hpp" />
+    <ClInclude Include="..\..\src\starborn\game\state.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
+    <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\starborn\entities\state.cpp" />
+    <ClCompile Include="..\..\src\starborn\entities\sprite.cpp" />
+    <ClCompile Include="..\..\src\starborn\game\state.cpp" />
     <ClCompile Include="..\..\src\starborn\main.cpp" />
     <ClCompile Include="..\..\src\starborn\starborn.cpp" />
+    <ClCompile Include="..\..\src\starborn\utilities\json.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\src\starborn\starborn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\assets\animations\general.json" />
+    <None Include="..\..\assets\sprites\general.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

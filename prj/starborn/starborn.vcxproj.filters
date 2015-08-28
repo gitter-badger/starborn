@@ -19,8 +19,29 @@
     <Filter Include="Header Files\entities">
       <UniqueIdentifier>{eb449fd7-ce30-4be0-9abd-ae68b2475426}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\entities">
+    <Filter Include="Resource Files\Assets">
+      <UniqueIdentifier>{1bf3e8df-a647-4c3b-8dec-366eaebb2708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game">
+      <UniqueIdentifier>{8d3e8128-308f-40bc-85fc-e27f42831a46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game">
       <UniqueIdentifier>{665281f8-376a-4244-b241-421561a06659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utilities">
+      <UniqueIdentifier>{d19790f2-da09-4eac-9a5b-9c64a9e8c7cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utilities">
+      <UniqueIdentifier>{a607f6fd-2623-4f61-bb5f-2b463bb5bfdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Assets\sprites">
+      <UniqueIdentifier>{8e72683e-1a65-4674-b6e0-42ce7ba402cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Assets\animations">
+      <UniqueIdentifier>{cb3a3797-ff0c-4df0-ad58-96f76c8fef27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\entities">
+      <UniqueIdentifier>{75de7bef-6372-4535-bc72-6808d71ac2f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,16 +60,28 @@
     <ClInclude Include="..\..\src\starborn\constants\states.hpp">
       <Filter>Header Files\constants</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\starborn\entities\state.hpp">
-      <Filter>Header Files\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\starborn\constants\assets.hpp">
-      <Filter>Header Files\constants</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp">
       <Filter>Header Files\entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\game\state.hpp">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\utilities\json.hpp">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\animation_types.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\sprite_types.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\entities\sprite.hpp">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\sprites.hpp">
       <Filter>Header Files\constants</Filter>
     </ClInclude>
   </ItemGroup>
@@ -64,7 +97,13 @@
     <ClCompile Include="..\..\src\starborn\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\starborn\entities\state.cpp">
+    <ClCompile Include="..\..\src\starborn\game\state.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\starborn\utilities\json.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\starborn\entities\sprite.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,5 +111,13 @@
     <Image Include="..\..\src\starborn\starborn.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\assets\animations\general.json">
+      <Filter>Resource Files\Assets\animations</Filter>
+    </None>
+    <None Include="..\..\assets\sprites\general.json">
+      <Filter>Resource Files\Assets\sprites</Filter>
+    </None>
   </ItemGroup>
 </Project>

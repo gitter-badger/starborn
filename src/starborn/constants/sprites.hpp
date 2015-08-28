@@ -19,7 +19,8 @@ namespace ss
 {
 	namespace constants
 	{
-		#define DRAWABLE_TYPE_ANIMATED_SPRITE	"animated_sprite"
-		#define DRAWABLE_TYPE_SPRITE			"sprite"
+		#define SPRITE_SNAILSOFT			"snailsoft"
+		#define SPRITE_STARBORN_HORIZONTAL	"starborn_horizontal"
+		#define SPRITE_STARBORN_VERTICAL	"starborn_vertical"
 	}
 }

@@ -19,8 +19,6 @@ namespace ss
 {
 	namespace entities
 	{
-		class AnimatedSprite : public sf::Sprite, public thor::Animator<sf::Sprite, std::string>
-		{
-		};
+		class AnimatedSprite : public Sprite, public thor::Animator<sf::Sprite, std::string> {};
 	}
 }

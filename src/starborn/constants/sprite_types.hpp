@@ -19,7 +19,7 @@ namespace ss
 {
 	namespace constants
 	{
-		#define DRAWABLE_TYPE_ANIMATED_SPRITE	"animated_sprite"
-		#define DRAWABLE_TYPE_SPRITE			"sprite"
+		#define SPRITE_TYPE_ANIMATED	"animated"
+		#define SPRITE_TYPE_DEFAULT		"default"
 	}
 }
