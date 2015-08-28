@@ -19,14 +19,18 @@ namespace ss
 {
 	namespace constants
 	{
-		#define ANCHOR_BOTTOM		"bottom"
-		#define ANCHOR_BOTTOM_LEFT	"bottom_left"
-		#define ANCHOR_BOTTOM_RIGHT	"bottom_right"
-		#define ANCHOR_CENTER		"center"
-		#define ANCHOR_LEFT			"left"
-		#define ANCHOR_RIGHT		"right"
-		#define ANCHOR_TOP			"top"
-		#define ANCHOR_TOP_LEFT		"top_left"
-		#define ANCHOR_TOP_RIGHT	"top_right"
+		#define ANCHOR_BOTTOM			"bottom"
+		#define ANCHOR_BOTTOM_LEFT		"bottom_left"
+		#define ANCHOR_BOTTOM_RIGHT		"bottom_right"
+		#define ANCHOR_CENTER			"center"
+		#define ANCHOR_CENTER_BOTTOM	"center_bottom"
+		#define ANCHOR_CENTER_LEFT		"center_left"
+		#define ANCHOR_CENTER_RIGHT		"center_right"
+		#define ANCHOR_CENTER_TOP		"center_top"
+		#define ANCHOR_LEFT				"left"
+		#define ANCHOR_RIGHT			"right"
+		#define ANCHOR_TOP				"top"
+		#define ANCHOR_TOP_LEFT			"top_left"
+		#define ANCHOR_TOP_RIGHT		"top_right"
 	}
 }

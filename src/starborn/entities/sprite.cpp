@@ -52,6 +52,26 @@ void ss::entities::Sprite::set_position(std::string anchor, float x, float y)
 		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
 		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
 	}
+	else if(anchor == ANCHOR_CENTER_BOTTOM)
+	{
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
+		new_y += static_cast<float>((((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) * 3.0f) - (this->getTexture()->getSize().y / 2)) + y;
+	}
+	else if(anchor == ANCHOR_CENTER_LEFT)
+	{
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+	}
+	else if(anchor == ANCHOR_CENTER_RIGHT)
+	{
+		new_x += static_cast<float>((((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) * 3.0f) - (this->getTexture()->getSize().x / 2)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+	}
+	else if(anchor == ANCHOR_CENTER_TOP)
+	{
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+	}
 	else if(anchor == ANCHOR_LEFT)
 	{
 		new_x += x;
