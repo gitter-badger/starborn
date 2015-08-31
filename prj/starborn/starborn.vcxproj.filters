@@ -43,6 +43,9 @@
     <Filter Include="Source Files\entities">
       <UniqueIdentifier>{75de7bef-6372-4535-bc72-6808d71ac2f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Assets\shaders">
+      <UniqueIdentifier>{0abb9f58-cf9c-4392-8f37-3b6aae216ec4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\version.hpp">
@@ -121,6 +124,15 @@
     </None>
     <None Include="..\..\assets\sprites\general.json">
       <Filter>Resource Files\Assets\sprites</Filter>
+    </None>
+    <None Include="..\..\assets\shaders\general.json">
+      <Filter>Resource Files\Assets\shaders</Filter>
+    </None>
+    <None Include="..\..\assets\shaders\pixels.frag">
+      <Filter>Resource Files\Assets\shaders</Filter>
+    </None>
+    <None Include="..\..\assets\shaders\starfield.frag">
+      <Filter>Resource Files\Assets\shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

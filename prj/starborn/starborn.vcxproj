@@ -87,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\animations\general.json" />
+    <None Include="..\..\assets\shaders\general.json" />
+    <None Include="..\..\assets\shaders\pixels.frag" />
+    <None Include="..\..\assets\shaders\starfield.frag" />
     <None Include="..\..\assets\sprites\general.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

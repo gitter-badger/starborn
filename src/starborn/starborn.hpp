@@ -53,6 +53,7 @@ namespace ss
 
 	namespace maps
 	{
+		typedef std::map<std::string, sf::Shader> Shaders;
 		typedef std::map<std::string, structs::Animation> Animations;
 	};
 
@@ -60,7 +61,9 @@ namespace ss
 	{
 		private:
 			game::State state;
+
 			maps::Animations animations;
+			maps::Shaders shaders;
 
 			sf::RenderWindow window;
 			sf::View view;
@@ -72,6 +75,9 @@ namespace ss
 
 			void load_animation(std::string filename);
 			void load_animations();
+
+			void load_shader(std::string filename);
+			void load_shaders();
 
 			void load_sprite(std::string filename);
 			void load_sprites();

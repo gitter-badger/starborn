@@ -32,13 +32,14 @@ std::string &ss::game::State::get_state()
 	return this->state;
 }
 
-void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation)
+void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation, sf::Shader *shader)
 {
 	structs::Drawable new_drawable;
 
 	new_drawable.animation = animation;
 	new_drawable.drawable = drawable;
 	new_drawable.name = name;
+	new_drawable.render_states.shader = shader;
 	new_drawable.type = type;
 
 	this->drawables[state].push_back(new_drawable);
@@ -61,7 +62,7 @@ void ss::game::State::switch_state(std::string state)
 	}
 }
 
-void ss::game::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
+void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window)
 {
 	for(auto &&drawable : this->drawables[this->state])
 	{
@@ -77,6 +78,9 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::RenderWindow &window
 				this->switch_state(STATE_MAIN_MENU);
 		}
 
-		window.draw(*drawable.drawable);
+		if(drawable.render_states.shader)
+			const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("time", total_time.asSeconds());
+
+		window.draw(*drawable.drawable, drawable.render_states);
 	}
 }

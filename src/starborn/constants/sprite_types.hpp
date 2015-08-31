@@ -21,5 +21,6 @@ namespace ss
 	{
 		#define SPRITE_TYPE_ANIMATED	"animated"
 		#define SPRITE_TYPE_DEFAULT		"default"
+		#define SPRITE_TYPE_NONE		"none"
 	}
 }
