@@ -83,6 +83,7 @@ namespace ss
 			void load_sprites();
 
 			void on_exit();
+			void on_screenshot();
 
 		public:
 			Starborn();

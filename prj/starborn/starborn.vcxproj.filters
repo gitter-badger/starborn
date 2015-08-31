@@ -112,6 +112,9 @@
     <ClCompile Include="..\..\src\starborn\entities\sprite.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\starborn\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\src\starborn\starborn.ico">

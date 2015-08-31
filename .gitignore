@@ -3,4 +3,5 @@
 
 .vs/*
 bin/*
+ipch/*
 prj/*/obj/*

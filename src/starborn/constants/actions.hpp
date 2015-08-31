@@ -19,6 +19,7 @@ namespace ss
 {
 	namespace constants
 	{
-		#define ACTION_EXIT	"exit"
+		#define ACTION_EXIT			"exit"
+		#define ACTION_SCREENSHOT	"screenshot"
 	}
 }

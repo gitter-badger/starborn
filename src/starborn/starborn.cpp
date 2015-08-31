@@ -34,7 +34,10 @@ ss::Starborn::Starborn()
 	this->window.setView(this->view);
 
 	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed) || thor::Action(sf::Keyboard::Escape);
+	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5);
+
 	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
+	this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
 
 	this->load_animations();
 	this->load_shaders();
@@ -129,6 +132,11 @@ void ss::Starborn::load_sprites()
 void ss::Starborn::on_exit()
 {
 	this->window.close();
+}
+
+void ss::Starborn::on_screenshot()
+{
+	sf::Image(this->window.capture()).saveToFile("screenshot.png");
 }
 
 void ss::Starborn::run()
