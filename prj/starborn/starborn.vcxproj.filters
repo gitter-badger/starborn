@@ -134,5 +134,8 @@
     <None Include="..\..\assets\shaders\starfield.frag">
       <Filter>Resource Files\Assets\shaders</Filter>
     </None>
+    <None Include="..\..\assets\shaders\stars.frag">
+      <Filter>Resource Files\Assets\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
