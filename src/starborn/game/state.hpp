@@ -21,6 +21,8 @@ namespace ss
 	{
 		struct Drawable
 		{
+			bool scale;
+
 			sf::Drawable *drawable;
 			sf::RenderStates render_states;
 
@@ -46,6 +48,10 @@ namespace ss
 		{
 			private:
 				maps::Drawables drawables;
+
+				sf::RenderTexture background;
+				sf::Sprite background_sprite;
+
 				std::string state;
 
 			public:
@@ -54,7 +60,7 @@ namespace ss
 				std::string &get_state();
 				vectors::Drawables &get_drawables();
 
-				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation = "", sf::Shader *shader = nullptr);
+				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation = "", bool scale = false, sf::Shader *shader = nullptr);
 				void switch_state(std::string state);
 				void update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window);
 		};

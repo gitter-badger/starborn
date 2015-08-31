@@ -19,6 +19,7 @@ namespace ss
 {
 	namespace constants
 	{
+		#define DRAWABLE_TYPE_BACKGROUND		"background"
 		#define DRAWABLE_TYPE_ANIMATED_SPRITE	"animated_sprite"
 		#define DRAWABLE_TYPE_SPRITE			"sprite"
 	}

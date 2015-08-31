@@ -19,6 +19,9 @@
 
 ss::game::State::State()
 {
+	this->background.create(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM));
+	this->background.clear(); 
+	
 	this->state = STATE_DEFAULT;
 }
 
@@ -32,7 +35,7 @@ std::string &ss::game::State::get_state()
 	return this->state;
 }
 
-void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation, sf::Shader *shader)
+void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation, bool scale, sf::Shader *shader)
 {
 	structs::Drawable new_drawable;
 
@@ -40,6 +43,7 @@ void ss::game::State::attach_drawable(std::string state, std::string name, sf::D
 	new_drawable.drawable = drawable;
 	new_drawable.name = name;
 	new_drawable.render_states.shader = shader;
+	new_drawable.scale = scale;
 	new_drawable.type = type;
 
 	this->drawables[state].push_back(new_drawable);
@@ -79,8 +83,26 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 		}
 
 		if(drawable.render_states.shader)
-			const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("time", total_time.asSeconds());
+		{
+			if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) || (drawable.type == DRAWABLE_TYPE_SPRITE))
+				const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((reinterpret_cast<entities::Sprite *>(drawable.drawable)->getTexture()->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((reinterpret_cast<entities::Sprite *>(drawable.drawable)->getTexture()->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
+			
+			else if(drawable.type == DRAWABLE_TYPE_BACKGROUND)
+				const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((reinterpret_cast<sf::RectangleShape *>(drawable.drawable)->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((reinterpret_cast<sf::RectangleShape *>(drawable.drawable)->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
 
-		window.draw(*drawable.drawable, drawable.render_states);
+			const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("time", total_time.asSeconds());
+		}
+
+		if(drawable.scale)
+		{
+			this->background.clear();
+			this->background.draw(*drawable.drawable, drawable.render_states);
+			this->background.display();
+
+			this->background_sprite.setTexture(this->background.getTexture());
+			window.draw(this->background_sprite);
+		}
+		else
+			window.draw(*drawable.drawable, drawable.render_states);
 	}
 }

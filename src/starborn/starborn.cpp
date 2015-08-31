@@ -80,10 +80,7 @@ void ss::Starborn::load_shader(std::string filename)
 			this->shaders[shader->name.GetString()].loadFromFile(shader->value["vertex"].GetString(), sf::Shader::Vertex);
 
 		if(shader->value.HasMember("fragment") || shader->value.HasMember("vertex"))
-		{
-			this->shaders[shader->name.GetString()].setParameter("resolution", static_cast<float>(sf::VideoMode::getDesktopMode().width), static_cast<float>(sf::VideoMode::getDesktopMode().height));
 			this->shaders[shader->name.GetString()].setParameter("texture", sf::Shader::CurrentTexture);
-		}
 	}
 }
 
@@ -108,10 +105,10 @@ void ss::Starborn::load_sprite(std::string filename)
 		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT))
 			new_sprite = new entities::Sprite();
 
-		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_NONE))
+		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND))
 		{
 			new_sprite = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
-			reinterpret_cast<sf::RectangleShape *>(new_sprite)->setFillColor(sf::Color::Black);
+			reinterpret_cast<sf::RectangleShape *>(new_sprite)->setFillColor(sf::Color::Transparent);
 		}
 		else
 		{
@@ -120,7 +117,15 @@ void ss::Starborn::load_sprite(std::string filename)
 			reinterpret_cast<entities::Sprite *>(new_sprite)->set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble());
 		}
 
-		this->state.attach_drawable(sprite->value["state"].GetString(), sprite->name.GetString(), reinterpret_cast<sf::Drawable *>(new_sprite), !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? DRAWABLE_TYPE_ANIMATED_SPRITE : DRAWABLE_TYPE_SPRITE, !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["animation"].GetString() : "", sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr);
+		auto drawable_type = SPRITE_TYPE_DEFAULT;
+
+		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED))
+			drawable_type = DRAWABLE_TYPE_ANIMATED_SPRITE;
+
+		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND))
+			drawable_type = DRAWABLE_TYPE_BACKGROUND;
+
+		this->state.attach_drawable(sprite->value["state"].GetString(), sprite->name.GetString(), reinterpret_cast<sf::Drawable *>(new_sprite), drawable_type, !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["animation"].GetString() : "", sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false, sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr);
 	}
 }
 
