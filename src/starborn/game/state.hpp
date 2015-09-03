@@ -54,6 +54,12 @@ namespace ss
 
 				std::string state;
 
+				void on_update_animated_sprite(sf::Time &last_frame_time, structs::Drawable &drawable);
+				void on_update_background(structs::Drawable &drawable);
+				void on_update_sprite(structs::Drawable &drawable);
+
+				void update_shader_parameters(sf::Time &total_time, sf::Shader &shader);
+
 			public:
 				State();
 

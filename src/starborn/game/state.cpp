@@ -49,6 +49,41 @@ void ss::game::State::attach_drawable(std::string state, std::string name, sf::D
 	this->drawables[state].push_back(new_drawable);
 }
 
+void ss::game::State::on_update_animated_sprite(sf::Time &last_frame_time, structs::Drawable &drawable)
+{
+	auto &animated_sprite = *reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable);
+
+	animated_sprite.update(last_frame_time);
+	animated_sprite.animate(animated_sprite);
+
+	if(!animated_sprite.isPlayingAnimation())
+	{
+		if((this->state == STATE_SNAILSOFT_LOGO) && (drawable.name == SPRITE_SNAILSOFT))
+			this->switch_state(STATE_STARBORN_LOGO);
+
+		if((this->state == STATE_STARBORN_LOGO) && (drawable.name == SPRITE_STARBORN_VERTICAL))
+			this->switch_state(STATE_MAIN_MENU);
+	}
+
+	this->on_update_sprite(drawable);
+}
+
+void ss::game::State::on_update_background(structs::Drawable &drawable)
+{
+	auto &background = *reinterpret_cast<sf::RectangleShape *>(drawable.drawable);
+
+	if(drawable.render_states.shader)
+		const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((background.getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((background.getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
+}
+
+void ss::game::State::on_update_sprite(structs::Drawable &drawable)
+{
+	auto &sprite = *reinterpret_cast<entities::Sprite *>(drawable.drawable);
+
+	if(drawable.render_states.shader)
+		const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((sprite.getTexture()->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((sprite.getTexture()->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
+}
+
 void ss::game::State::switch_state(std::string state)
 {
 	for(auto &&drawable : this->drawables[this->state])
@@ -71,27 +106,16 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 	for(auto &&drawable : this->drawables[this->state])
 	{
 		if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-		{
-			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->update(last_frame_time);
-			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->animate(*reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable));
+			this->on_update_animated_sprite(last_frame_time, drawable);
 
-			if((this->state == STATE_SNAILSOFT_LOGO) && (drawable.name == SPRITE_SNAILSOFT) && !reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->isPlayingAnimation())
-				this->switch_state(STATE_STARBORN_LOGO);
+		else if(drawable.type == DRAWABLE_TYPE_BACKGROUND)
+			this->on_update_background(drawable);
 
-			if((this->state == STATE_STARBORN_LOGO) && (drawable.name == SPRITE_STARBORN_VERTICAL) && !reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->isPlayingAnimation())
-				this->switch_state(STATE_MAIN_MENU);
-		}
+		else if(drawable.type == DRAWABLE_TYPE_SPRITE)
+			this->on_update_sprite(drawable);
 
 		if(drawable.render_states.shader)
-		{
-			if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) || (drawable.type == DRAWABLE_TYPE_SPRITE))
-				const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((reinterpret_cast<entities::Sprite *>(drawable.drawable)->getTexture()->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((reinterpret_cast<entities::Sprite *>(drawable.drawable)->getTexture()->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
-			
-			else if(drawable.type == DRAWABLE_TYPE_BACKGROUND)
-				const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((reinterpret_cast<sf::RectangleShape *>(drawable.drawable)->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((reinterpret_cast<sf::RectangleShape *>(drawable.drawable)->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
-
-			const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("time", total_time.asSeconds());
-		}
+			this->update_shader_parameters(total_time, *const_cast<sf::Shader *>(drawable.render_states.shader));
 
 		if(drawable.scale)
 		{
@@ -105,4 +129,9 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 		else
 			window.draw(*drawable.drawable, drawable.render_states);
 	}
+}
+
+void ss::game::State::update_shader_parameters(sf::Time &total_time, sf::Shader &shader)
+{
+	shader.setParameter("time", total_time.asSeconds());
 }
