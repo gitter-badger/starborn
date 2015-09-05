@@ -128,9 +128,6 @@
     <None Include="..\..\assets\sprites\general.json">
       <Filter>Resource Files\Assets\sprites</Filter>
     </None>
-    <None Include="..\..\assets\shaders\general.json">
-      <Filter>Resource Files\Assets\shaders</Filter>
-    </None>
     <None Include="..\..\assets\shaders\pixels.frag">
       <Filter>Resource Files\Assets\shaders</Filter>
     </None>
@@ -138,6 +135,12 @@
       <Filter>Resource Files\Assets\shaders</Filter>
     </None>
     <None Include="..\..\assets\shaders\stars.frag">
+      <Filter>Resource Files\Assets\shaders</Filter>
+    </None>
+    <None Include="..\..\assets\shaders\shadow_border.frag">
+      <Filter>Resource Files\Assets\shaders</Filter>
+    </None>
+    <None Include="..\..\assets\shaders\shaders.json">
       <Filter>Resource Files\Assets\shaders</Filter>
     </None>
   </ItemGroup>

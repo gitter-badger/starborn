@@ -106,8 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\animations\general.json" />
-    <None Include="..\..\assets\shaders\general.json" />
+    <None Include="..\..\assets\shaders\shaders.json" />
     <None Include="..\..\assets\shaders\pixels.frag" />
+    <None Include="..\..\assets\shaders\shadow_border.frag" />
     <None Include="..\..\assets\shaders\starfield.frag" />
     <None Include="..\..\assets\shaders\stars.frag" />
     <None Include="..\..\assets\sprites\general.json" />

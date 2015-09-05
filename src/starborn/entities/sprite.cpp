@@ -27,64 +27,64 @@ ss::entities::Sprite::Sprite()
 	this->dynamic_position = false;
 }
 
-void ss::entities::Sprite::set_position(std::string anchor, float x, float y)
+void ss::entities::Sprite::set_position(std::string anchor, float x, float y, float sprite_width, float sprite_height)
 {
 	auto new_x = 0.0f;
 	auto new_y = 0.0f;
 	
 	if(anchor == ANCHOR_BOTTOM)
 	{
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
-		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getTexture()->getSize().y) + y;
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor((!sprite_width ? this->getTexture()->getSize().x : sprite_width) / 2)) + x;
+		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - (!sprite_height ? this->getTexture()->getSize().y : sprite_height)) + y;
 	}
 	else if(anchor == ANCHOR_BOTTOM_LEFT)
 	{
 		new_x += x;
-		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getTexture()->getSize().y) + y;
+		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - (!sprite_height ? this->getTexture()->getSize().y : sprite_height)) + y;
 	}
 	else if(anchor == ANCHOR_BOTTOM_RIGHT)
 	{
-		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getTexture()->getSize().x) + x;
-		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getTexture()->getSize().y) + y;
+		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - (!sprite_width ? this->getTexture()->getSize().x : sprite_width)) + x;
+		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - (!sprite_height ? this->getTexture()->getSize().y : sprite_height)) + y;
 	}
 	else if(anchor == ANCHOR_CENTER)
 	{
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor((!sprite_width ? this->getTexture()->getSize().x : sprite_width) / 2)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor((!sprite_height ? this->getTexture()->getSize().y : sprite_height) / 2)) + y;
 	}
 	else if(anchor == ANCHOR_CENTER_BOTTOM)
 	{
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
-		new_y += static_cast<float>((((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) * 3.0f) - (this->getTexture()->getSize().y / 2)) + y;
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor((!sprite_width ? this->getTexture()->getSize().x : sprite_width) / 2)) + x;
+		new_y += static_cast<float>((((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) * 3.0f) - floor((!sprite_height ? this->getTexture()->getSize().y : sprite_height) / 2)) + y;
 	}
 	else if(anchor == ANCHOR_CENTER_LEFT)
 	{
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) - floor((!sprite_width ? this->getTexture()->getSize().x : sprite_width) / 2)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor((!sprite_height ? this->getTexture()->getSize().y : sprite_height) / 2)) + y;
 	}
 	else if(anchor == ANCHOR_CENTER_RIGHT)
 	{
-		new_x += static_cast<float>((((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) * 3.0f) - (this->getTexture()->getSize().x / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+		new_x += static_cast<float>((((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) * 3.0f) - floor((!sprite_width ? this->getTexture()->getSize().x : sprite_width) / 2)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor((!sprite_height ? this->getTexture()->getSize().y : sprite_height) / 2)) + y;
 	}
 	else if(anchor == ANCHOR_CENTER_TOP)
 	{
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor((!sprite_width ? this->getTexture()->getSize().x : sprite_width) / 2)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) - floor((!sprite_height ? this->getTexture()->getSize().y : sprite_height) / 2)) + y;
 	}
 	else if(anchor == ANCHOR_LEFT)
 	{
 		new_x += x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor((!sprite_height ? this->getTexture()->getSize().y : sprite_height) / 2)) + y;
 	}
 	else if(anchor == ANCHOR_RIGHT)
 	{
-		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getTexture()->getSize().x) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().y / 2)) + y;
+		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - (!sprite_width ? this->getTexture()->getSize().x : sprite_width)) + x;
+		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor((!sprite_height ? this->getTexture()->getSize().y : sprite_height) / 2)) + y;
 	}
 	else if(anchor == ANCHOR_TOP)
 	{
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (this->getTexture()->getSize().x / 2)) + x;
+		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor((!sprite_width ? this->getTexture()->getSize().x : sprite_width) / 2)) + x;
 		new_y += y;
 	}
 	else if(anchor == ANCHOR_TOP_LEFT)
@@ -94,7 +94,7 @@ void ss::entities::Sprite::set_position(std::string anchor, float x, float y)
 	}
 	else if(anchor == ANCHOR_TOP_RIGHT)
 	{
-		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getTexture()->getSize().x) + x;
+		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - (!sprite_width ? this->getTexture()->getSize().x : sprite_width)) + x;
 		new_y += y;
 	}
 

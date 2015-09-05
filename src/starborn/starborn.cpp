@@ -55,6 +55,16 @@ void ss::Starborn::load_animation(std::string filename)
 		if(!strcmp(animation->value["type"].GetString(), ANIMATION_TYPE_FADE))
 			this->animations[animation->name.GetString()].animation = thor::FadeAnimation(animation->value["inRatio"].GetDouble(), animation->value["outRatio"].GetDouble());
 
+		else
+		{
+			auto frame_animation = thor::FrameAnimation();
+			
+			for(auto frame = animation->value["frames"].Begin(); frame != animation->value["frames"].End(); ++frame)
+				frame_animation.addFrame((*frame)["ratio"].GetDouble(), sf::IntRect((*frame)["x"].GetInt(), (*frame)["y"].GetInt(), (*frame)["width"].GetInt(), (*frame)["height"].GetInt()));
+
+			this->animations[animation->name.GetString()].animation = frame_animation;
+		}
+
 		this->animations[animation->name.GetString()].duration = sf::seconds(animation->value["duration"].GetDouble());
 	}
 }
@@ -86,7 +96,7 @@ void ss::Starborn::load_shader(std::string filename)
 
 void ss::Starborn::load_shaders()
 {
-	this->load_shader("assets/shaders/general.json");
+	this->load_shader("assets/shaders/shaders.json");
 }
 
 void ss::Starborn::load_sprite(std::string filename)
@@ -100,7 +110,9 @@ void ss::Starborn::load_sprite(std::string filename)
 		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED))
 		{
 			new_sprite = new entities::AnimatedSprite();
-			reinterpret_cast<entities::AnimatedSprite *>(new_sprite)->addAnimation(sprite->value["animation"].GetString(), this->animations[sprite->value["animation"].GetString()].animation, this->animations[sprite->value["animation"].GetString()].duration);
+
+			for(auto animation = sprite->value["animations"].Begin(); animation != sprite->value["animations"].End(); ++animation)
+				reinterpret_cast<entities::AnimatedSprite *>(new_sprite)->addAnimation(animation->GetString(), this->animations[animation->GetString()].animation, this->animations[animation->GetString()].duration);
 		}
 		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT))
 			new_sprite = new entities::Sprite();
@@ -114,7 +126,7 @@ void ss::Starborn::load_sprite(std::string filename)
 		{
 			reinterpret_cast<entities::Sprite *>(new_sprite)->has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
 			reinterpret_cast<entities::Sprite *>(new_sprite)->setTexture(this->assets.acquire(sprite->value["texture"].GetString(), thor::Resources::fromFile<sf::Texture>(sprite->value["texture"].GetString()), thor::Resources::Reuse));
-			reinterpret_cast<entities::Sprite *>(new_sprite)->set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble());
+			reinterpret_cast<entities::Sprite *>(new_sprite)->set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble(), sprite->value.HasMember("size") ? sprite->value["size"]["x"].GetDouble() : 0.0f, sprite->value.HasMember("size") ? sprite->value["size"]["y"].GetDouble() : 0.0f);
 		}
 
 		auto drawable_type = SPRITE_TYPE_DEFAULT;
