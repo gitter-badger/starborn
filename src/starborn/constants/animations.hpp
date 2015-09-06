@@ -17,19 +17,9 @@
 
 namespace ss
 {
-	namespace entities
+	namespace constants
 	{
-		class Sprite : public sf::Sprite
-		{
-			private:
-				bool dynamic_position;
-
-			public:
-				bool &has_dynamic_position();
-
-				Sprite();
-
-				void set_position(std::string anchor, float x, float y, float width, float height);
-		};
+		#define ANIMATION_BUTTON			"button"
+		#define ANIMATION_BUTTON_SELECTED	"button_selected"
 	}
 }

@@ -27,6 +27,8 @@
 #include <starborn/constants/actions.hpp>
 #include <starborn/constants/anchors.hpp>
 #include <starborn/constants/animation_types.hpp>
+#include <starborn/constants/animations.hpp>
+#include <starborn/constants/buttons.hpp>
 #include <starborn/constants/drawable_types.hpp>
 #include <starborn/constants/settings.hpp>
 #include <starborn/constants/sprites.hpp>
@@ -37,6 +39,8 @@
 #include <starborn/entities/animated_sprite.hpp>
 
 #include <starborn/game/state.hpp>
+
+#include <starborn/ui/menu.hpp>
 
 #include <starborn/utilities/json.hpp>
 
@@ -73,6 +77,8 @@ namespace ss
 
 			thor::ResourceHolder<sf::Texture, std::string> assets;
 
+			ui::Menu main_menu;
+
 			void load_animation(std::string filename);
 			void load_animations();
 
@@ -82,8 +88,11 @@ namespace ss
 			void load_sprite(std::string filename);
 			void load_sprites();
 
+			void on_down();
 			void on_exit();
 			void on_screenshot();
+			void on_select();
+			void on_up();
 
 		public:
 			Starborn();

@@ -33,11 +33,17 @@ ss::Starborn::Starborn()
 
 	this->window.setView(this->view);
 
-	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed) || thor::Action(sf::Keyboard::Escape);
-	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5);
+	this->actions[ACTION_DOWN] = thor::Action(sf::Keyboard::Down, thor::Action::PressOnce);
+	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed) || thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
+	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5, thor::Action::PressOnce);
+	this->actions[ACTION_SELECT] = thor::Action(sf::Keyboard::Return, thor::Action::PressOnce);
+	this->actions[ACTION_UP] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce);
 
+	this->callbacks.connect(ACTION_DOWN, std::bind(&Starborn::on_down, this));
 	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
 	this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
+	this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
+	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
 
 	this->load_animations();
 	this->load_shaders();
@@ -72,6 +78,7 @@ void ss::Starborn::load_animation(std::string filename)
 void ss::Starborn::load_animations()
 {
 	this->load_animation("assets/animations/general.json");
+	this->load_animation("assets/animations/ui.json");
 }
 
 void ss::Starborn::load_shader(std::string filename)
@@ -113,6 +120,16 @@ void ss::Starborn::load_sprite(std::string filename)
 
 			for(auto animation = sprite->value["animations"].Begin(); animation != sprite->value["animations"].End(); ++animation)
 				reinterpret_cast<entities::AnimatedSprite *>(new_sprite)->addAnimation(animation->GetString(), this->animations[animation->GetString()].animation, this->animations[animation->GetString()].duration);
+		
+			if(!strcmp(sprite->name.GetString(), BUTTON_CONTINUE) || !strcmp(sprite->name.GetString(), BUTTON_EXIT) || !strcmp(sprite->name.GetString(), BUTTON_LOAD_GAME) || !strcmp(sprite->name.GetString(), BUTTON_NEW_GAME) || !strcmp(sprite->name.GetString(), BUTTON_OPTIONS))
+			{
+				structs::AnimatedSprite button;
+
+				button.animated_sprite = reinterpret_cast<entities::AnimatedSprite *>(new_sprite);
+				button.name = sprite->name.GetString();
+
+				this->main_menu.get_buttons().push_back(button);
+			}
 		}
 		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT))
 			new_sprite = new entities::Sprite();
@@ -144,6 +161,13 @@ void ss::Starborn::load_sprite(std::string filename)
 void ss::Starborn::load_sprites()
 {
 	this->load_sprite("assets/sprites/general.json");
+	this->load_sprite("assets/sprites/ui.json");
+}
+
+void ss::Starborn::on_down()
+{
+	if(this->state.get_state() == STATE_MAIN_MENU)
+		this->main_menu.scroll_down();
 }
 
 void ss::Starborn::on_exit()
@@ -154,6 +178,21 @@ void ss::Starborn::on_exit()
 void ss::Starborn::on_screenshot()
 {
 	sf::Image(this->window.capture()).saveToFile("screenshot.png");
+}
+
+void ss::Starborn::on_select()
+{
+	if(this->state.get_state() == STATE_MAIN_MENU)
+	{
+		if(this->main_menu.get_buttons()[this->main_menu.get_position()].name == BUTTON_EXIT)
+			this->on_exit();
+	}
+}
+
+void ss::Starborn::on_up()
+{
+	if(this->state.get_state() == STATE_MAIN_MENU)
+		this->main_menu.scroll_up();
 }
 
 void ss::Starborn::run()

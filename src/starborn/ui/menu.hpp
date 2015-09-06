@@ -17,19 +17,36 @@
 
 namespace ss
 {
-	namespace entities
+	namespace structs
 	{
-		class Sprite : public sf::Sprite
+		struct AnimatedSprite
+		{
+			entities::AnimatedSprite *animated_sprite;
+			std::string name;
+		};
+	}
+
+	namespace vectors
+	{
+		typedef std::vector<structs::AnimatedSprite> AnimatedSprites;
+	}
+
+	namespace ui
+	{
+		class Menu
 		{
 			private:
-				bool dynamic_position;
+				size_t position;
+				vectors::AnimatedSprites buttons;
 
 			public:
-				bool &has_dynamic_position();
+				Menu();
 
-				Sprite();
+				size_t &get_position();
+				vectors::AnimatedSprites &get_buttons();
 
-				void set_position(std::string anchor, float x, float y, float width, float height);
+				void scroll_down();
+				void scroll_up();
 		};
 	}
 }

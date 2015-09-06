@@ -17,19 +17,12 @@
 
 namespace ss
 {
-	namespace entities
+	namespace constants
 	{
-		class Sprite : public sf::Sprite
-		{
-			private:
-				bool dynamic_position;
-
-			public:
-				bool &has_dynamic_position();
-
-				Sprite();
-
-				void set_position(std::string anchor, float x, float y, float width, float height);
-		};
+		#define BUTTON_CONTINUE		"continue"
+		#define BUTTON_EXIT			"exit"
+		#define BUTTON_LOAD_GAME	"load_game"
+		#define BUTTON_NEW_GAME		"new_game"
+		#define BUTTON_OPTIONS		"options"
 	}
 }

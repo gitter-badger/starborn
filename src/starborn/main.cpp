@@ -17,7 +17,7 @@
 
 #include <starborn/starborn.hpp>
 
-int _stdcall WinMain()
+int32_t _stdcall WinMain()
 {
 	ss::Starborn().run();
 

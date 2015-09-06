@@ -59,7 +59,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\anchors.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\animations.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\animation_types.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants\buttons.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\sprites.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\settings.hpp" />
@@ -69,6 +71,7 @@
     <ClInclude Include="..\..\src\starborn\entities\sprite.hpp" />
     <ClInclude Include="..\..\src\starborn\game\state.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
+    <ClInclude Include="..\..\src\starborn\ui\menu.hpp" />
     <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
   </ItemGroup>
@@ -96,6 +99,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\src\starborn\ui\menu.cpp" />
     <ClCompile Include="..\..\src\starborn\utilities\json.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -106,12 +110,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\animations\general.json" />
+    <None Include="..\..\assets\animations\ui.json" />
     <None Include="..\..\assets\shaders\shaders.json" />
     <None Include="..\..\assets\shaders\pixels.frag" />
     <None Include="..\..\assets\shaders\shadow_border.frag" />
     <None Include="..\..\assets\shaders\starfield.frag" />
     <None Include="..\..\assets\shaders\stars.frag" />
     <None Include="..\..\assets\sprites\general.json" />
+    <None Include="..\..\assets\sprites\ui.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

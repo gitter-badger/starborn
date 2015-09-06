@@ -46,6 +46,12 @@
     <Filter Include="Resource Files\Assets\shaders">
       <UniqueIdentifier>{0abb9f58-cf9c-4392-8f37-3b6aae216ec4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ui">
+      <UniqueIdentifier>{25e22f4f-d26b-4cf9-a32c-fb9eee34acd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{ff4981dd-a79c-4463-94b5-bb1525f66261}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\version.hpp">
@@ -90,6 +96,15 @@
     <ClInclude Include="..\..\src\starborn\constants\anchors.hpp">
       <Filter>Header Files\constants</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\buttons.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\ui\menu.hpp">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\starborn\constants\animations.hpp">
+      <Filter>Header Files\constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc">
@@ -114,6 +129,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\starborn\pch.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\starborn\ui\menu.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +160,12 @@
     </None>
     <None Include="..\..\assets\shaders\shaders.json">
       <Filter>Resource Files\Assets\shaders</Filter>
+    </None>
+    <None Include="..\..\assets\animations\ui.json">
+      <Filter>Resource Files\Assets\animations</Filter>
+    </None>
+    <None Include="..\..\assets\sprites\ui.json">
+      <Filter>Resource Files\Assets\sprites</Filter>
     </None>
   </ItemGroup>
 </Project>
