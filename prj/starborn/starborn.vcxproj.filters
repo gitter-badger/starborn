@@ -102,8 +102,8 @@
     <ClInclude Include="..\..\src\starborn\ui\menu.hpp">
       <Filter>Header Files\ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\starborn\constants\animations.hpp">
-      <Filter>Header Files\constants</Filter>
+    <ClInclude Include="..\..\src\starborn\game\typedefs.hpp">
+      <Filter>Header Files\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

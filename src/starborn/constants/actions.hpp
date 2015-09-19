@@ -20,9 +20,10 @@ namespace ss
 	namespace constants
 	{
 		#define ACTION_DOWN			"down"
-		#define ACTION_EXIT			"exit"
-		#define ACTION_SCREENSHOT	"screenshot"
-		#define ACTION_SELECT		"select"
-		#define ACTION_UP			"up"
+		#define ACTION_EXIT				"exit"
+		#define ACTION_RELOAD_SHADERS	"reload_shaders"
+		#define ACTION_SCREENSHOT		"screenshot"
+		#define ACTION_SELECT			"select"
+		#define ACTION_UP				"up"
 	}
 }

@@ -19,16 +19,19 @@ namespace ss
 {
 	namespace structs
 	{
-		struct AnimatedSprite
+		struct Button
 		{
 			entities::AnimatedSprite *animated_sprite;
+
 			std::string name;
+			std::string selected_texture;
+			std::string texture;
 		};
 	}
 
 	namespace vectors
 	{
-		typedef std::vector<structs::AnimatedSprite> AnimatedSprites;
+		typedef std::vector<structs::Button> Buttons;
 	}
 
 	namespace ui
@@ -37,16 +40,18 @@ namespace ss
 		{
 			private:
 				size_t position;
-				vectors::AnimatedSprites buttons;
+				vectors::Buttons buttons;
 
 			public:
 				Menu();
 
 				size_t &get_position();
-				vectors::AnimatedSprites &get_buttons();
+				vectors::Buttons &get_buttons();
 
-				void scroll_down();
-				void scroll_up();
+				void init(game::Assets &assets);
+
+				void scroll_down(game::Assets &assets);
+				void scroll_up(game::Assets &assets);
 		};
 	}
 }

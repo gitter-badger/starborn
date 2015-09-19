@@ -35,12 +35,14 @@ ss::Starborn::Starborn()
 
 	this->actions[ACTION_DOWN] = thor::Action(sf::Keyboard::Down, thor::Action::PressOnce);
 	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed) || thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
+	this->actions[ACTION_RELOAD_SHADERS] = thor::Action(sf::Keyboard::F9, thor::Action::PressOnce);
 	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5, thor::Action::PressOnce);
 	this->actions[ACTION_SELECT] = thor::Action(sf::Keyboard::Return, thor::Action::PressOnce);
 	this->actions[ACTION_UP] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce);
 
 	this->callbacks.connect(ACTION_DOWN, std::bind(&Starborn::on_down, this));
 	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
+	this->callbacks.connect(ACTION_RELOAD_SHADERS, std::bind(&Starborn::on_reload_shaders, this));
 	this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
 	this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
 	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
@@ -49,6 +51,7 @@ ss::Starborn::Starborn()
 	this->load_shaders();
 	this->load_sprites();
 
+	this->main_menu.init(this->assets);
 	this->state.switch_state(STATE_SNAILSOFT_LOGO);
 }
 
@@ -97,7 +100,10 @@ void ss::Starborn::load_shader(std::string filename)
 			this->shaders[shader->name.GetString()].loadFromFile(shader->value["vertex"].GetString(), sf::Shader::Vertex);
 
 		if(shader->value.HasMember("fragment") || shader->value.HasMember("vertex"))
+		{
+			this->shaders[shader->name.GetString()].setParameter("pi", static_cast<float>(M_PI));
 			this->shaders[shader->name.GetString()].setParameter("texture", sf::Shader::CurrentTexture);
+		}
 	}
 }
 
@@ -123,10 +129,12 @@ void ss::Starborn::load_sprite(std::string filename)
 		
 			if(!strcmp(sprite->name.GetString(), BUTTON_CONTINUE) || !strcmp(sprite->name.GetString(), BUTTON_EXIT) || !strcmp(sprite->name.GetString(), BUTTON_LOAD_GAME) || !strcmp(sprite->name.GetString(), BUTTON_NEW_GAME) || !strcmp(sprite->name.GetString(), BUTTON_OPTIONS))
 			{
-				structs::AnimatedSprite button;
+				structs::Button button;
 
 				button.animated_sprite = reinterpret_cast<entities::AnimatedSprite *>(new_sprite);
 				button.name = sprite->name.GetString();
+				button.selected_texture = sprite->value["selected_texture"].GetString();
+				button.texture = sprite->value["texture"].GetString();
 
 				this->main_menu.get_buttons().push_back(button);
 			}
@@ -141,9 +149,11 @@ void ss::Starborn::load_sprite(std::string filename)
 		}
 		else
 		{
-			reinterpret_cast<entities::Sprite *>(new_sprite)->has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
-			reinterpret_cast<entities::Sprite *>(new_sprite)->setTexture(this->assets.acquire(sprite->value["texture"].GetString(), thor::Resources::fromFile<sf::Texture>(sprite->value["texture"].GetString()), thor::Resources::Reuse));
-			reinterpret_cast<entities::Sprite *>(new_sprite)->set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble(), sprite->value.HasMember("size") ? sprite->value["size"]["x"].GetDouble() : 0.0f, sprite->value.HasMember("size") ? sprite->value["size"]["y"].GetDouble() : 0.0f);
+			auto &final_sprite = *reinterpret_cast<entities::Sprite *>(new_sprite);
+
+			final_sprite.has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
+			final_sprite.setTexture(this->assets.acquire(sprite->value["texture"].GetString(), thor::Resources::fromFile<sf::Texture>(sprite->value["texture"].GetString()), thor::Resources::Reuse));
+			final_sprite.set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble(), sprite->value.HasMember("size") ? sprite->value["size"]["x"].GetDouble() : 0.0f, sprite->value.HasMember("size") ? sprite->value["size"]["y"].GetDouble() : 0.0f);
 		}
 
 		auto drawable_type = SPRITE_TYPE_DEFAULT;
@@ -164,15 +174,36 @@ void ss::Starborn::load_sprites()
 	this->load_sprite("assets/sprites/ui.json");
 }
 
+void ss::Starborn::on_continue()
+{
+}
+
 void ss::Starborn::on_down()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
-		this->main_menu.scroll_down();
+		this->main_menu.scroll_down(this->assets);
 }
 
 void ss::Starborn::on_exit()
 {
 	this->window.close();
+}
+
+void ss::Starborn::on_load_game()
+{
+}
+
+void ss::Starborn::on_new_game()
+{
+}
+
+void ss::Starborn::on_options()
+{
+}
+
+void ss::Starborn::on_reload_shaders()
+{
+	this->load_shaders();
 }
 
 void ss::Starborn::on_screenshot()
@@ -184,15 +215,29 @@ void ss::Starborn::on_select()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
 	{
-		if(this->main_menu.get_buttons()[this->main_menu.get_position()].name == BUTTON_EXIT)
+		auto &button_name = this->main_menu.get_buttons()[this->main_menu.get_position()].name;
+
+		if(button_name == BUTTON_CONTINUE)
+			this->on_continue();
+
+		else if(button_name == BUTTON_EXIT)
 			this->on_exit();
+
+		else if(button_name == BUTTON_LOAD_GAME)
+			this->on_load_game();
+
+		else if(button_name == BUTTON_NEW_GAME)
+			this->on_new_game();
+
+		else if(button_name == BUTTON_OPTIONS)
+			this->on_options();
 	}
 }
 
 void ss::Starborn::on_up()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
-		this->main_menu.scroll_up();
+		this->main_menu.scroll_up(this->assets);
 }
 
 void ss::Starborn::run()

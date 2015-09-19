@@ -17,9 +17,8 @@
 
 namespace ss
 {
-	namespace constants
+	namespace game
 	{
-		#define ANIMATION_BUTTON			"button"
-		#define ANIMATION_BUTTON_SELECTED	"button_selected"
-	}
+		typedef thor::ResourceHolder<sf::Texture, std::string> Assets;
+	};
 }

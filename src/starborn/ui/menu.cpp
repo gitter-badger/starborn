@@ -27,27 +27,32 @@ ss::ui::Menu::Menu()
 	this->position = 0;
 }
 
-ss::vectors::AnimatedSprites &ss::ui::Menu::get_buttons()
+ss::vectors::Buttons &ss::ui::Menu::get_buttons()
 {
 	return this->buttons;
 }
 
-void ss::ui::Menu::scroll_down()
+void ss::ui::Menu::init(game::Assets &assets)
+{
+	this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].selected_texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].selected_texture), thor::Resources::Reuse));
+}
+
+void ss::ui::Menu::scroll_down(game::Assets &assets)
 {
 	if(this->buttons.size())
 	{
-		this->buttons[this->position].animated_sprite->playAnimation(ANIMATION_BUTTON);
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].texture), thor::Resources::Reuse));
 		this->position = (this->position < (this->buttons.size() - 1)) ? (this->position + 1) : 0;
-		this->buttons[this->position].animated_sprite->playAnimation(ANIMATION_BUTTON_SELECTED);
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].selected_texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].selected_texture), thor::Resources::Reuse));
 	}
 }
 
-void ss::ui::Menu::scroll_up()
+void ss::ui::Menu::scroll_up(game::Assets &assets)
 {
 	if(this->buttons.size())
 	{
-		this->buttons[this->position].animated_sprite->playAnimation(ANIMATION_BUTTON);
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].texture), thor::Resources::Reuse));
 		this->position = this->position ? (this->position - 1) : (this->buttons.size() - 1);
-		this->buttons[this->position].animated_sprite->playAnimation(ANIMATION_BUTTON_SELECTED);
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].selected_texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].selected_texture), thor::Resources::Reuse));
 	}
 }

@@ -34,7 +34,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;SFML_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;SFML_STATIC</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <AdditionalIncludeDirectories>$(SolutionDir)\src</AdditionalIncludeDirectories>
@@ -59,7 +59,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\anchors.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\animations.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\animation_types.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\buttons.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\sprites.hpp" />
@@ -70,6 +69,7 @@
     <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp" />
     <ClInclude Include="..\..\src\starborn\entities\sprite.hpp" />
     <ClInclude Include="..\..\src\starborn\game\state.hpp" />
+    <ClInclude Include="..\..\src\starborn\game\typedefs.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
     <ClInclude Include="..\..\src\starborn\ui\menu.hpp" />
     <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
