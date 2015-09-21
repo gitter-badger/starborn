@@ -91,6 +91,7 @@ namespace ss
 
 			void on_continue();
 			void on_down();
+			void on_escape();
 			void on_exit();
 			void on_load_game();
 			void on_new_game();

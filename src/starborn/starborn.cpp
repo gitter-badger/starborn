@@ -34,13 +34,15 @@ ss::Starborn::Starborn()
 	this->window.setView(this->view);
 
 	this->actions[ACTION_DOWN] = thor::Action(sf::Keyboard::Down, thor::Action::PressOnce);
-	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed) || thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
+	this->actions[ACTION_ESCAPE] = thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
+	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed);
 	this->actions[ACTION_RELOAD_SHADERS] = thor::Action(sf::Keyboard::F9, thor::Action::PressOnce);
 	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5, thor::Action::PressOnce);
 	this->actions[ACTION_SELECT] = thor::Action(sf::Keyboard::Return, thor::Action::PressOnce);
 	this->actions[ACTION_UP] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce);
 
 	this->callbacks.connect(ACTION_DOWN, std::bind(&Starborn::on_down, this));
+	this->callbacks.connect(ACTION_ESCAPE, std::bind(&Starborn::on_escape, this));
 	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
 	this->callbacks.connect(ACTION_RELOAD_SHADERS, std::bind(&Starborn::on_reload_shaders, this));
 	this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
@@ -189,6 +191,15 @@ void ss::Starborn::on_down()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
 		this->main_menu.scroll_down(this->assets);
+}
+
+void ss::Starborn::on_escape()
+{
+	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
+		this->state.switch_state(STATE_MAIN_MENU, [](){});
+
+	else
+		this->window.close();
 }
 
 void ss::Starborn::on_exit()

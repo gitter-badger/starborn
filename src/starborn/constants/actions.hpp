@@ -19,7 +19,8 @@ namespace ss
 {
 	namespace constants
 	{
-		#define ACTION_DOWN			"down"
+		#define ACTION_DOWN				"down"
+		#define ACTION_ESCAPE			"escape"
 		#define ACTION_EXIT				"exit"
 		#define ACTION_RELOAD_SHADERS	"reload_shaders"
 		#define ACTION_SCREENSHOT		"screenshot"
