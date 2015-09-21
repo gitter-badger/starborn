@@ -20,8 +20,10 @@ namespace ss
 	namespace constants
 	{
 		#define STATE_DEFAULT			"default"
+		#define STATE_LOAD_GAME			"load_game"
 		#define STATE_MAIN_MENU			"main_menu"
-		#define STATE_PAUSED			"paused"
+		#define STATE_NEW_GAME			"new_game"
+		#define STATE_OPTIONS			"options"
 		#define STATE_RUNNING			"running"
 		#define STATE_SNAILSOFT_LOGO	"snailsoft_logo"
 		#define STATE_STARBORN_LOGO		"starborn_logo"

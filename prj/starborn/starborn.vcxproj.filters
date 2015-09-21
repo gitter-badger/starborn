@@ -155,9 +155,6 @@
     <None Include="..\..\assets\shaders\stars.frag">
       <Filter>Resource Files\Assets\shaders</Filter>
     </None>
-    <None Include="..\..\assets\shaders\shadow_border.frag">
-      <Filter>Resource Files\Assets\shaders</Filter>
-    </None>
     <None Include="..\..\assets\shaders\shaders.json">
       <Filter>Resource Files\Assets\shaders</Filter>
     </None>
@@ -166,6 +163,9 @@
     </None>
     <None Include="..\..\assets\sprites\ui.json">
       <Filter>Resource Files\Assets\sprites</Filter>
+    </None>
+    <None Include="..\..\assets\shaders\vignette.frag">
+      <Filter>Resource Files\Assets\shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

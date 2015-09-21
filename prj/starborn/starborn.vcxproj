@@ -113,7 +113,7 @@
     <None Include="..\..\assets\animations\ui.json" />
     <None Include="..\..\assets\shaders\shaders.json" />
     <None Include="..\..\assets\shaders\pixels.frag" />
-    <None Include="..\..\assets\shaders\shadow_border.frag" />
+    <None Include="..\..\assets\shaders\vignette.frag" />
     <None Include="..\..\assets\shaders\starfield.frag" />
     <None Include="..\..\assets\shaders\stars.frag" />
     <None Include="..\..\assets\sprites\general.json" />
