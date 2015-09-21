@@ -26,8 +26,9 @@ namespace ss
 			sf::Drawable *drawable;
 			sf::RenderStates render_states;
 
-			std::string animation;
+			std::string ending_animation;
 			std::string name;
+			std::string starting_animation;
 			std::string type;
 		};
 	};
@@ -47,11 +48,16 @@ namespace ss
 		class State
 		{
 			private:
+				bool update_state;
+
 				maps::Drawables drawables;
 
 				sf::RenderTexture background;
 				sf::Sprite background_sprite;
 
+				std::function<void()> callback;
+
+				std::string next_state;
 				std::string state;
 
 				void on_update_animated_sprite(sf::Time &last_frame_time, structs::Drawable &drawable);
@@ -66,8 +72,8 @@ namespace ss
 				std::string &get_state();
 				vectors::Drawables &get_drawables();
 
-				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation = "", bool scale = false, sf::Shader *shader = nullptr);
-				void switch_state(std::string state);
+				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string starting_animation = "", std::string ending_animation = "", bool scale = false, sf::Shader *shader = nullptr);
+				void switch_state(std::string state, std::function<void()> callback);
 				void update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window);
 		};
 	}

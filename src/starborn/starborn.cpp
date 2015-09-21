@@ -52,7 +52,14 @@ ss::Starborn::Starborn()
 	this->load_sprites();
 
 	this->main_menu.init(this->assets);
-	this->state.switch_state(STATE_SNAILSOFT_LOGO);
+
+	this->state.switch_state(STATE_SNAILSOFT_LOGO, [this]()
+	{
+		this->state.switch_state(STATE_STARBORN_LOGO, [this]()
+		{
+			this->state.switch_state(STATE_MAIN_MENU, [](){});
+		});
+	});
 }
 
 void ss::Starborn::load_animation(std::string filename)
@@ -164,7 +171,7 @@ void ss::Starborn::load_sprite(std::string filename)
 		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND))
 			drawable_type = DRAWABLE_TYPE_BACKGROUND;
 
-		this->state.attach_drawable(sprite->value["state"].GetString(), sprite->name.GetString(), reinterpret_cast<sf::Drawable *>(new_sprite), drawable_type, !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["animation"].GetString() : "", sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false, sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr);
+		this->state.attach_drawable(sprite->value["state"].GetString(), sprite->name.GetString(), reinterpret_cast<sf::Drawable *>(new_sprite), drawable_type, !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["starting_animation"].GetString() : "", !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["ending_animation"].GetString() : "", sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false, sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr);
 	}
 }
 
@@ -195,6 +202,10 @@ void ss::Starborn::on_load_game()
 
 void ss::Starborn::on_new_game()
 {
+	this->state.switch_state(STATE_NEW_GAME, [this]()
+	{
+		this->main_menu.init(this->assets);
+	});
 }
 
 void ss::Starborn::on_options()

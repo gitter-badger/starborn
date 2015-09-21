@@ -23,6 +23,7 @@ ss::game::State::State()
 	this->background.clear(); 
 	
 	this->state = STATE_DEFAULT;
+	this->update_state = false;
 }
 
 ss::vectors::Drawables &ss::game::State::get_drawables()
@@ -35,15 +36,16 @@ std::string &ss::game::State::get_state()
 	return this->state;
 }
 
-void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string animation, bool scale, sf::Shader *shader)
+void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string starting_animation, std::string ending_animation, bool scale, sf::Shader *shader)
 {
 	structs::Drawable new_drawable;
 
-	new_drawable.animation = animation;
+	new_drawable.ending_animation = ending_animation;
 	new_drawable.drawable = drawable;
 	new_drawable.name = name;
 	new_drawable.render_states.shader = shader;
 	new_drawable.scale = scale;
+	new_drawable.starting_animation = starting_animation;
 	new_drawable.type = type;
 
 	this->drawables[state].push_back(new_drawable);
@@ -56,16 +58,10 @@ void ss::game::State::on_update_animated_sprite(sf::Time &last_frame_time, struc
 	animated_sprite.update(last_frame_time);
 	animated_sprite.animate(animated_sprite);
 
-	if(!animated_sprite.isPlayingAnimation())
-	{
-		if((this->state == STATE_SNAILSOFT_LOGO) && (drawable.name == SPRITE_SNAILSOFT))
-			this->switch_state(STATE_STARBORN_LOGO);
-
-		if((this->state == STATE_STARBORN_LOGO) && (drawable.name == SPRITE_STARBORN_VERTICAL))
-			this->switch_state(STATE_MAIN_MENU);
-	}
-
 	this->on_update_sprite(drawable);
+
+	if(this->next_state.length() && animated_sprite.isPlayingAnimation() && (animated_sprite.getPlayingAnimation() == drawable.ending_animation))
+		this->update_state = false;
 }
 
 void ss::game::State::on_update_background(structs::Drawable &drawable)
@@ -84,25 +80,23 @@ void ss::game::State::on_update_sprite(structs::Drawable &drawable)
 		const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((sprite.getTexture()->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((sprite.getTexture()->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
 }
 
-void ss::game::State::switch_state(std::string state)
+void ss::game::State::switch_state(std::string state, std::function<void()> callback)
 {
-	for(auto &&drawable : this->drawables[this->state])
-	{
-		if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->stopAnimation();
-	}
-
-	this->state = state;
+	this->callback = callback;
+	this->next_state = state;
 
 	for(auto &&drawable : this->drawables[this->state])
 	{
-		if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(drawable.animation);
+		if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) && drawable.ending_animation.length())
+			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(drawable.ending_animation);
 	}
 }
 
 void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window)
 {
+	if(this->next_state.length())
+		this->update_state = true;
+
 	for(auto &&drawable : this->drawables[this->state])
 	{
 		if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
@@ -128,6 +122,21 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 		}
 		else
 			window.draw(*drawable.drawable, drawable.render_states);
+	}
+
+	if(this->next_state.length() && this->update_state)
+	{
+		this->state = this->next_state;
+		this->next_state.clear();
+		this->update_state = false;
+
+		for(auto &&drawable : this->drawables[this->state])
+		{
+			if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) && drawable.starting_animation.length())
+				reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(drawable.starting_animation);
+		}
+
+		this->callback();
 	}
 }
 

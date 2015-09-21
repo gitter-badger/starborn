@@ -34,6 +34,8 @@ ss::vectors::Buttons &ss::ui::Menu::get_buttons()
 
 void ss::ui::Menu::init(game::Assets &assets)
 {
+	this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].texture), thor::Resources::Reuse));
+	this->position = 0;
 	this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].selected_texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].selected_texture), thor::Resources::Reuse));
 }
 
