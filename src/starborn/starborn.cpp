@@ -52,14 +52,15 @@ ss::Starborn::Starborn()
 	this->load_animations();
 	this->load_shaders();
 	this->load_sprites();
-
-	this->main_menu.init(this->assets);
-
-	this->state.switch_state(STATE_SNAILSOFT_LOGO, [this]()
+	
+	this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
 	{
-		this->state.switch_state(STATE_STARBORN_LOGO, [this]()
+		this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
 		{
-			this->state.switch_state(STATE_MAIN_MENU, [](){});
+			this->state.switch_state(STATE_MAIN_MENU, false, [this]()
+			{
+				this->main_menu.init(this->assets);
+			});
 		});
 	});
 }
@@ -165,15 +166,18 @@ void ss::Starborn::load_sprite(std::string filename)
 			final_sprite.set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble(), sprite->value.HasMember("size") ? sprite->value["size"]["x"].GetDouble() : 0.0f, sprite->value.HasMember("size") ? sprite->value["size"]["y"].GetDouble() : 0.0f);
 		}
 
-		auto drawable_type = SPRITE_TYPE_DEFAULT;
+		structs::Drawable drawable;
 
-		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED))
-			drawable_type = DRAWABLE_TYPE_ANIMATED_SPRITE;
+		drawable.ending_animation = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["ending_animation"].GetString() : "";
+		drawable.drawable = reinterpret_cast<sf::Drawable *>(new_sprite);
+		drawable.name = sprite->name.GetString();
+		drawable.render_states.shader = sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr;
+		drawable.reversible = sprite->value.HasMember("reversible") ? sprite->value["reversible"].GetBool() : false;
+		drawable.scale = sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false;
+		drawable.starting_animation = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["starting_animation"].GetString() : "";
+		drawable.type = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? DRAWABLE_TYPE_ANIMATED_SPRITE : (!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND) ? DRAWABLE_TYPE_BACKGROUND : SPRITE_TYPE_DEFAULT);
 
-		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND))
-			drawable_type = DRAWABLE_TYPE_BACKGROUND;
-
-		this->state.attach_drawable(sprite->value["state"].GetString(), sprite->name.GetString(), reinterpret_cast<sf::Drawable *>(new_sprite), drawable_type, !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["starting_animation"].GetString() : "", !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["ending_animation"].GetString() : "", sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false, sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr);
+		this->state.get_drawables()[sprite->value["state"].GetString()].push_back(drawable);
 	}
 }
 
@@ -196,7 +200,7 @@ void ss::Starborn::on_down()
 void ss::Starborn::on_escape()
 {
 	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
-		this->state.switch_state(STATE_MAIN_MENU, [](){});
+		this->state.switch_state(STATE_MAIN_MENU, true);
 
 	else
 		this->window.close();
@@ -213,10 +217,7 @@ void ss::Starborn::on_load_game()
 
 void ss::Starborn::on_new_game()
 {
-	this->state.switch_state(STATE_NEW_GAME, [this]()
-	{
-		this->main_menu.init(this->assets);
-	});
+	this->state.switch_state(STATE_NEW_GAME);
 }
 
 void ss::Starborn::on_options()

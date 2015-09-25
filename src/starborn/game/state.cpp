@@ -22,33 +22,19 @@ ss::game::State::State()
 	this->background.create(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM));
 	this->background.clear(); 
 	
+	this->reverse_animations = false;
 	this->state = STATE_DEFAULT;
 	this->update_state = false;
 }
 
-ss::vectors::Drawables &ss::game::State::get_drawables()
+ss::maps::Drawables &ss::game::State::get_drawables()
 {
-	return this->drawables[this->state];
+	return this->drawables;
 }
 
 std::string &ss::game::State::get_state()
 {
 	return this->state;
-}
-
-void ss::game::State::attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string starting_animation, std::string ending_animation, bool scale, sf::Shader *shader)
-{
-	structs::Drawable new_drawable;
-
-	new_drawable.ending_animation = ending_animation;
-	new_drawable.drawable = drawable;
-	new_drawable.name = name;
-	new_drawable.render_states.shader = shader;
-	new_drawable.scale = scale;
-	new_drawable.starting_animation = starting_animation;
-	new_drawable.type = type;
-
-	this->drawables[state].push_back(new_drawable);
 }
 
 void ss::game::State::on_update_animated_sprite(sf::Time &last_frame_time, structs::Drawable &drawable)
@@ -80,15 +66,16 @@ void ss::game::State::on_update_sprite(structs::Drawable &drawable)
 		const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((sprite.getTexture()->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((sprite.getTexture()->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
 }
 
-void ss::game::State::switch_state(std::string state, std::function<void()> callback)
+void ss::game::State::switch_state(std::string state, bool reverse_animations, std::function<void()> callback)
 {
 	this->callback = callback;
 	this->next_state = state;
+	this->reverse_animations = reverse_animations;
 
 	for(auto &&drawable : this->drawables[this->state])
 	{
-		if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) && drawable.ending_animation.length())
-			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(drawable.ending_animation);
+		if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) && (((!this->reverse_animations && drawable.ending_animation.length()) || (this->reverse_animations && drawable.starting_animation.length())) || (!drawable.reversible && drawable.ending_animation.length())))
+			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(this->reverse_animations ? (drawable.reversible ? drawable.starting_animation : drawable.ending_animation) : drawable.ending_animation);
 	}
 }
 
@@ -132,8 +119,8 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 
 		for(auto &&drawable : this->drawables[this->state])
 		{
-			if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) && drawable.starting_animation.length())
-				reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(drawable.starting_animation);
+			if((drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE) && (((!this->reverse_animations && drawable.starting_animation.length()) || (this->reverse_animations && drawable.ending_animation.length())) || (!drawable.reversible && drawable.starting_animation.length())))
+				reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(this->reverse_animations ? (drawable.reversible ? drawable.ending_animation : drawable.starting_animation) : drawable.starting_animation);
 		}
 
 		this->callback();

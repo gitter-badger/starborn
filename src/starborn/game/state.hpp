@@ -21,6 +21,7 @@ namespace ss
 	{
 		struct Drawable
 		{
+			bool reversible;
 			bool scale;
 
 			sf::Drawable *drawable;
@@ -48,6 +49,7 @@ namespace ss
 		class State
 		{
 			private:
+				bool reverse_animations;
 				bool update_state;
 
 				maps::Drawables drawables;
@@ -67,13 +69,11 @@ namespace ss
 				void update_shader_parameters(sf::Time &total_time, sf::Shader &shader);
 
 			public:
+				maps::Drawables &get_drawables();
 				State();
-
 				std::string &get_state();
-				vectors::Drawables &get_drawables();
 
-				void attach_drawable(std::string state, std::string name, sf::Drawable *drawable, std::string type, std::string starting_animation = "", std::string ending_animation = "", bool scale = false, sf::Shader *shader = nullptr);
-				void switch_state(std::string state, std::function<void()> callback);
+				void switch_state(std::string state, bool reverse_animations = false, std::function<void()> callback = [](){});
 				void update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window);
 		};
 	}
