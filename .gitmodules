@@ -4,3 +4,9 @@
 [submodule "third_party/rapidjson"]
 	path = third_party/rapidjson
 	url = https://github.com/snail23/rapidjson.git
+[submodule "third_party/sand"]
+	path = third_party/sand
+	url = https://github.com/snail23/sand.git
+[submodule "third_party/apathy"]
+	path = third_party/apathy
+	url = https://github.com/snail23/apathy.git

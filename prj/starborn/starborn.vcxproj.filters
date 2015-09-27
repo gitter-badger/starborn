@@ -52,6 +52,15 @@
     <Filter Include="Source Files\ui">
       <UniqueIdentifier>{ff4981dd-a79c-4463-94b5-bb1525f66261}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Third Party">
+      <UniqueIdentifier>{012c588f-8bfc-45e3-982c-40f1a251e27a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third Party\Source Files">
+      <UniqueIdentifier>{ac543a39-2b45-4cec-b6cf-e8c6633c8aea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third Party\Header Files">
+      <UniqueIdentifier>{5856a760-31a0-4b1a-b9e0-33562fc2d84d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\version.hpp">
@@ -105,6 +114,12 @@
     <ClInclude Include="..\..\src\starborn\game\typedefs.hpp">
       <Filter>Header Files\game</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\third_party\sand\sand.hpp">
+      <Filter>Third Party\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\apathy\apathy.hpp">
+      <Filter>Third Party\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc">
@@ -132,6 +147,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\starborn\ui\menu.cpp">
       <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\sand\sand.cpp">
+      <Filter>Third Party\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
+      <Filter>Third Party\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

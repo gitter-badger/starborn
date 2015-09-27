@@ -243,7 +243,10 @@ void ss::Starborn::on_right()
 
 void ss::Starborn::on_screenshot()
 {
-	sf::Image(this->window.capture()).saveToFile("screenshot.png");
+	if(!apathy::exists("screenshots"))
+		apathy::mkdir("screenshots");
+
+	sf::Image(this->window.capture()).saveToFile("screenshots/starborn-" + sand::format(sand::now(), "mm-dd-yy-HH-MM-SS") + ".png");
 }
 
 void ss::Starborn::on_select()

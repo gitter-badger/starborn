@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <OutDir>$(SolutionDir)bin\</OutDir>
-    <IntDir>$(ProjectDir)\obj\</IntDir>
+    <IntDir>$(ProjectDir)obj\</IntDir>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -37,12 +37,12 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;SFML_STATIC</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src;$(SolutionDir)\third_party;$(SolutionDir)\third_party\rapidjson\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)third_party;$(SolutionDir)third_party\rapidjson\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DisableSpecificWarnings>4458</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4458</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <OptimizeReferences>true</OptimizeReferences>
@@ -74,6 +74,8 @@
     <ClInclude Include="..\..\src\starborn\ui\menu.hpp" />
     <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
+    <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
+    <ClInclude Include="..\..\third_party\sand\sand.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc" />
@@ -103,6 +105,12 @@
     <ClCompile Include="..\..\src\starborn\utilities\json.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4100;4127;4244;4245;4458;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\sand\sand.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244;4458</DisableSpecificWarnings>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

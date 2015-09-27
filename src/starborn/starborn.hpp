@@ -15,8 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <apathy/apathy.hpp>
+
 #include <rapidjson/document.h>
 #include <rapidjson/filereadstream.h>
+
+#include <sand/sand.hpp>
 
 #include <SFML/Graphics.hpp>
 
