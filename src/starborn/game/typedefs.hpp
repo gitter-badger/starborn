@@ -19,6 +19,6 @@ namespace ss
 {
 	namespace game
 	{
-		typedef thor::ResourceHolder<sf::Texture, std::string> Assets;
+		typedef thor::ResourceHolder<sf::Texture, wire::string> Assets;
 	};
 }

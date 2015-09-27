@@ -24,6 +24,8 @@
 #include <Thor/Input.hpp>
 #include <Thor/Resources.hpp>
 
+#include <wire/wire.hpp>
+
 #include <starborn/constants/actions.hpp>
 #include <starborn/constants/anchors.hpp>
 #include <starborn/constants/animation_types.hpp>
@@ -57,9 +59,9 @@ namespace ss
 
 	namespace maps
 	{
-		typedef std::map<std::string, sf::Shader> Shaders;
-		typedef std::map<std::string, structs::Animation> Animations;
-		typedef std::map<std::string, ui::Menu> Menus;
+		typedef std::map<wire::string, sf::Shader> Shaders;
+		typedef std::map<wire::string, structs::Animation> Animations;
+		typedef std::map<wire::string, ui::Menu> Menus;
 	};
 
 	class Starborn
@@ -75,18 +77,18 @@ namespace ss
 			sf::RenderWindow window;
 			sf::View view;
 
-			thor::ActionMap<std::string> actions;
-			thor::ActionMap<std::string>::CallbackSystem callbacks;
+			thor::ActionMap<wire::string> actions;
+			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
 			void load();
 
-			void load_animation(std::string filename);
+			void load_animation(wire::string filename);
 			void load_animations();
 
-			void load_shader(std::string filename);
+			void load_shader(wire::string filename);
 			void load_shaders();
 
-			void load_sprite(std::string filename);
+			void load_sprite(wire::string filename);
 			void load_sprites();
 
 			void new_game(bool midnight = true);

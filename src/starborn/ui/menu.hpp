@@ -23,9 +23,9 @@ namespace ss
 		{
 			entities::AnimatedSprite *animated_sprite;
 
-			std::string name;
-			std::string selected_texture;
-			std::string texture;
+			wire::string name;
+			wire::string selected_texture;
+			wire::string texture;
 		};
 	}
 

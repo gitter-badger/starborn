@@ -26,11 +26,11 @@ namespace ss
 
 			public:
 				Json() = default;
-				Json(std::string filename);
+				Json(wire::string filename);
 
 				rapidjson::Document &get_document();
 
-				void parse(std::string filename);
+				void parse(wire::string filename);
 		};
 	}
 }

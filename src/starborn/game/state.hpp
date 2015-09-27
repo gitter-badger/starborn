@@ -27,10 +27,10 @@ namespace ss
 			sf::Drawable *drawable;
 			sf::RenderStates render_states;
 
-			std::string ending_animation;
-			std::string name;
-			std::string starting_animation;
-			std::string type;
+			wire::string ending_animation;
+			wire::string name;
+			wire::string starting_animation;
+			wire::string type;
 		};
 	};
 
@@ -41,7 +41,7 @@ namespace ss
 
 	namespace maps
 	{
-		typedef std::map<std::string, vectors::Drawables> Drawables;
+		typedef std::map<wire::string, vectors::Drawables> Drawables;
 	};
 
 	namespace game
@@ -60,8 +60,8 @@ namespace ss
 
 				std::function<void()> callback;
 
-				std::string next_state;
-				std::string state;
+				wire::string next_state;
+				wire::string state;
 
 				void on_update_animated_sprite(sf::Time &last_frame_time, structs::Drawable &drawable);
 				void on_update_background(structs::Drawable &drawable);
@@ -74,9 +74,9 @@ namespace ss
 
 				maps::Drawables &get_drawables();
 				State();
-				std::string &get_state();
+				wire::string &get_state();
 
-				void switch_state(std::string state, bool reverse_animations = false, std::function<void()> callback = [](){});
+				void switch_state(wire::string state, bool reverse_animations = false, std::function<void()> callback = [](){});
 				void update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window);
 		};
 	}

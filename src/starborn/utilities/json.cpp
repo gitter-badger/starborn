@@ -22,12 +22,12 @@ rapidjson::Document &ss::utilities::Json::get_document()
 	return this->document;
 }
 
-ss::utilities::Json::Json(std::string filename)
+ss::utilities::Json::Json(wire::string filename)
 {
 	this->parse(filename);
 }
 
-void ss::utilities::Json::parse(std::string filename)
+void ss::utilities::Json::parse(wire::string filename)
 {
 	auto *file = fopen(filename.c_str(), "r");
 	char buffer[256];

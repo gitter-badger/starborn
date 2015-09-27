@@ -29,7 +29,7 @@ namespace ss
 
 				Sprite();
 
-				void set_position(std::string anchor, float x, float y, float width, float height);
+				void set_position(wire::string anchor, float x, float y, float width, float height);
 		};
 	}
 }

@@ -27,7 +27,7 @@ ss::entities::Sprite::Sprite()
 	this->dynamic_position = false;
 }
 
-void ss::entities::Sprite::set_position(std::string anchor, float x, float y, float width, float height)
+void ss::entities::Sprite::set_position(wire::string anchor, float x, float y, float width, float height)
 {
 	auto new_x = 0.0f;
 	auto new_y = 0.0f;

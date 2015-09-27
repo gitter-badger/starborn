@@ -29,18 +29,12 @@ ss::game::State::State()
 	
 	this->reverse_animations = false;
 	this->running = false;
-	this->state = STATE_DEFAULT;
 	this->update_state = false;
 }
 
 ss::maps::Drawables &ss::game::State::get_drawables()
 {
 	return this->drawables;
-}
-
-std::string &ss::game::State::get_state()
-{
-	return this->state;
 }
 
 void ss::game::State::on_update_animated_sprite(sf::Time &last_frame_time, structs::Drawable &drawable)
@@ -72,7 +66,7 @@ void ss::game::State::on_update_sprite(structs::Drawable &drawable)
 		const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((sprite.getTexture()->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((sprite.getTexture()->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
 }
 
-void ss::game::State::switch_state(std::string state, bool reverse_animations, std::function<void()> callback)
+void ss::game::State::switch_state(wire::string state, bool reverse_animations, std::function<void()> callback)
 {
 	this->callback = callback;
 	this->next_state = state;
@@ -139,4 +133,9 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 void ss::game::State::update_shader_parameters(sf::Time &total_time, sf::Shader &shader)
 {
 	shader.setParameter("time", total_time.asSeconds());
+}
+
+wire::string &ss::game::State::get_state()
+{
+	return this->state;
 }

@@ -69,7 +69,7 @@ ss::Starborn::Starborn()
 	});
 }
 
-void ss::Starborn::load_animation(std::string filename)
+void ss::Starborn::load_animation(wire::string filename)
 {
 	utilities::Json json(filename);
 
@@ -98,7 +98,7 @@ void ss::Starborn::load_animations()
 	this->load_animation("assets/animations/ui.json");
 }
 
-void ss::Starborn::load_shader(std::string filename)
+void ss::Starborn::load_shader(wire::string filename)
 {
 	utilities::Json json(filename);
 
@@ -126,7 +126,7 @@ void ss::Starborn::load_shaders()
 	this->load_shader("assets/shaders/shaders.json");
 }
 
-void ss::Starborn::load_sprite(std::string filename)
+void ss::Starborn::load_sprite(wire::string filename)
 {
 	utilities::Json json(filename);
 
