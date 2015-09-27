@@ -50,6 +50,7 @@ namespace ss
 		{
 			private:
 				bool reverse_animations;
+				bool running;
 				bool update_state;
 
 				maps::Drawables drawables;
@@ -69,6 +70,8 @@ namespace ss
 				void update_shader_parameters(sf::Time &total_time, sf::Shader &shader);
 
 			public:
+				bool &is_running();
+
 				maps::Drawables &get_drawables();
 				State();
 				std::string &get_state();

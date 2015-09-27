@@ -59,6 +59,7 @@ namespace ss
 	{
 		typedef std::map<std::string, sf::Shader> Shaders;
 		typedef std::map<std::string, structs::Animation> Animations;
+		typedef std::map<std::string, ui::Menu> Menus;
 	};
 
 	class Starborn
@@ -69,14 +70,13 @@ namespace ss
 
 			maps::Animations animations;
 			maps::Shaders shaders;
+			maps::Menus menus;
 
 			sf::RenderWindow window;
 			sf::View view;
 
 			thor::ActionMap<std::string> actions;
 			thor::ActionMap<std::string>::CallbackSystem callbacks;
-
-			ui::Menu main_menu;
 
 			void load();
 
@@ -89,14 +89,15 @@ namespace ss
 			void load_sprite(std::string filename);
 			void load_sprites();
 
+			void new_game(bool midnight = true);
+
 			void on_continue();
 			void on_down();
 			void on_escape();
 			void on_exit();
-			void on_load_game();
-			void on_new_game();
-			void on_options();
+			void on_left();
 			void on_reload_shaders();
+			void on_right();
 			void on_screenshot();
 			void on_select();
 			void on_up();

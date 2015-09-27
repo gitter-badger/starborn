@@ -17,12 +17,18 @@
 
 #include <starborn/starborn.hpp>
 
+bool &ss::game::State::is_running()
+{
+	return this->running;
+}
+
 ss::game::State::State()
 {
 	this->background.create(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM));
 	this->background.clear(); 
 	
 	this->reverse_animations = false;
+	this->running = false;
 	this->state = STATE_DEFAULT;
 	this->update_state = false;
 }
@@ -123,6 +129,9 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 				reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation(this->reverse_animations ? (drawable.reversible ? drawable.ending_animation : drawable.starting_animation) : drawable.starting_animation);
 		}
 
+		if(this->state == STATE_RUNNING)
+			this->running = true;
+	
 		this->callback();
 	}
 }

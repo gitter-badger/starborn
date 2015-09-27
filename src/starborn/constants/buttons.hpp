@@ -22,7 +22,9 @@ namespace ss
 		#define BUTTON_CONTINUE		"continue"
 		#define BUTTON_EXIT			"exit"
 		#define BUTTON_LOAD_GAME	"load_game"
+		#define BUTTON_MIDNIGHT		"midnight"
 		#define BUTTON_NEW_GAME		"new_game"
+		#define BUTTON_NIGHTFALL	"nightfall"
 		#define BUTTON_OPTIONS		"options"
 	}
 }

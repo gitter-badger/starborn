@@ -36,7 +36,9 @@ ss::Starborn::Starborn()
 	this->actions[ACTION_DOWN] = thor::Action(sf::Keyboard::Down, thor::Action::PressOnce);
 	this->actions[ACTION_ESCAPE] = thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
 	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed);
+	this->actions[ACTION_LEFT] = thor::Action(sf::Keyboard::Left, thor::Action::PressOnce);
 	this->actions[ACTION_RELOAD_SHADERS] = thor::Action(sf::Keyboard::F9, thor::Action::PressOnce);
+	this->actions[ACTION_RIGHT] = thor::Action(sf::Keyboard::Right, thor::Action::PressOnce);
 	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5, thor::Action::PressOnce);
 	this->actions[ACTION_SELECT] = thor::Action(sf::Keyboard::Return, thor::Action::PressOnce);
 	this->actions[ACTION_UP] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce);
@@ -44,7 +46,9 @@ ss::Starborn::Starborn()
 	this->callbacks.connect(ACTION_DOWN, std::bind(&Starborn::on_down, this));
 	this->callbacks.connect(ACTION_ESCAPE, std::bind(&Starborn::on_escape, this));
 	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
+	this->callbacks.connect(ACTION_LEFT, std::bind(&Starborn::on_left, this));
 	this->callbacks.connect(ACTION_RELOAD_SHADERS, std::bind(&Starborn::on_reload_shaders, this));
+	this->callbacks.connect(ACTION_RIGHT, std::bind(&Starborn::on_right, this));
 	this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
 	this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
 	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
@@ -52,15 +56,15 @@ ss::Starborn::Starborn()
 	this->load_animations();
 	this->load_shaders();
 	this->load_sprites();
+
+	this->menus[STATE_MAIN_MENU].init(this->assets);
+	this->menus[STATE_NEW_GAME].init(this->assets);
 	
 	this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
 	{
 		this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
 		{
-			this->state.switch_state(STATE_MAIN_MENU, false, [this]()
-			{
-				this->main_menu.init(this->assets);
-			});
+			this->state.switch_state(STATE_MAIN_MENU);
 		});
 	});
 }
@@ -137,7 +141,9 @@ void ss::Starborn::load_sprite(std::string filename)
 			for(auto animation = sprite->value["animations"].Begin(); animation != sprite->value["animations"].End(); ++animation)
 				reinterpret_cast<entities::AnimatedSprite *>(new_sprite)->addAnimation(animation->GetString(), this->animations[animation->GetString()].animation, this->animations[animation->GetString()].duration);
 		
-			if(!strcmp(sprite->name.GetString(), BUTTON_CONTINUE) || !strcmp(sprite->name.GetString(), BUTTON_EXIT) || !strcmp(sprite->name.GetString(), BUTTON_LOAD_GAME) || !strcmp(sprite->name.GetString(), BUTTON_NEW_GAME) || !strcmp(sprite->name.GetString(), BUTTON_OPTIONS))
+			if(!strcmp(sprite->name.GetString(), BUTTON_CONTINUE) || !strcmp(sprite->name.GetString(), BUTTON_EXIT) || !strcmp(sprite->name.GetString(), BUTTON_LOAD_GAME) ||
+				!strcmp(sprite->name.GetString(), BUTTON_MIDNIGHT) || !strcmp(sprite->name.GetString(), BUTTON_NEW_GAME) || !strcmp(sprite->name.GetString(), BUTTON_NIGHTFALL) ||
+				!strcmp(sprite->name.GetString(), BUTTON_OPTIONS))
 			{
 				structs::Button button;
 
@@ -146,7 +152,7 @@ void ss::Starborn::load_sprite(std::string filename)
 				button.selected_texture = sprite->value["selected_texture"].GetString();
 				button.texture = sprite->value["texture"].GetString();
 
-				this->main_menu.get_buttons().push_back(button);
+				this->menus[sprite->value["state"].GetString()].get_buttons().push_back(button);
 			}
 		}
 		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT))
@@ -172,7 +178,7 @@ void ss::Starborn::load_sprite(std::string filename)
 		drawable.drawable = reinterpret_cast<sf::Drawable *>(new_sprite);
 		drawable.name = sprite->name.GetString();
 		drawable.render_states.shader = sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr;
-		drawable.reversible = sprite->value.HasMember("reversible") ? sprite->value["reversible"].GetBool() : false;
+		drawable.reversible = sprite->value.HasMember("reversible") ? sprite->value["reversible"].GetBool() : true;
 		drawable.scale = sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false;
 		drawable.starting_animation = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["starting_animation"].GetString() : "";
 		drawable.type = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? DRAWABLE_TYPE_ANIMATED_SPRITE : (!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND) ? DRAWABLE_TYPE_BACKGROUND : SPRITE_TYPE_DEFAULT);
@@ -187,20 +193,27 @@ void ss::Starborn::load_sprites()
 	this->load_sprite("assets/sprites/ui.json");
 }
 
+void ss::Starborn::new_game(bool midnight)
+{
+	this->state.switch_state(STATE_RUNNING);
+}
+
 void ss::Starborn::on_continue()
 {
+	if(this->state.is_running())
+		this->state.switch_state(STATE_RUNNING);
 }
 
 void ss::Starborn::on_down()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
-		this->main_menu.scroll_down(this->assets);
+		this->menus[this->state.get_state()].scroll_down(this->assets);
 }
 
 void ss::Starborn::on_escape()
 {
 	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
-		this->state.switch_state(STATE_MAIN_MENU, true);
+		this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? false : true);
 
 	else
 		this->window.close();
@@ -211,22 +224,21 @@ void ss::Starborn::on_exit()
 	this->window.close();
 }
 
-void ss::Starborn::on_load_game()
+void ss::Starborn::on_left()
 {
-}
-
-void ss::Starborn::on_new_game()
-{
-	this->state.switch_state(STATE_NEW_GAME);
-}
-
-void ss::Starborn::on_options()
-{
+	if(this->state.get_state() == STATE_NEW_GAME)
+		this->menus[this->state.get_state()].scroll_up(this->assets);
 }
 
 void ss::Starborn::on_reload_shaders()
 {
 	this->load_shaders();
+}
+
+void ss::Starborn::on_right()
+{
+	if(this->state.get_state() == STATE_NEW_GAME)
+		this->menus[this->state.get_state()].scroll_down(this->assets);
 }
 
 void ss::Starborn::on_screenshot()
@@ -236,31 +248,32 @@ void ss::Starborn::on_screenshot()
 
 void ss::Starborn::on_select()
 {
-	if(this->state.get_state() == STATE_MAIN_MENU)
+	if((this->state.get_state() != STATE_RUNNING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
 	{
-		auto &button_name = this->main_menu.get_buttons()[this->main_menu.get_position()].name;
-
+		auto &menu = this->menus[this->state.get_state()];
+		auto &button_name = menu.get_buttons()[menu.get_position()].name;
+		
 		if(button_name == BUTTON_CONTINUE)
 			this->on_continue();
 
 		else if(button_name == BUTTON_EXIT)
 			this->on_exit();
 
-		else if(button_name == BUTTON_LOAD_GAME)
-			this->on_load_game();
+		else if(button_name == BUTTON_MIDNIGHT)
+			this->new_game();
 
 		else if(button_name == BUTTON_NEW_GAME)
-			this->on_new_game();
+			this->state.switch_state(STATE_NEW_GAME);
 
-		else if(button_name == BUTTON_OPTIONS)
-			this->on_options();
+		else if(button_name == BUTTON_NIGHTFALL)
+			this->new_game(false);
 	}
 }
 
 void ss::Starborn::on_up()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
-		this->main_menu.scroll_up(this->assets);
+		this->menus[this->state.get_state()].scroll_up(this->assets);
 }
 
 void ss::Starborn::run()
