@@ -1,0 +1,9 @@
+[submodule "third_party/wire"]
+	path = third_party/wire
+	url = https://github.com/snail23/wire.git
+[submodule "third_party/memo"]
+	path = third_party/memo
+	url = https://github.com/snail23/memo.git
+[submodule "third_party/oak"]
+	path = third_party/oak
+	url = https://github.com/snail23/oak.git
