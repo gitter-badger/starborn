@@ -53,7 +53,7 @@
       <GenerateDebugInformation>No</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy ..\..\assets ..\..\bin\assets /I /S /Y</Command>
+      <Command>cd $(SolutionDir) &amp;&amp; bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
