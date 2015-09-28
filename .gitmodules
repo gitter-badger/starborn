@@ -10,3 +10,39 @@
 [submodule "third_party/apathy"]
 	path = third_party/apathy
 	url = https://github.com/snail23/apathy.git
+[submodule "third_party/tracey"]
+	path = third_party/tracey
+	url = https://github.com/snail23/tracey.git
+[submodule "third_party/heal"]
+	path = third_party/heal
+	url = https://github.com/snail23/heal.git
+[submodule "third_party/metrics"]
+	path = third_party/metrics
+	url = https://github.com/snail23/metrics.git
+[submodule "third_party/units"]
+	path = third_party/units
+	url = https://github.com/snail23/units.git
+[submodule "third_party/collage"]
+	path = third_party/collage
+	url = https://github.com/snail23/collage.git
+[submodule "third_party/flow"]
+	path = third_party/flow
+	url = https://github.com/snail23/flow.git
+[submodule "third_party/DrEcho"]
+	path = third_party/DrEcho
+	url = https://github.com/snail23/DrEcho.git
+[submodule "third_party/cocoa"]
+	path = third_party/cocoa
+	url = https://github.com/snail23/cocoa.git
+[submodule "third_party/profit"]
+	path = third_party/profit
+	url = https://github.com/snail23/profit.git
+[submodule "third_party/bundler"]
+	path = third_party/bundler
+	url = https://github.com/snail23/bundler.git
+[submodule "third_party/bubble"]
+	path = third_party/bubble
+	url = https://github.com/snail23/bubble.git
+[submodule "third_party/bundle"]
+	path = third_party/bundle
+	url = https://github.com/snail23/bundle.git
