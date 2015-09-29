@@ -31,12 +31,14 @@ bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
 
 ss::Starborn::~Starborn()
 {
+	apathy::ostream::detach(std::cerr);
 	apathy::ostream::detach(std::cout);
 }
 
 ss::Starborn::Starborn()
 {
 	apathy::ostream::attach(std::cout, &log);
+	apathy::ostream::attach(std::cerr, &log);
 
 	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << "\r\n";
 	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>\r\n";
@@ -249,15 +251,15 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 
 void ss::Starborn::log(bool open, bool feed, bool close, const std::string &line)
 {
-	if(open)
+	if(open || close)
 	{
-		logger.open(get_filename("logs", "starborn", ".txt").c_str(), std::ios::app | std::ios::binary | std::ios::out);
+		if(open)
+			logger.open(get_filename("logs", "starborn", ".txt").c_str(), std::ios::app | std::ios::binary | std::ios::out);
+		
 		logger << line << std::endl;
-	}
-	else if(close)
-	{
-		logger << line << std::endl;
-		logger.close();
+
+		if(close)
+			logger.close();
 	}
 	else if(feed)
 	{
