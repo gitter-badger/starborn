@@ -16,6 +16,7 @@
 */
 
 #include <starborn/starborn.hpp>
+#include <starborn/git.hpp>
 #include <starborn/version.hpp>
 
 bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
@@ -36,6 +37,12 @@ ss::Starborn::~Starborn()
 ss::Starborn::Starborn()
 {
 	apathy::ostream::attach(std::cout, &log);
+
+	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << "\r\n";
+	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>\r\n";
+	std::cout << "\r\n";
+	std::cout << "[" << STARBORN_BRANCH << "] " << STARBORN_HASH << " - " << __DATE__ << " " << __TIME__ << "\r\n";
+	std::cout << "\r\n";
 
 	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
 
@@ -254,7 +261,7 @@ void ss::Starborn::log(bool open, bool feed, bool close, const std::string &line
 	}
 	else if(feed)
 	{
-		logger << logger_cache << std::endl;
+		logger << sand::format(sand::now(), "[mm/dd/yyyy HH:MM:SS] ") << logger_cache << std::endl;
 		logger_cache.clear();
 	}
 	else

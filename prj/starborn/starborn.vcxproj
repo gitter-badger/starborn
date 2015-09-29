@@ -53,8 +53,28 @@
       <GenerateDebugInformation>No</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir) &amp;&amp; bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all</Command>
+      <Command>cd $(SolutionDir)
+bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir)
+
+git rev-parse --abbrev-ref HEAD &gt; temp
+set /p BRANCH=&lt;temp
+
+git rev-parse HEAD &gt; temp
+set /p HASH=&lt;temp
+
+git rev-list --count --first-parent HEAD &gt; temp
+set /p REVISION=&lt;temp
+
+del /Q temp
+
+echo #define STARBORN_BRANCH "%BRANCH%" &gt; src/starborn/git.hpp
+echo #define STARBORN_HASH "%HASH%" &gt;&gt; src/starborn/git.hpp
+echo #define STARBORN_REVISION "%REVISION%" &gt;&gt; src/starborn/git.hpp
+echo #define STARBORN_REVISION_NUMBER %REVISION% &gt;&gt; src/starborn/git.hpp</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />

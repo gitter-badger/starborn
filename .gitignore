@@ -5,3 +5,4 @@
 bin/*
 ipch/*
 prj/*/obj/*
+src/starborn/git.hpp
