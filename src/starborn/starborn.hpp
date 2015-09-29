@@ -89,6 +89,9 @@ namespace ss
 
 			bundle::string unpack_asset(bundle::file &asset);
 
+			static void log(bool open, bool feed, bool close, const std::string &line);
+			static wire::string get_filename(wire::string directory, wire::string filename_prefix, wire::string extension);
+
 			void load();
 
 			void load_animation(bundle::string &json_data);
@@ -109,8 +112,12 @@ namespace ss
 			void on_up();
 
 		public:
+			~Starborn();
 			Starborn();
 
 			void run();
 	};
+
+	static std::ofstream logger;
+	static wire::string logger_cache;
 }

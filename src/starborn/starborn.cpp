@@ -28,10 +28,17 @@ bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
 	return data;
 }
 
+ss::Starborn::~Starborn()
+{
+	apathy::ostream::detach(std::cout);
+}
+
 ss::Starborn::Starborn()
 {
+	apathy::ostream::attach(std::cout, &log);
+
 	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
-	
+
 	this->window.setKeyRepeatEnabled(false);
 	this->window.setMouseCursorVisible(false);
 	this->window.setVerticalSyncEnabled(true);
@@ -233,6 +240,27 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 	}
 }
 
+void ss::Starborn::log(bool open, bool feed, bool close, const std::string &line)
+{
+	if(open)
+	{
+		logger.open(get_filename("logs", "starborn", ".txt").c_str(), std::ios::app | std::ios::binary | std::ios::out);
+		logger << line << std::endl;
+	}
+	else if(close)
+	{
+		logger << line << std::endl;
+		logger.close();
+	}
+	else if(feed)
+	{
+		logger << logger_cache << std::endl;
+		logger_cache.clear();
+	}
+	else
+		logger_cache += line;
+}
+
 void ss::Starborn::new_game(bool midnight)
 {
 	this->state.switch_state(STATE_RUNNING);
@@ -282,10 +310,7 @@ void ss::Starborn::on_right()
 
 void ss::Starborn::on_screenshot()
 {
-	if(!apathy::exists("screenshots"))
-		apathy::mkdir("screenshots");
-
-	sf::Image(this->window.capture()).saveToFile("screenshots/starborn-" + sand::format(sand::now(), "mm-dd-yy-HH-MM-SS") + ".png");
+	sf::Image(this->window.capture()).saveToFile(get_filename("screenshots", "starborn", ".png"));
 }
 
 void ss::Starborn::on_select()
@@ -337,4 +362,14 @@ void ss::Starborn::run()
 		this->state.update(last_frame_time, total_time, this->window);
 		this->window.display();
 	}
+}
+
+wire::string ss::Starborn::get_filename(wire::string directory, wire::string filename_prefix, wire::string extension)
+{
+	apathy::path path(directory);
+
+	if(!path.exists())
+		apathy::path::md(path);
+
+	return directory + "/" + filename_prefix + "-" + sand::format(sand::now(), "mm-dd-yy-HH-MM-SS") + extension;
 }
