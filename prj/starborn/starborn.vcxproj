@@ -69,7 +69,7 @@
     <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp" />
     <ClInclude Include="..\..\src\starborn\entities\sprite.hpp" />
     <ClInclude Include="..\..\src\starborn\game\state.hpp" />
-    <ClInclude Include="..\..\src\starborn\game\typedefs.hpp" />
+    <ClInclude Include="..\..\src\starborn\resources\resources.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
     <ClInclude Include="..\..\src\starborn\ui\menu.hpp" />
     <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />

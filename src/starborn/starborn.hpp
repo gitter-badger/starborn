@@ -44,11 +44,10 @@
 #include <starborn/entities/sprite.hpp>
 #include <starborn/entities/animated_sprite.hpp>
 
+#include <starborn/resources/resources.hpp>
 #include <starborn/game/state.hpp>
-#include <starborn/game/typedefs.hpp>
 
 #include <starborn/ui/menu.hpp>
-
 #include <starborn/utilities/json.hpp>
 
 namespace ss
@@ -64,6 +63,7 @@ namespace ss
 
 	namespace maps
 	{
+		typedef std::map<wire::string, bundle::string> ShaderSources;
 		typedef std::map<wire::string, sf::Shader> Shaders;
 		typedef std::map<wire::string, structs::Animation> Animations;
 		typedef std::map<wire::string, ui::Menu> Menus;
@@ -72,14 +72,14 @@ namespace ss
 	class Starborn
 	{
 		private:
-			bundle::archive assets_archive;
-
-			game::Assets assets;
 			game::State state;
 
 			maps::Animations animations;
-			maps::Shaders shaders;
 			maps::Menus menus;
+			maps::Shaders shaders;
+			maps::ShaderSources shader_sources;
+
+			resources::Textures textures;
 
 			sf::RenderWindow window;
 			sf::View view;
@@ -87,7 +87,6 @@ namespace ss
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
-			bundle::string load_file(wire::string filename);
 			bundle::string unpack_asset(bundle::file &asset);
 
 			void load();

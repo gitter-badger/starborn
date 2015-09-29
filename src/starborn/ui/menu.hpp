@@ -48,10 +48,10 @@ namespace ss
 				size_t &get_position();
 				vectors::Buttons &get_buttons();
 
-				void init(game::Assets &assets, std::function<bundle::string(wire::string)> load_file);
+				void init(resources::Textures &textures);
 
-				void scroll_down(game::Assets &assets, std::function<bundle::string(wire::string)> load_file);
-				void scroll_up(game::Assets &assets, std::function<bundle::string(wire::string)> load_file);
+				void scroll_down(resources::Textures &textures);
+				void scroll_up(resources::Textures &textures);
 		};
 	}
 }
