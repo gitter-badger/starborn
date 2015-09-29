@@ -120,6 +120,9 @@
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp">
       <Filter>Third Party\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\third_party\bundle\bundle.hpp">
+      <Filter>Third Party\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc">
@@ -152,6 +155,9 @@
       <Filter>Third Party\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
+      <Filter>Third Party\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\bundle\bundle.cpp">
       <Filter>Third Party\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

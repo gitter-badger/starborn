@@ -18,6 +18,27 @@
 #include <starborn/starborn.hpp>
 #include <starborn/version.hpp>
 
+bundle::string ss::Starborn::load_file(wire::string filename)
+{
+	for(auto &&asset : this->assets_archive)
+	{
+		if(asset["file"] == filename)
+			return this->unpack_asset(asset);
+	}
+
+	return bundle::string();
+}
+
+bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
+{
+	auto data = asset["data"];
+
+	if(bundle::is_packed(data))
+		bundle::unpack(data, asset["data"]);
+
+	return data;
+}
+
 ss::Starborn::Starborn()
 {
 	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
@@ -53,12 +74,10 @@ ss::Starborn::Starborn()
 	this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
 	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
 
-	this->load_animations();
-	this->load_shaders();
-	this->load_sprites();
+	this->load();
 
-	this->menus[STATE_MAIN_MENU].init(this->assets);
-	this->menus[STATE_NEW_GAME].init(this->assets);
+	this->menus[STATE_MAIN_MENU].init(this->assets, std::bind(&Starborn::load_file, this, std::placeholders::_1));
+	this->menus[STATE_NEW_GAME].init(this->assets, std::bind(&Starborn::load_file, this, std::placeholders::_1));
 	
 	this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
 	{
@@ -69,9 +88,37 @@ ss::Starborn::Starborn()
 	});
 }
 
-void ss::Starborn::load_animation(wire::string filename)
+void ss::Starborn::load()
 {
-	utilities::Json json(filename);
+	this->assets_archive.bin(apathy::file("assets.zip").read());
+
+	for(auto &&asset : this->assets_archive)
+	{
+		wire::string file = asset["file"];
+
+		auto animation = file.matchesi("assets/animations/*.json");
+		auto shader = file.matchesi("assets/shaders/*.json");
+		auto sprite = file.matchesi("assets/sprites/*.json");
+
+		if(animation || shader || sprite)
+		{
+			auto data = this->unpack_asset(asset);
+
+			if(animation)
+				this->load_animation(data);
+
+			else if(shader)
+				this->load_shader(data);
+
+			else if(sprite)
+				this->load_sprite(data);
+		}
+	}
+}
+
+void ss::Starborn::load_animation(bundle::string &json_data)
+{
+	utilities::Json json(json_data);
 
 	for(auto animation = json.get_document().MemberBegin(); animation != json.get_document().MemberEnd(); ++animation)
 	{
@@ -92,26 +139,20 @@ void ss::Starborn::load_animation(wire::string filename)
 	}
 }
 
-void ss::Starborn::load_animations()
+void ss::Starborn::load_shader(bundle::string &json_data)
 {
-	this->load_animation("assets/animations/general.json");
-	this->load_animation("assets/animations/ui.json");
-}
-
-void ss::Starborn::load_shader(wire::string filename)
-{
-	utilities::Json json(filename);
+	utilities::Json json(json_data);
 
 	for(auto shader = json.get_document().MemberBegin(); shader != json.get_document().MemberEnd(); ++shader)
 	{
 		if(shader->value.HasMember("fragment") && shader->value.HasMember("vertex"))
-			this->shaders[shader->name.GetString()].loadFromFile(shader->value["vertex"].GetString(), shader->value["fragment"].GetString());
+			this->shaders[shader->name.GetString()].loadFromMemory(this->load_file(shader->value["vertex"].GetString()), this->load_file(shader->value["fragment"].GetString()));
 
 		else if(shader->value.HasMember("fragment"))
-			this->shaders[shader->name.GetString()].loadFromFile(shader->value["fragment"].GetString(), sf::Shader::Fragment);
+			this->shaders[shader->name.GetString()].loadFromMemory(this->load_file(shader->value["fragment"].GetString()), sf::Shader::Fragment);
 
 		else if(shader->value.HasMember("vertex"))
-			this->shaders[shader->name.GetString()].loadFromFile(shader->value["vertex"].GetString(), sf::Shader::Vertex);
+			this->shaders[shader->name.GetString()].loadFromMemory(this->load_file(shader->value["vertex"].GetString()), sf::Shader::Vertex);
 
 		if(shader->value.HasMember("fragment") || shader->value.HasMember("vertex"))
 		{
@@ -121,14 +162,9 @@ void ss::Starborn::load_shader(wire::string filename)
 	}
 }
 
-void ss::Starborn::load_shaders()
+void ss::Starborn::load_sprite(bundle::string &json_data)
 {
-	this->load_shader("assets/shaders/shaders.json");
-}
-
-void ss::Starborn::load_sprite(wire::string filename)
-{
-	utilities::Json json(filename);
+	utilities::Json json(json_data);
 
 	for(auto sprite = json.get_document().MemberBegin(); sprite != json.get_document().MemberEnd(); ++sprite)
 	{
@@ -166,9 +202,10 @@ void ss::Starborn::load_sprite(wire::string filename)
 		else
 		{
 			auto &final_sprite = *reinterpret_cast<entities::Sprite *>(new_sprite);
+			auto texture = this->load_file(sprite->value["texture"].GetString());
 
 			final_sprite.has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
-			final_sprite.setTexture(this->assets.acquire(sprite->value["texture"].GetString(), thor::Resources::fromFile<sf::Texture>(sprite->value["texture"].GetString()), thor::Resources::Reuse));
+			final_sprite.setTexture(this->assets.acquire(sprite->value["texture"].GetString(), thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse));
 			final_sprite.set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble(), sprite->value.HasMember("size") ? sprite->value["size"]["x"].GetDouble() : 0.0f, sprite->value.HasMember("size") ? sprite->value["size"]["y"].GetDouble() : 0.0f);
 		}
 
@@ -187,12 +224,6 @@ void ss::Starborn::load_sprite(wire::string filename)
 	}
 }
 
-void ss::Starborn::load_sprites()
-{
-	this->load_sprite("assets/sprites/general.json");
-	this->load_sprite("assets/sprites/ui.json");
-}
-
 void ss::Starborn::new_game(bool midnight)
 {
 	this->state.switch_state(STATE_RUNNING);
@@ -207,7 +238,7 @@ void ss::Starborn::on_continue()
 void ss::Starborn::on_down()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
-		this->menus[this->state.get_state()].scroll_down(this->assets);
+		this->menus[this->state.get_state()].scroll_down(this->assets, std::bind(&Starborn::load_file, this, std::placeholders::_1));
 }
 
 void ss::Starborn::on_escape()
@@ -227,18 +258,17 @@ void ss::Starborn::on_exit()
 void ss::Starborn::on_left()
 {
 	if(this->state.get_state() == STATE_NEW_GAME)
-		this->menus[this->state.get_state()].scroll_up(this->assets);
+		this->menus[this->state.get_state()].scroll_up(this->assets, std::bind(&Starborn::load_file, this, std::placeholders::_1));
 }
 
 void ss::Starborn::on_reload_shaders()
 {
-	this->load_shaders();
 }
 
 void ss::Starborn::on_right()
 {
 	if(this->state.get_state() == STATE_NEW_GAME)
-		this->menus[this->state.get_state()].scroll_down(this->assets);
+		this->menus[this->state.get_state()].scroll_down(this->assets, std::bind(&Starborn::load_file, this, std::placeholders::_1));
 }
 
 void ss::Starborn::on_screenshot()
@@ -276,7 +306,7 @@ void ss::Starborn::on_select()
 void ss::Starborn::on_up()
 {
 	if(this->state.get_state() == STATE_MAIN_MENU)
-		this->menus[this->state.get_state()].scroll_up(this->assets);
+		this->menus[this->state.get_state()].scroll_up(this->assets, std::bind(&Starborn::load_file, this, std::placeholders::_1));
 }
 
 void ss::Starborn::run()

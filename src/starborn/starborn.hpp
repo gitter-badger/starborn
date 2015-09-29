@@ -16,6 +16,7 @@
  */
 
 #include <apathy/apathy.hpp>
+#include <bundle/bundle.hpp>
 
 #include <rapidjson/document.h>
 #include <rapidjson/filereadstream.h>
@@ -71,6 +72,8 @@ namespace ss
 	class Starborn
 	{
 		private:
+			bundle::archive assets_archive;
+
 			game::Assets assets;
 			game::State state;
 
@@ -84,16 +87,14 @@ namespace ss
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
+			bundle::string load_file(wire::string filename);
+			bundle::string unpack_asset(bundle::file &asset);
+
 			void load();
 
-			void load_animation(wire::string filename);
-			void load_animations();
-
-			void load_shader(wire::string filename);
-			void load_shaders();
-
-			void load_sprite(wire::string filename);
-			void load_sprites();
+			void load_animation(bundle::string &json_data);
+			void load_shader(bundle::string &json_data);
+			void load_sprite(bundle::string &json_data);
 
 			void new_game(bool midnight = true);
 

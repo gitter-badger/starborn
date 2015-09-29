@@ -42,7 +42,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DisableSpecificWarnings>4100;4458</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4456;4458</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <OptimizeReferences>true</OptimizeReferences>
@@ -75,6 +75,7 @@
     <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
+    <ClInclude Include="..\..\third_party\bundle\bundle.hpp" />
     <ClInclude Include="..\..\third_party\sand\sand.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4100;4127;4244;4245;4458;4505</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\bundle\bundle.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4018;4099;4100;4127;4189;4244;4245;4267;4305;4310;4324;4334;4456;4457;4458;4459;4701;4702;4996</DisableSpecificWarnings>
     </ClCompile>
     <ClCompile Include="..\..\third_party\sand\sand.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244;4458</DisableSpecificWarnings>

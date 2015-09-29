@@ -22,19 +22,24 @@ rapidjson::Document &ss::utilities::Json::get_document()
 	return this->document;
 }
 
-ss::utilities::Json::Json(wire::string filename)
+ss::utilities::Json::Json(bundle::string &json_data, bool file)
 {
-	this->parse(filename);
+	this->parse(json_data, file);
 }
 
-void ss::utilities::Json::parse(wire::string filename)
+void ss::utilities::Json::parse(bundle::string &json_data, bool file)
 {
-	auto *file = fopen(filename.c_str(), "r");
-	char buffer[256];
-
-	rapidjson::FileReadStream stream(file, buffer, sizeof(buffer));
-	this->document.ParseStream(stream);
-
 	if(file)
-		fclose(file);
+	{
+		auto *file_handle = fopen(json_data.c_str(), "r");
+		char buffer[256];
+
+		rapidjson::FileReadStream stream(file_handle, buffer, sizeof(buffer));
+		this->document.ParseStream(stream);
+
+		if(file_handle)
+			fclose(file_handle);
+	}
+	else
+		this->document.Parse(json_data.c_str());
 }

@@ -32,29 +32,50 @@ ss::vectors::Buttons &ss::ui::Menu::get_buttons()
 	return this->buttons;
 }
 
-void ss::ui::Menu::init(game::Assets &assets)
+void ss::ui::Menu::init(game::Assets &assets, std::function<bundle::string(wire::string)> load_file)
 {
-	this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].texture), thor::Resources::Reuse));
+	auto texture = this->buttons[this->position].texture;
+	auto texture_data = load_file(texture);
+
+	this->buttons[this->position].animated_sprite->setTexture(assets.acquire(texture, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse));
 	this->position = 0;
-	this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].selected_texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].selected_texture), thor::Resources::Reuse));
+
+	texture = this->buttons[this->position].selected_texture;
+	texture_data = load_file(texture);
+
+	this->buttons[this->position].animated_sprite->setTexture(assets.acquire(texture, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse));
 }
 
-void ss::ui::Menu::scroll_down(game::Assets &assets)
+void ss::ui::Menu::scroll_down(game::Assets &assets, std::function<bundle::string(wire::string)> load_file)
 {
 	if(this->buttons.size())
 	{
-		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].texture), thor::Resources::Reuse));
+		auto texture = this->buttons[this->position].texture;
+		auto texture_data = load_file(texture);
+
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(texture, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse));
 		this->position = (this->position < (this->buttons.size() - 1)) ? (this->position + 1) : 0;
-		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].selected_texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].selected_texture), thor::Resources::Reuse));
+
+		texture = this->buttons[this->position].selected_texture;
+		texture_data = load_file(texture);
+
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(texture, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse));
 	}
 }
 
-void ss::ui::Menu::scroll_up(game::Assets &assets)
+void ss::ui::Menu::scroll_up(game::Assets &assets, std::function<bundle::string(wire::string)> load_file)
 {
 	if(this->buttons.size())
 	{
-		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].texture), thor::Resources::Reuse));
+		auto texture = this->buttons[this->position].texture;
+		auto texture_data = load_file(texture);
+
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(texture, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse));
 		this->position = this->position ? (this->position - 1) : (this->buttons.size() - 1);
-		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(this->buttons[this->position].selected_texture, thor::Resources::fromFile<sf::Texture>(this->buttons[this->position].selected_texture), thor::Resources::Reuse));
+
+		texture = this->buttons[this->position].selected_texture;
+		texture_data = load_file(texture);
+
+		this->buttons[this->position].animated_sprite->setTexture(assets.acquire(texture, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse));
 	}
 }

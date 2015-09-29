@@ -26,11 +26,11 @@ namespace ss
 
 			public:
 				Json() = default;
-				Json(wire::string filename);
+				Json(bundle::string &json_data, bool file = false);
 
 				rapidjson::Document &get_document();
 
-				void parse(wire::string filename);
+				void parse(bundle::string &json_data, bool file = false);
 		};
 	}
 }
