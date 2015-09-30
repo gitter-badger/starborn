@@ -82,7 +82,7 @@ ss::Starborn::Starborn()
 	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << "\r\n";
 	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>\r\n";
 	std::cout << "\r\n";
-	std::cout << "[" << GIT_BRANCH << "] " << GIT_SHA1 << " - " << __DATE__ << " " << __TIME__ << "\r\n";
+	std::cout << "[" << GIT_BRANCH << "] " << __DATE__ << " " << __TIME__ << "\r\n";
 	std::cout << "\r\n";
 	
 	if(!this->update())

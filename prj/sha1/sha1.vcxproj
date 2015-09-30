@@ -67,17 +67,15 @@ git rev-parse --abbrev-ref HEAD &gt; temp
 set /p BRANCH=&lt;temp
 
 git rev-list --count --first-parent HEAD &gt; temp
-set /p REVISION=&lt;temp
 
-git rev-parse HEAD &gt; temp
-set /p SHA1=&lt;temp
+set /p REVISION2=&lt;temp
+set /a REVISION=%REVISION2%+1
 
 del /Q temp
 
 echo #define GIT_BRANCH "%BRANCH%" &gt; src\git.hpp
 echo #define GIT_REVISION "%REVISION%" &gt;&gt; src\git.hpp
-echo #define GIT_REVISION_NUMBER %REVISION% &gt;&gt; src\git.hpp
-echo #define GIT_SHA1 "%SHA1%" &gt;&gt; src\git.hpp</Command>
+echo #define GIT_REVISION_NUMBER %REVISION% &gt;&gt; src\git.hpp</Command>
     </PreBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>
