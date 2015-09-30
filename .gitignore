@@ -1,8 +1,9 @@
+*.iobj
+*.ipdb
 *.opensdf
 *.sdf
 
 .vs/*
-bin/*
 ipch/*
 prj/*/obj/*
 src/starborn/git.hpp
