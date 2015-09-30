@@ -15,8 +15,27 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define STARBORN_AUTHOR			"Snailsoft"
-#define STARBORN_DESCRIPTION	"Starborn"
-#define STARBORN_NAME			"Starborn"
-#define STARBORN_VERSION		"0.1.0." GIT_REVISION
-#define STARBORN_VERSION_NUMBER	0, 1, 0, GIT_REVISION_NUMBER
+#include <git.hpp>
+#include <version.hpp>
+
+1 VERSIONINFO FILEVERSION SHA1_VERSION_NUMBER
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040901B5"
+		BEGIN
+			VALUE "CompanyName",		SHA1_AUTHOR
+			VALUE "FileDescription",	SHA1_DESCRIPTION
+			VALUE "LegalCopyright",		"Copyright (C) 2013-2015 " SHA1_AUTHOR
+			VALUE "ProductName",		SHA1_NAME
+			VALUE "ProductVersion",		SHA1_VERSION
+		END
+	END
+
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x409, 0x01B5
+	END
+END
+
+2 ICON "sha1.ico"

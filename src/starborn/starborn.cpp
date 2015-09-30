@@ -16,8 +16,47 @@
 */
 
 #include <starborn/starborn.hpp>
-#include <starborn/git.hpp>
+#include <git.hpp>
 #include <starborn/version.hpp>
+#include <windows.h>
+
+bool ss::Starborn::update()
+{
+	wire::string url = "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/bin/";
+
+	this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip?raw=true");
+	this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe?raw=true");
+
+	if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe?raw=true", false))
+	{
+		PROCESS_INFORMATION process_info;
+		STARTUPINFO startup_info;
+
+		memset(&process_info, 0, sizeof(process_info));
+		memset(&startup_info, 0, sizeof(startup_info));
+
+		startup_info.cb = sizeof(startup_info);
+		CreateProcess(nullptr, "starborn.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
+
+		return true;
+	}
+
+	return false;
+}
+
+bool ss::Starborn::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file)
+{
+	apathy::file file(source_filename);
+
+	if(wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
+	{
+		file.patch(flow::download(destination_url).data, delete_old_file);
+
+		return true;
+	}
+
+	return false;
+}
 
 bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
 {
@@ -31,66 +70,82 @@ bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
 
 ss::Starborn::~Starborn()
 {
-	apathy::ostream::detach(std::cerr);
 	apathy::ostream::detach(std::cout);
 }
 
 ss::Starborn::Starborn()
 {
+	this->handle_updated();
+
 	apathy::ostream::attach(std::cout, &log);
-	apathy::ostream::attach(std::cerr, &log);
 
 	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << "\r\n";
 	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>\r\n";
 	std::cout << "\r\n";
-	std::cout << "[" << STARBORN_BRANCH << "] " << STARBORN_HASH << " - " << __DATE__ << " " << __TIME__ << "\r\n";
+	std::cout << "[" << GIT_BRANCH << "] " << GIT_SHA1 << " - " << __DATE__ << " " << __TIME__ << "\r\n";
 	std::cout << "\r\n";
-
-	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
-
-	this->window.setKeyRepeatEnabled(false);
-	this->window.setMouseCursorVisible(false);
-	this->window.setVerticalSyncEnabled(true);
-
-	this->view = this->window.getView();
-
-	this->view.zoom(1.0f / SETTING_ZOOM);
-	this->view.setCenter(static_cast<float>((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM), static_cast<float>((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM));
-
-	this->window.setView(this->view);
-
-	this->actions[ACTION_DOWN] = thor::Action(sf::Keyboard::Down, thor::Action::PressOnce);
-	this->actions[ACTION_ESCAPE] = thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
-	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed);
-	this->actions[ACTION_LEFT] = thor::Action(sf::Keyboard::Left, thor::Action::PressOnce);
-	this->actions[ACTION_RELOAD_SHADERS] = thor::Action(sf::Keyboard::F9, thor::Action::PressOnce);
-	this->actions[ACTION_RIGHT] = thor::Action(sf::Keyboard::Right, thor::Action::PressOnce);
-	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5, thor::Action::PressOnce);
-	this->actions[ACTION_SELECT] = thor::Action(sf::Keyboard::Return, thor::Action::PressOnce);
-	this->actions[ACTION_UP] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce);
-
-	this->callbacks.connect(ACTION_DOWN, std::bind(&Starborn::on_down, this));
-	this->callbacks.connect(ACTION_ESCAPE, std::bind(&Starborn::on_escape, this));
-	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
-	this->callbacks.connect(ACTION_LEFT, std::bind(&Starborn::on_left, this));
-	this->callbacks.connect(ACTION_RELOAD_SHADERS, std::bind(&Starborn::on_reload_shaders, this));
-	this->callbacks.connect(ACTION_RIGHT, std::bind(&Starborn::on_right, this));
-	this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
-	this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
-	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
-
-	this->load();
-
-	this->menus[STATE_MAIN_MENU].init(this->textures);
-	this->menus[STATE_NEW_GAME].init(this->textures);
 	
-	this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
+	if(!this->update())
 	{
-		this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
+		this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
+
+		this->window.setKeyRepeatEnabled(false);
+		this->window.setMouseCursorVisible(false);
+		this->window.setVerticalSyncEnabled(true);
+
+		this->view = this->window.getView();
+
+		this->view.zoom(1.0f / SETTING_ZOOM);
+		this->view.setCenter(static_cast<float>((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM), static_cast<float>((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM));
+
+		this->window.setView(this->view);
+
+		this->actions[ACTION_DOWN] = thor::Action(sf::Keyboard::Down, thor::Action::PressOnce);
+		this->actions[ACTION_ESCAPE] = thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
+		this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed);
+		this->actions[ACTION_LEFT] = thor::Action(sf::Keyboard::Left, thor::Action::PressOnce);
+		this->actions[ACTION_RELOAD_SHADERS] = thor::Action(sf::Keyboard::F9, thor::Action::PressOnce);
+		this->actions[ACTION_RIGHT] = thor::Action(sf::Keyboard::Right, thor::Action::PressOnce);
+		this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5, thor::Action::PressOnce);
+		this->actions[ACTION_SELECT] = thor::Action(sf::Keyboard::Return, thor::Action::PressOnce);
+		this->actions[ACTION_UP] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce);
+
+		this->callbacks.connect(ACTION_DOWN, std::bind(&Starborn::on_down, this));
+		this->callbacks.connect(ACTION_ESCAPE, std::bind(&Starborn::on_escape, this));
+		this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
+		this->callbacks.connect(ACTION_LEFT, std::bind(&Starborn::on_left, this));
+		this->callbacks.connect(ACTION_RELOAD_SHADERS, std::bind(&Starborn::on_reload_shaders, this));
+		this->callbacks.connect(ACTION_RIGHT, std::bind(&Starborn::on_right, this));
+		this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
+		this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
+		this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
+
+		this->load();
+
+		this->menus[STATE_MAIN_MENU].init(this->textures);
+		this->menus[STATE_NEW_GAME].init(this->textures);
+
+		this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
 		{
-			this->state.switch_state(STATE_MAIN_MENU);
+			this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
+			{
+				this->state.switch_state(STATE_MAIN_MENU);
+			});
 		});
-	});
+	}
+}
+
+void ss::Starborn::handle_updated()
+{
+	apathy::file starborn_old("starborn.exe.$old");
+
+	if(starborn_old.exists())
+	{
+		while(starborn_old.exists())
+			starborn_old.remove();
+
+		bubble::notify("Updated to version " STARBORN_VERSION, STARBORN_NAME);
+	}
 }
 
 void ss::Starborn::load()

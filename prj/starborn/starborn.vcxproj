@@ -28,13 +28,14 @@
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(ProjectDir)obj\</IntDir>
     <GenerateManifest>false</GenerateManifest>
+    <ExtensionsToDeleteOnClean>$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;SFML_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;NOMINMAX;SFML_STATIC</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)third_party;$(SolutionDir)third_party\rapidjson\include</AdditionalIncludeDirectories>
@@ -42,7 +43,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DisableSpecificWarnings>4100;4456;4458</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4127;4456;4458</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <OptimizeReferences>true</OptimizeReferences>
@@ -54,27 +55,17 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all</Command>
+bin\sha1.exe bin\starborn.exe bin\starborn.exe.sha1
+bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all
+bin\sha1.exe bin\assets.zip bin\assets.zip.sha1</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>cd $(SolutionDir)
-
-git rev-parse --abbrev-ref HEAD &gt; temp
-set /p BRANCH=&lt;temp
-
-git rev-parse HEAD &gt; temp
-set /p HASH=&lt;temp
-
-git rev-list --count --first-parent HEAD &gt; temp
-set /p REVISION=&lt;temp
-
-del /Q temp
-
-echo #define STARBORN_BRANCH "%BRANCH%" &gt; src/starborn/git.hpp
-echo #define STARBORN_HASH "%HASH%" &gt;&gt; src/starborn/git.hpp
-echo #define STARBORN_REVISION "%REVISION%" &gt;&gt; src/starborn/git.hpp
-echo #define STARBORN_REVISION_NUMBER %REVISION% &gt;&gt; src/starborn/git.hpp</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />
@@ -95,7 +86,9 @@ echo #define STARBORN_REVISION_NUMBER %REVISION% &gt;&gt; src/starborn/git.hpp</
     <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
+    <ClInclude Include="..\..\third_party\bubble\bubble.hpp" />
     <ClInclude Include="..\..\third_party\bundle\bundle.hpp" />
+    <ClInclude Include="..\..\third_party\flow\flow.hpp" />
     <ClInclude Include="..\..\third_party\sand\sand.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,8 +123,14 @@ echo #define STARBORN_REVISION_NUMBER %REVISION% &gt;&gt; src/starborn/git.hpp</
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4100;4127;4244;4245;4458;4505</DisableSpecificWarnings>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\bubble\bubble.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4100;4127;4244;4310;4456;4458</DisableSpecificWarnings>
+    </ClCompile>
     <ClCompile Include="..\..\third_party\bundle\bundle.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4018;4099;4100;4127;4189;4244;4245;4267;4305;4310;4324;4334;4456;4457;4458;4459;4701;4702;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\flow\flow.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4100;4127;4244;4267;4456;4458;4706</DisableSpecificWarnings>
     </ClCompile>
     <ClCompile Include="..\..\third_party\sand\sand.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244;4458</DisableSpecificWarnings>

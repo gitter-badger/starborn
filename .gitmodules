@@ -37,9 +37,9 @@
 [submodule "third_party/bundler"]
 	path = third_party/bundler
 	url = https://github.com/snail23/bundler.git
-[submodule "third_party/bubble"]
-	path = third_party/bubble
-	url = https://github.com/snail23/bubble.git
 [submodule "third_party/bundle"]
 	path = third_party/bundle
 	url = https://github.com/snail23/bundle.git
+[submodule "third_party/bubble"]
+	path = third_party/bubble
+	url = http://github.com/snail23/bubble.git

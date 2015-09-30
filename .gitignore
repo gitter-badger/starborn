@@ -1,9 +1,11 @@
+*.$old
 *.iobj
 *.ipdb
 *.opensdf
 *.sdf
 
 .vs/*
+bin/logs/*
 ipch/*
 prj/*/obj/*
 src/starborn/git.hpp

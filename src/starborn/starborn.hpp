@@ -16,7 +16,10 @@
  */
 
 #include <apathy/apathy.hpp>
+#include <bubble/bubble.hpp>
 #include <bundle/bundle.hpp>
+#include <cocoa/cocoa.hpp>
+#include <flow/flow.hpp>
 
 #include <rapidjson/document.h>
 #include <rapidjson/filereadstream.h>
@@ -87,11 +90,15 @@ namespace ss
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
+			bool update();
+			bool update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file = true);
+
 			bundle::string unpack_asset(bundle::file &asset);
 
 			static void log(bool open, bool feed, bool close, const std::string &line);
 			static wire::string get_filename(wire::string directory, wire::string filename_prefix, wire::string extension);
 
+			void handle_updated();
 			void load();
 
 			void load_animation(bundle::string &json_data);

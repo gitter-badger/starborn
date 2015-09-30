@@ -21,5 +21,5 @@ int32_t _stdcall WinMain()
 {
 	ss::Starborn().run();
 
-	return 0;
+	return EXIT_SUCCESS;
 }

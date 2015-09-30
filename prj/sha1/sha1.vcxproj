@@ -6,12 +6,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\third_party\bundler\bundler.cc" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{85470197-F0CF-4474-A631-EAFAF42C25A2}</ProjectGuid>
-    <RootNamespace>bundler</RootNamespace>
+    <ProjectGuid>{092C3DA9-7890-40CE-8951-B3CCF0CE1CDE}</ProjectGuid>
+    <RootNamespace>sha1</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -31,22 +28,22 @@
     <OutDir>$(SolutionDir)bin\</OutDir>
     <IntDir>$(ProjectDir)obj\</IntDir>
     <GenerateManifest>false</GenerateManifest>
-    <ExtensionsToDeleteOnClean>$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <AdditionalIncludeDirectories>$(SolutionDir)third_party\bundler\deps</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)third_party</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DisableSpecificWarnings>4018;4099;4100;4127;4189;4244;4245;4267;4305;4310;4324;4334;4456;4457;4458;4459;4701;4702;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <OptimizeReferences>true</OptimizeReferences>
@@ -58,14 +55,50 @@
       <GenerateDebugInformation>No</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir)
-bin\sha1.exe bin\bundler.exe bin\bundler.exe.sha1</Command>
-    </PostBuildEvent>
-    <PreBuildEvent>
       <Command>
       </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir)
+
+git submodule update --init --recursive
+
+git rev-parse --abbrev-ref HEAD &gt; temp
+set /p BRANCH=&lt;temp
+
+git rev-list --count --first-parent HEAD &gt; temp
+set /p REVISION=&lt;temp
+
+git rev-parse HEAD &gt; temp
+set /p SHA1=&lt;temp
+
+del /Q temp
+
+echo #define GIT_BRANCH "%BRANCH%" &gt; src\git.hpp
+echo #define GIT_REVISION "%REVISION%" &gt;&gt; src\git.hpp
+echo #define GIT_REVISION_NUMBER %REVISION% &gt;&gt; src\git.hpp
+echo #define GIT_SHA1 "%SHA1%" &gt;&gt; src\git.hpp</Command>
     </PreBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\sha1\version.hpp" />
+    <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\src\sha1\sha1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\sha1\sha1.cpp" />
+    <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4100;4127;4244;4245;4458;4505</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\src\sha1\sha1.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
