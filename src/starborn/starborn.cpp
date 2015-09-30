@@ -236,10 +236,7 @@ void ss::Starborn::load_shader(bundle::string &json_data)
 			this->shaders[shader->name.GetString()].loadFromMemory(this->shader_sources[shader->value["vertex"].GetString()], sf::Shader::Vertex);
 
 		if(shader->value.HasMember("fragment") || shader->value.HasMember("vertex"))
-		{
-			this->shaders[shader->name.GetString()].setParameter("pi", static_cast<float>(M_PI));
 			this->shaders[shader->name.GetString()].setParameter("texture", sf::Shader::CurrentTexture);
-		}
 	}
 }
 
