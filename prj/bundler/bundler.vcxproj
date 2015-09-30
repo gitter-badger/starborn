@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG</PreprocessorDefinitions>
@@ -46,7 +46,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DisableSpecificWarnings>4018;4099;4100;4127;4189;4244;4245;4267;4305;4310;4324;4334;4456;4457;4458;4459;4701;4702;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4018;4099;4244;4267;4305;4334;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <OptimizeReferences>true</OptimizeReferences>

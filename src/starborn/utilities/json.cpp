@@ -18,19 +18,19 @@
 #include <starborn/starborn.hpp>
 
 rapidjson::Document &ss::utilities::Json::get_document()
-{
+{ $
 	return this->document;
 }
 
 ss::utilities::Json::Json(bundle::string &json_data, bool file)
-{
+{ $
 	this->parse(json_data, file);
 }
 
 void ss::utilities::Json::parse(bundle::string &json_data, bool file)
-{
+{ $
 	if(file)
-	{
+	{ $
 		auto *file_handle = fopen(json_data.c_str(), "r");
 		char buffer[256];
 

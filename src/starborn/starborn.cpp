@@ -21,14 +21,14 @@
 #include <windows.h>
 
 bool ss::Starborn::update()
-{
+{ $
 	wire::string url = "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/bin/";
 
 	this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip?raw=true");
 	this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe?raw=true");
 
 	if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe?raw=true", false))
-	{
+	{ $
 		PROCESS_INFORMATION process_info;
 		STARTUPINFO startup_info;
 
@@ -45,11 +45,11 @@ bool ss::Starborn::update()
 }
 
 bool ss::Starborn::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file)
-{
+{ $
 	apathy::file file(source_filename);
 
 	if(wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
-	{
+	{ $
 		file.patch(flow::download(destination_url).data, delete_old_file);
 
 		return true;
@@ -59,7 +59,7 @@ bool ss::Starborn::update_file(wire::string source_filename, wire::string sha1_u
 }
 
 bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
-{
+{ $
 	auto data = asset["data"];
 
 	if(bundle::is_packed(data))
@@ -68,25 +68,18 @@ bundle::string ss::Starborn::unpack_asset(bundle::file &asset)
 	return data;
 }
 
-ss::Starborn::~Starborn()
-{
-	apathy::ostream::detach(std::cout);
-}
-
 ss::Starborn::Starborn()
-{
+{ $
 	this->handle_updated();
 
-	apathy::ostream::attach(std::cout, &log);
-
-	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << "\r\n";
-	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>\r\n";
-	std::cout << "\r\n";
-	std::cout << "[" << GIT_BRANCH << "] " << __DATE__ << " " << __TIME__ << "\r\n";
-	std::cout << "\r\n";
+	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << std::endl;
+	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
+	std::cout << std::endl;
+	std::cout << "[" << GIT_BRANCH << "] " << __DATE__ << " " << __TIME__ << std::endl;
+	std::cout << std::endl;
 	
 	if(!this->update())
-	{
+	{ $
 		this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
 
 		this->window.setKeyRepeatEnabled(false);
@@ -126,9 +119,9 @@ ss::Starborn::Starborn()
 		this->menus[STATE_NEW_GAME].init(this->textures);
 
 		this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
-		{
+		{ $
 			this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
-			{
+			{ $
 				this->state.switch_state(STATE_MAIN_MENU);
 			});
 		});
@@ -136,11 +129,11 @@ ss::Starborn::Starborn()
 }
 
 void ss::Starborn::handle_updated()
-{
+{ $
 	apathy::file starborn_old("starborn.exe.$old");
 
 	if(starborn_old.exists())
-	{
+	{ $
 		while(starborn_old.exists())
 			starborn_old.remove();
 
@@ -149,12 +142,12 @@ void ss::Starborn::handle_updated()
 }
 
 void ss::Starborn::load()
-{
+{ $
 	bundle::archive assets;
 	assets.bin(apathy::file("assets.zip").read());
 
 	for(auto &&asset : assets)
-	{
+	{ $
 		wire::string file = asset["name"];
 
 		auto animation = file.matchesi("assets/animations/*.json");
@@ -162,7 +155,7 @@ void ss::Starborn::load()
 		auto sprite = file.matchesi("assets/sprites/*.json");
 
 		if(!animation && !shader && !sprite)
-		{
+		{ $
 			auto data = this->unpack_asset(asset);
 
 			if(file.matchesi("assets/shaders/*.frag") || file.matchesi("assets/shaders/*.vert"))
@@ -174,7 +167,7 @@ void ss::Starborn::load()
 	}
 
 	for(auto &&asset : assets)
-	{
+	{ $
 		wire::string file = asset["name"];
 
 		auto animation = file.matchesi("assets/animations/*.json");
@@ -182,7 +175,7 @@ void ss::Starborn::load()
 		auto sprite = file.matchesi("assets/sprites/*.json");
 
 		if(animation || shader || sprite)
-		{
+		{ $
 			auto data = this->unpack_asset(asset);
 
 			if(animation)
@@ -198,16 +191,16 @@ void ss::Starborn::load()
 }
 
 void ss::Starborn::load_animation(bundle::string &json_data)
-{
+{ $
 	utilities::Json json(json_data);
 
 	for(auto animation = json.get_document().MemberBegin(); animation != json.get_document().MemberEnd(); ++animation)
-	{
+	{ $
 		if(!strcmp(animation->value["type"].GetString(), ANIMATION_TYPE_FADE))
 			this->animations[animation->name.GetString()].animation = thor::FadeAnimation(animation->value["inRatio"].GetDouble(), animation->value["outRatio"].GetDouble());
 
 		else
-		{
+		{ $
 			auto frame_animation = thor::FrameAnimation();
 			
 			for(auto frame = animation->value["frames"].Begin(); frame != animation->value["frames"].End(); ++frame)
@@ -221,11 +214,11 @@ void ss::Starborn::load_animation(bundle::string &json_data)
 }
 
 void ss::Starborn::load_shader(bundle::string &json_data)
-{
+{ $
 	utilities::Json json(json_data);
 
 	for(auto shader = json.get_document().MemberBegin(); shader != json.get_document().MemberEnd(); ++shader)
-	{
+	{ $
 		if(shader->value.HasMember("fragment") && shader->value.HasMember("vertex"))
 			this->shaders[shader->name.GetString()].loadFromMemory(this->shader_sources[shader->value["vertex"].GetString()], this->shader_sources[shader->value["fragment"].GetString()]);
 
@@ -241,15 +234,15 @@ void ss::Starborn::load_shader(bundle::string &json_data)
 }
 
 void ss::Starborn::load_sprite(bundle::string &json_data)
-{
+{ $
 	utilities::Json json(json_data);
 
 	for(auto sprite = json.get_document().MemberBegin(); sprite != json.get_document().MemberEnd(); ++sprite)
-	{
+	{ $
 		void *new_sprite = nullptr;
 
 		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED))
-		{
+		{ $
 			new_sprite = new entities::AnimatedSprite();
 
 			for(auto animation = sprite->value["animations"].Begin(); animation != sprite->value["animations"].End(); ++animation)
@@ -258,7 +251,7 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 			if(!strcmp(sprite->name.GetString(), BUTTON_CONTINUE) || !strcmp(sprite->name.GetString(), BUTTON_EXIT) || !strcmp(sprite->name.GetString(), BUTTON_LOAD_GAME) ||
 				!strcmp(sprite->name.GetString(), BUTTON_MIDNIGHT) || !strcmp(sprite->name.GetString(), BUTTON_NEW_GAME) || !strcmp(sprite->name.GetString(), BUTTON_NIGHTFALL) ||
 				!strcmp(sprite->name.GetString(), BUTTON_OPTIONS))
-			{
+			{ $
 				structs::Button button;
 
 				button.animated_sprite = reinterpret_cast<entities::AnimatedSprite *>(new_sprite);
@@ -273,12 +266,12 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 			new_sprite = new entities::Sprite();
 
 		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND))
-		{
+		{ $
 			new_sprite = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
 			reinterpret_cast<sf::RectangleShape *>(new_sprite)->setFillColor(sf::Color::Transparent);
 		}
 		else
-		{
+		{ $
 			auto &final_sprite = *reinterpret_cast<entities::Sprite *>(new_sprite);
 
 			final_sprite.has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
@@ -302,9 +295,9 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 }
 
 void ss::Starborn::log(bool open, bool feed, bool close, const std::string &line)
-{
+{ $
 	if(open || close)
-	{
+	{ $
 		if(open)
 			logger.open(get_filename("logs", "starborn", ".txt").c_str(), std::ios::app | std::ios::binary | std::ios::out);
 		
@@ -314,8 +307,8 @@ void ss::Starborn::log(bool open, bool feed, bool close, const std::string &line
 			logger.close();
 	}
 	else if(feed)
-	{
-		logger << sand::format(sand::now(), "[mm/dd/yyyy HH:MM:SS] ") << logger_cache << std::endl;
+	{ $
+		logger << sand::format(sand::now(), "[mm/dd/yyyy HH:MM:SS] ") << logger_cache << "\r\n";
 		logger_cache.clear();
 	}
 	else
@@ -323,24 +316,24 @@ void ss::Starborn::log(bool open, bool feed, bool close, const std::string &line
 }
 
 void ss::Starborn::new_game(bool midnight)
-{
+{ $
 	this->state.switch_state(STATE_RUNNING);
 }
 
 void ss::Starborn::on_continue()
-{
+{ $
 	if(this->state.is_running())
 		this->state.switch_state(STATE_RUNNING);
 }
 
 void ss::Starborn::on_down()
-{
+{ $
 	if(this->state.get_state() == STATE_MAIN_MENU)
 		this->menus[this->state.get_state()].scroll_down(this->textures);
 }
 
 void ss::Starborn::on_escape()
-{
+{ $
 	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
 		this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? false : true);
 
@@ -349,35 +342,35 @@ void ss::Starborn::on_escape()
 }
 
 void ss::Starborn::on_exit()
-{
+{ $
 	this->window.close();
 }
 
 void ss::Starborn::on_left()
-{
+{ $
 	if(this->state.get_state() == STATE_NEW_GAME)
 		this->menus[this->state.get_state()].scroll_up(this->textures);
 }
 
 void ss::Starborn::on_reload_shaders()
-{
+{ $
 }
 
 void ss::Starborn::on_right()
-{
+{ $
 	if(this->state.get_state() == STATE_NEW_GAME)
 		this->menus[this->state.get_state()].scroll_down(this->textures);
 }
 
 void ss::Starborn::on_screenshot()
-{
+{ $
 	sf::Image(this->window.capture()).saveToFile(get_filename("screenshots", "starborn", ".png"));
 }
 
 void ss::Starborn::on_select()
-{
+{ $
 	if((this->state.get_state() != STATE_RUNNING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
-	{
+	{ $
 		auto &menu = this->menus[this->state.get_state()];
 		auto &button_name = menu.get_buttons()[menu.get_position()].name;
 		
@@ -399,20 +392,20 @@ void ss::Starborn::on_select()
 }
 
 void ss::Starborn::on_up()
-{
+{ $
 	if(this->state.get_state() == STATE_MAIN_MENU)
 		this->menus[this->state.get_state()].scroll_up(this->textures);
 }
 
 void ss::Starborn::run()
-{
+{ $
 	sf::Clock last_frame;
 
 	sf::Time last_frame_time;
 	sf::Time total_time;
 
 	while(this->window.isOpen())
-	{
+	{ $
 		last_frame_time = last_frame.restart();
 		total_time += last_frame_time;
 
@@ -426,7 +419,7 @@ void ss::Starborn::run()
 }
 
 wire::string ss::Starborn::get_filename(wire::string directory, wire::string filename_prefix, wire::string extension)
-{
+{ $
 	apathy::path path(directory);
 
 	if(!path.exists())

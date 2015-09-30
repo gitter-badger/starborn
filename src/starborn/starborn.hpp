@@ -20,6 +20,7 @@
 #include <bundle/bundle.hpp>
 #include <cocoa/cocoa.hpp>
 #include <flow/flow.hpp>
+#include <profit/profit.hpp>
 
 #include <rapidjson/document.h>
 #include <rapidjson/filereadstream.h>
@@ -94,8 +95,6 @@ namespace ss
 			bool update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file = true);
 
 			bundle::string unpack_asset(bundle::file &asset);
-
-			static void log(bool open, bool feed, bool close, const std::string &line);
 			static wire::string get_filename(wire::string directory, wire::string filename_prefix, wire::string extension);
 
 			void handle_updated();
@@ -119,9 +118,8 @@ namespace ss
 			void on_up();
 
 		public:
-			~Starborn();
+			static void log(bool open, bool feed, bool close, const std::string &line);
 			Starborn();
-
 			void run();
 	};
 

@@ -18,8 +18,16 @@
 #include <starborn/starborn.hpp>
 
 int32_t _stdcall WinMain()
-{
+{ $
+	apathy::ostream::attach(std::cout, &ss::Starborn::log);
+
 	ss::Starborn().run();
+
+	std::cout << "CPU usage for this session:" << std::endl;
+	std::cout << std::endl;
+
+	profit::report(std::cout);
+	apathy::ostream::detach(std::cout);
 
 	return EXIT_SUCCESS;
 }

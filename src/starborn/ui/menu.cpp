@@ -18,30 +18,30 @@
 #include <starborn/starborn.hpp>
 
 size_t &ss::ui::Menu::get_position()
-{
+{ $
 	return this->position;
 }
 
 ss::ui::Menu::Menu()
-{
+{ $
 	this->position = 0;
 }
 
 ss::vectors::Buttons &ss::ui::Menu::get_buttons()
-{
+{ $
 	return this->buttons;
 }
 
 void ss::ui::Menu::init(resources::Textures &textures)
-{
+{ $
 	if(this->buttons.size())
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].selected_texture]);
 }
 
 void ss::ui::Menu::scroll_down(resources::Textures &textures)
-{
+{ $
 	if(this->buttons.size())
-	{
+	{ $
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].texture]);
 		this->position = (this->position < (this->buttons.size() - 1)) ? (this->position + 1) : 0;
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].selected_texture]);
@@ -49,9 +49,9 @@ void ss::ui::Menu::scroll_down(resources::Textures &textures)
 }
 
 void ss::ui::Menu::scroll_up(resources::Textures &textures)
-{
+{ $
 	if(this->buttons.size())
-	{
+	{ $
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].texture]);
 		this->position = this->position ? (this->position - 1) : (this->buttons.size() - 1);
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].selected_texture]);
