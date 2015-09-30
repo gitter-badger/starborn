@@ -23,6 +23,7 @@ int32_t _stdcall WinMain()
 
 	ss::Starborn().run();
 
+	std::cout << std::endl;
 	std::cout << "CPU usage for this session:" << std::endl;
 	std::cout << std::endl;
 

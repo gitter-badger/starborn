@@ -20,6 +20,8 @@
 #include <bundle/bundle.hpp>
 #include <cocoa/cocoa.hpp>
 #include <flow/flow.hpp>
+#include <heal/heal.hpp>
+#include <metrics/metrics.hpp>
 #include <profit/profit.hpp>
 
 #include <rapidjson/document.h>
@@ -116,6 +118,8 @@ namespace ss
 			void on_screenshot();
 			void on_select();
 			void on_up();
+
+			void stack_trace();
 
 		public:
 			static void log(bool open, bool feed, bool close, const std::string &line);

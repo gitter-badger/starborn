@@ -132,6 +132,9 @@
     <ClInclude Include="..\..\third_party\bubble\bubble.hpp">
       <Filter>Third Party\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\third_party\heal\heal.hpp">
+      <Filter>Third Party\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc">
@@ -173,6 +176,9 @@
       <Filter>Third Party\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\bubble\bubble.cpp">
+      <Filter>Third Party\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\heal\heal.cpp">
       <Filter>Third Party\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

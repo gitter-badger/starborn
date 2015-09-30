@@ -341,11 +341,15 @@ void ss::Starborn::on_escape()
 		this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? false : true);
 
 	else
-		this->window.close();
+		this->on_exit();
 }
 
 void ss::Starborn::on_exit()
 { $
+	std::cout << "on_exit() stack trace:" << std::endl;
+	std::cout << std::endl;
+
+	this->stack_trace();
 	this->window.close();
 }
 
@@ -419,6 +423,19 @@ void ss::Starborn::run()
 		this->state.update(last_frame_time, total_time, this->window);
 		this->window.display();
 	}
+}
+
+void ss::Starborn::stack_trace()
+{ $
+	metrics::table_ascii table;
+	table.add_column_right("#").add_column_left("function").with_horizontal_padding(1);
+
+	auto call_stack = heal::stacktrace("\2", 3);
+
+	for(auto i = 0; i < call_stack.size(); ++i)
+		table << i << call_stack[i];
+
+	table.print(std::cout, false);
 }
 
 wire::string ss::Starborn::get_filename(wire::string directory, wire::string filename_prefix, wire::string extension)
