@@ -24,21 +24,24 @@ bool ss::Starborn::update()
 { $
 	wire::string url = "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/bin/";
 
-	this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip?raw=true");
-	this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe?raw=true");
-
-	if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe?raw=true", false))
+	if(GIT_REVISION_NUMBER < wire::string(flow::download(url + "revision.txt?raw=true").data).as<int32_t>())
 	{ $
-		PROCESS_INFORMATION process_info;
-		STARTUPINFO startup_info;
+		this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip?raw=true");
+		this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe?raw=true");
 
-		memset(&process_info, 0, sizeof(process_info));
-		memset(&startup_info, 0, sizeof(startup_info));
+		if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe?raw=true", false))
+		{ $
+			PROCESS_INFORMATION process_info;
+			STARTUPINFO startup_info;
 
-		startup_info.cb = sizeof(startup_info);
-		CreateProcess(nullptr, "starborn.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
+			memset(&process_info, 0, sizeof(process_info));
+			memset(&startup_info, 0, sizeof(startup_info));
 
-		return true;
+			startup_info.cb = sizeof(startup_info);
+			CreateProcess(nullptr, "starborn.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
+
+			return true;
+		}
 	}
 
 	return false;
@@ -77,7 +80,7 @@ ss::Starborn::Starborn()
 	std::cout << std::endl;
 	std::cout << "[" << GIT_BRANCH << "] " << __DATE__ << " " << __TIME__ << std::endl;
 	std::cout << std::endl;
-	
+
 	if(!this->update())
 	{ $
 		this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
