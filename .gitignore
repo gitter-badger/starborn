@@ -8,4 +8,4 @@
 bin/logs/*
 ipch/*
 prj/*/obj/*
-src/starborn/git.hpp
+src/git.hpp
