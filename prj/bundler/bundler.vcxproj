@@ -59,7 +59,7 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-bin\sha1.exe bin\bundler.exe bin\bundler.exe.sha1</Command>
+bin\sha1.exe bin\bundler.exe</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>

@@ -22,21 +22,22 @@
 
 int32_t main(int32_t argc, char *argv[])
 {
-	if(argc == 3)
+	if(argc == 2)
 	{
 		auto data = apathy::file(argv[1]).read();
 
 		if(data.size())
 		{
+			auto output_filename = argv[1] + std::string(".sha1");
 			auto sha1 = cocoa::SHA1(data);
 
-			if(apathy::file(argv[2]).overwrite(sha1))
+			if(apathy::file(output_filename).overwrite(sha1))
 				std::cout << "Wrote ";
 
 			else
 				std::cout << "Error: Could not write ";
 
-			std::cout << "SHA1 (" << sha1 << ") for '" << argv[1] << "' to file: " << argv[2] << std::endl;
+			std::cout << "SHA1 (" << sha1 << ") for '" << argv[1] << "' to file: " << output_filename << std::endl;
 		}
 		else
 		{
@@ -51,7 +52,7 @@ int32_t main(int32_t argc, char *argv[])
 		std::cout << "Copyright (C) 2013-2015 " << SHA1_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
 		std::cout << std::endl;
 		std::cout << "Usage:" << std::endl;
-		std::cout << "    " << argv[0] << " <input_file> <output_file.sha1>" << std::endl;
+		std::cout << "    " << argv[0] << " <file>" << std::endl;
 	}
 
 	return EXIT_SUCCESS;

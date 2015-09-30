@@ -55,9 +55,9 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-bin\sha1.exe bin\starborn.exe bin\starborn.exe.sha1
+bin\sha1.exe bin\starborn.exe
 bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all
-bin\sha1.exe bin\assets.zip bin\assets.zip.sha1</Command>
+bin\sha1.exe bin\assets.zip</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
