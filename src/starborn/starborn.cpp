@@ -27,7 +27,9 @@ bool ss::Starborn::update()
 	if(GIT_REVISION_NUMBER < wire::string(flow::download(url + "revision.txt?raw=true").data).as<int32_t>())
 	{ $
 		this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip.b91?raw=true");
+		this->update_file("base91.exe", url + "base91.exe.sha1?raw=true", url + "base91.exe.b91?raw=true");
 		this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe.b91?raw=true");
+		this->update_file("uuid.exe", url + "uuid.exe.sha1?raw=true", url + "uuid.exe.b91?raw=true");
 
 		if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe.b91?raw=true", false))
 		{ $
