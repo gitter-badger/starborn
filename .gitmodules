@@ -13,9 +13,6 @@
 [submodule "third_party/metrics"]
 	path = third_party/metrics
 	url = https://github.com/snail23/metrics.git
-[submodule "third_party/collage"]
-	path = third_party/collage
-	url = https://github.com/snail23/collage.git
 [submodule "third_party/flow"]
 	path = third_party/flow
 	url = https://github.com/snail23/flow.git

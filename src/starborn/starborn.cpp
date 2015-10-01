@@ -26,27 +26,21 @@ bool ss::Starborn::update()
 
 	if(GIT_REVISION_NUMBER < wire::string(flow::download(url + "revision.txt?raw=true").data).as<int32_t>())
 	{ $
-		if(!apathy::file("assets.zip").exists())
-			this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip.b91?raw=true");
+		this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip.b91?raw=true");
+		this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe.b91?raw=true");
 
-		if(!apathy::file("bundler.exe").exists())
-			this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe.b91?raw=true");
-
-		if(!apathy::file("starborn.exe").exists())
+		if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe.b91?raw=true", false))
 		{ $
-			if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe.b91?raw=true", false))
-			{ $
-				PROCESS_INFORMATION process_info;
-				STARTUPINFO startup_info;
+			PROCESS_INFORMATION process_info;
+			STARTUPINFO startup_info;
 
-				memset(&process_info, 0, sizeof(process_info));
-				memset(&startup_info, 0, sizeof(startup_info));
+			memset(&process_info, 0, sizeof(process_info));
+			memset(&startup_info, 0, sizeof(startup_info));
 
-				startup_info.cb = sizeof(startup_info);
-				CreateProcess(nullptr, "starborn.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
+			startup_info.cb = sizeof(startup_info);
+			CreateProcess(nullptr, "starborn.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
 
-				return true;
-			}
+			return true;
 		}
 	}
 
@@ -321,6 +315,7 @@ void ss::Starborn::log(bool open, bool feed, bool close, const std::string &line
 	else if(feed)
 	{ $
 		logger << sand::format(sand::now(), "[mm/dd/yyyy HH:MM:SS] ") << logger_cache << "\r\n";
+		logger.flush();
 		logger_cache.clear();
 	}
 	else
