@@ -20,7 +20,6 @@
 int32_t _stdcall WinMain()
 { $
 	apathy::ostream::attach(std::cout, &ss::Starborn::log);
-
 	ss::Starborn().run();
 
 	std::cout << std::endl;

@@ -16,9 +16,6 @@
 [submodule "third_party/flow"]
 	path = third_party/flow
 	url = https://github.com/snail23/flow.git
-[submodule "third_party/DrEcho"]
-	path = third_party/DrEcho
-	url = https://github.com/snail23/DrEcho.git
 [submodule "third_party/cocoa"]
 	path = third_party/cocoa
 	url = https://github.com/snail23/cocoa.git
