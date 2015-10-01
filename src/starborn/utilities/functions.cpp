@@ -30,7 +30,7 @@ bool ss::utilities::update_file(wire::string source_filename, wire::string sha1_
 		if(file.exists())
 			file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
 
-		else
+		else 
 			file.overwrite(base91::decode(flow::download(destination_url).data));
 
 		return true;
@@ -41,37 +41,42 @@ bool ss::utilities::update_file(wire::string source_filename, wire::string sha1_
 
 bool ss::utilities::update_files(vectors::Strings &files, vectors::Strings &critical_files, wire::string github_url)
 { $
-	if(GIT_REVISION_NUMBER < wire::string(flow::download(github_url + "revision.txt?raw=true").data).as<int32_t>())
-	{ $		
-		for(auto &&file : files)
+	auto revision = wire::string(flow::download(github_url + "revision.txt?raw=true").data).as<int32_t>();
+
+	for(auto &&file : files)
+	{ $
+		if(!apathy::file(file).exists() || (GIT_REVISION_NUMBER < revision))
 			update_file(file, github_url + file + ".sha1?raw=true", github_url + file + ".b91?raw=true");
+	}
 
-		auto restart_required = false;
+	auto restart_required = false;
 
-		for(auto &&critical_file : critical_files)
+	for(auto &&critical_file : critical_files)
+	{ $
+		if(!apathy::file(critical_file).exists() || (GIT_REVISION_NUMBER < revision))
 		{ $
 			if(update_file(critical_file, github_url + critical_file + ".sha1?raw=true", github_url + critical_file + ".b91?raw=true", false))
 				restart_required = true;
 		}
+	}
 
-		if(restart_required)
-		{ $
-			PROCESS_INFORMATION process_info;
-			STARTUPINFO startup_info;
+	if(restart_required)
+	{ $
+		PROCESS_INFORMATION process_info;
+		STARTUPINFO startup_info;
 
-			memset(&process_info, 0, sizeof(process_info));
-			memset(&startup_info, 0, sizeof(startup_info));
+		memset(&process_info, 0, sizeof(process_info));
+		memset(&startup_info, 0, sizeof(startup_info));
 
-			startup_info.cb = sizeof(startup_info);
+		startup_info.cb = sizeof(startup_info);
 
-			char filename[1024];
-			memset(filename, 0, sizeof(filename));
+		char filename[1024];
+		memset(filename, 0, sizeof(filename));
 
-			GetModuleFileName(GetModuleHandle(nullptr), filename, sizeof(filename));
-			CreateProcess(nullptr, filename, nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
+		GetModuleFileName(GetModuleHandle(nullptr), filename, sizeof(filename));
+		CreateProcess(nullptr, filename, nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
 
-			return true;
-		}
+		return true;
 	}
 
 	return false;
