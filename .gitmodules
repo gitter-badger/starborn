@@ -43,3 +43,6 @@
 [submodule "third_party/heal"]
 	path = third_party/heal
 	url = https://github.com/snail23/heal.git
+[submodule "third_party/entity"]
+	path = third_party/entity
+	url = https://github.com/snail23/entity.git

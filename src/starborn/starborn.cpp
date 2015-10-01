@@ -28,7 +28,8 @@ bool ss::Starborn::update()
 	{ $
 		auto files =
 		{
-			"assets.zip", "base91.exe", "bundler.exe", "uuid.exe"
+			"assets.zip", "base91.exe", "bundler.exe", "starborn.pdb",
+			"uuid.exe"
 		};
 		
 		for(auto &&file : files)
