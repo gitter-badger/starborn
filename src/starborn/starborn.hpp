@@ -46,7 +46,6 @@
 #include <starborn/constants/drawable_types.hpp>
 #include <starborn/constants/settings.hpp>
 #include <starborn/constants/sprites.hpp>
-#include <starborn/constants/sprite_types.hpp>
 #include <starborn/constants/states.hpp>
 
 #include <starborn/entities/sprite.hpp>

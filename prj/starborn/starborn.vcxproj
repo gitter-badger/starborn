@@ -88,7 +88,6 @@ echo %REVISION% &gt; patch\revision.txt</Command>
     <ClInclude Include="..\..\src\starborn\constants\sprites.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\settings.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\sprite_types.hpp" />
     <ClInclude Include="..\..\src\starborn\constants\states.hpp" />
     <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp" />
     <ClInclude Include="..\..\src\starborn\entities\sprite.hpp" />
@@ -158,7 +157,6 @@ echo %REVISION% &gt; patch\revision.txt</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\animations\general.json" />
-    <None Include="..\..\assets\animations\ui.json" />
     <None Include="..\..\assets\shaders\shaders.json" />
     <None Include="..\..\assets\shaders\pixels.frag" />
     <None Include="..\..\assets\shaders\vignette.frag" />

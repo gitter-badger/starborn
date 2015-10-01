@@ -31,7 +31,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/general/copyright.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in"
@@ -50,7 +50,7 @@
 		"starting_animation": "",
 		"state": "new_game",
 		"texture": "assets/textures/general/copyright.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_out"
@@ -69,7 +69,7 @@
 		"starting_animation": "",
 		"state": "snailsoft_logo",
 		"texture": "assets/textures/general/snailsoft.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade"
@@ -88,7 +88,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/general/starborn_horizontal.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in"
@@ -107,7 +107,7 @@
 		"starting_animation": "",
 		"state": "new_game",
 		"texture": "assets/textures/general/starborn_horizontal.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_out"
@@ -126,7 +126,7 @@
 		"starting_animation": "",
 		"state": "starborn_logo",
 		"texture": "assets/textures/general/starborn_vertical.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade"
@@ -145,7 +145,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/general/version.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in"
@@ -164,7 +164,7 @@
 		"starting_animation": "",
 		"state": "new_game",
 		"texture": "assets/textures/general/version.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_out"

@@ -96,9 +96,6 @@
     <ClInclude Include="..\..\src\starborn\constants\animation_types.hpp">
       <Filter>Header Files\constants</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\starborn\constants\sprite_types.hpp">
-      <Filter>Header Files\constants</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\starborn\entities\sprite.hpp">
       <Filter>Header Files\entities</Filter>
     </ClInclude>
@@ -211,9 +208,6 @@
     </None>
     <None Include="..\..\assets\shaders\shaders.json">
       <Filter>Resource Files\Assets\shaders</Filter>
-    </None>
-    <None Include="..\..\assets\animations\ui.json">
-      <Filter>Resource Files\Assets\animations</Filter>
     </None>
     <None Include="..\..\assets\sprites\ui.json">
       <Filter>Resource Files\Assets\sprites</Filter>

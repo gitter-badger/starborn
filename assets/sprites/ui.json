@@ -7,7 +7,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/ui/continue.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in",
@@ -29,7 +29,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/ui/new_game.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in",
@@ -51,7 +51,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/ui/load_game.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in",
@@ -73,7 +73,7 @@
 		"starting_animation": "fade_in",
 		"state": "new_game",
 		"texture": "assets/textures/ui/midnight.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in",
@@ -95,7 +95,7 @@
 		"starting_animation": "fade_in",
 		"state": "new_game",
 		"texture": "assets/textures/ui/nightfall.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in",
@@ -117,7 +117,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/ui/options.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in",
@@ -139,7 +139,7 @@
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/ui/exit.png",
-		"type": "animated",
+		"type": "animated_sprite",
 
 		"animations": [
 			"fade_in",

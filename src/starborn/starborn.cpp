@@ -169,7 +169,7 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 	{ $
 		void *new_sprite = nullptr;
 
-		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED))
+		if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE))
 		{ $
 			new_sprite = new entities::AnimatedSprite();
 
@@ -190,10 +190,10 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 				this->menus[sprite->value["state"].GetString()].get_buttons().push_back(button);
 			}
 		}
-		else if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_DEFAULT))
+		else if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_SPRITE))
 			new_sprite = new entities::Sprite();
 
-		if(!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND))
+		if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_BACKGROUND))
 		{ $
 			new_sprite = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
 			reinterpret_cast<sf::RectangleShape *>(new_sprite)->setFillColor(sf::Color::Transparent);
@@ -209,14 +209,14 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 
 		structs::Drawable drawable;
 
-		drawable.ending_animation = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["ending_animation"].GetString() : "";
+		drawable.ending_animation = !strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE) ? sprite->value["ending_animation"].GetString() : "";
 		drawable.drawable = reinterpret_cast<sf::Drawable *>(new_sprite);
 		drawable.name = sprite->name.GetString();
 		drawable.render_states.shader = sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr;
 		drawable.reversible = sprite->value.HasMember("reversible") ? sprite->value["reversible"].GetBool() : true;
 		drawable.scale = sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false;
-		drawable.starting_animation = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? sprite->value["starting_animation"].GetString() : "";
-		drawable.type = !strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_ANIMATED) ? DRAWABLE_TYPE_ANIMATED_SPRITE : (!strcmp(sprite->value["type"].GetString(), SPRITE_TYPE_BACKGROUND) ? DRAWABLE_TYPE_BACKGROUND : SPRITE_TYPE_DEFAULT);
+		drawable.starting_animation = !strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE) ? sprite->value["starting_animation"].GetString() : "";
+		drawable.type = sprite->value["type"].GetString();
 
 		this->state.get_drawables()[sprite->value["state"].GetString()].push_back(drawable);
 	}
