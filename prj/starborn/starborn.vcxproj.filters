@@ -135,6 +135,9 @@
     <ClInclude Include="..\..\third_party\heal\heal.hpp">
       <Filter>Third Party\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\starborn\utilities\functions.hpp">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc">
@@ -180,6 +183,9 @@
     </ClCompile>
     <ClCompile Include="..\..\third_party\heal\heal.cpp">
       <Filter>Third Party\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\starborn\utilities\functions.cpp">
+      <Filter>Source Files\utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

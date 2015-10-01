@@ -21,6 +21,7 @@
 #include <bundle/bundle.hpp>
 #include <cocoa/cocoa.hpp>
 #include <flow/flow.hpp>
+#include <git.hpp>
 #include <heal/heal.hpp>
 #include <metrics/metrics.hpp>
 #include <profit/profit.hpp>
@@ -55,7 +56,11 @@
 #include <starborn/game/state.hpp>
 
 #include <starborn/ui/menu.hpp>
+
+#include <starborn/utilities/functions.hpp>
 #include <starborn/utilities/json.hpp>
+
+#include <starborn/version.hpp>
 
 namespace ss
 {
@@ -94,13 +99,6 @@ namespace ss
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
-			bool update();
-			bool update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file = true);
-
-			bundle::string unpack_asset(bundle::file &asset);
-			static wire::string get_filename(wire::string directory, wire::string filename_prefix, wire::string extension);
-
-			void handle_updated();
 			void load();
 
 			void load_animation(bundle::string &json_data);
@@ -120,14 +118,9 @@ namespace ss
 			void on_select();
 			void on_up();
 
-			void stack_trace();
-
 		public:
-			static void log(bool open, bool feed, bool close, const std::string &line);
 			Starborn();
+
 			void run();
 	};
-
-	static std::ofstream logger;
-	static wire::string logger_cache;
 }

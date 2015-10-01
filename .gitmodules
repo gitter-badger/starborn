@@ -46,3 +46,6 @@
 [submodule "third_party/entity"]
 	path = third_party/entity
 	url = https://github.com/snail23/entity.git
+[submodule "third_party/safe_event"]
+	path = third_party/safe_event
+	url = https://github.com/snail23/safe_event.git

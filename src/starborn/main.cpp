@@ -19,14 +19,29 @@
 
 int32_t _stdcall WinMain()
 { $
-	apathy::ostream::attach(std::cout, &ss::Starborn::log);
-	ss::Starborn().run();
+	ss::vectors::Strings critical_files =
+	{
+		"starborn.pdb", "starborn.exe"
+	};
 
+	ss::vectors::Strings files =
+	{
+		"assets.zip", "base91.exe", "bundler.exe", "uuid.exe"
+	};
+
+	ss::utilities::handle_updated(critical_files);
+	apathy::ostream::attach(std::cout, &ss::utilities::log);
+
+	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << std::endl;
+	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
 	std::cout << std::endl;
-	std::cout << "CPU usage for this session:" << std::endl;
+	std::cout << "[" << GIT_BRANCH << "] " << __DATE__ << " " << __TIME__ << std::endl;
 	std::cout << std::endl;
 
-	profit::report(std::cout);
+	if(!ss::utilities::update_files(files, critical_files, "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/"))
+		ss::Starborn().run();
+
+	ss::utilities::log_cpu_usage();
 	apathy::ostream::detach(std::cout);
 
 	return EXIT_SUCCESS;

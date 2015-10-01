@@ -96,6 +96,7 @@ echo %REVISION% &gt; patch\revision.txt</Command>
     <ClInclude Include="..\..\src\starborn\resources\resources.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
     <ClInclude Include="..\..\src\starborn\ui\menu.hpp" />
+    <ClInclude Include="..\..\src\starborn\utilities\functions.hpp" />
     <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
@@ -130,6 +131,7 @@ echo %REVISION% &gt; patch\revision.txt</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\starborn\ui\menu.cpp" />
+    <ClCompile Include="..\..\src\starborn\utilities\functions.cpp" />
     <ClCompile Include="..\..\src\starborn\utilities\json.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
