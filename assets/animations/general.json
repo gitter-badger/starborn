@@ -1,0 +1,22 @@
+{
+	"fade": {
+		"duration": 4,
+		"inRatio": 0.25,
+		"outRatio": 0.25,
+		"type": "fade"
+	},
+
+	"fade_in": {
+		"duration": 1,
+		"inRatio": 1,
+		"outRatio": 0,
+		"type": "fade"
+	},
+
+	"fade_out": {
+		"duration": 1,
+		"inRatio": 0,
+		"outRatio": 1,
+		"type": "fade"
+	}
+}

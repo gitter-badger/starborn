@@ -29,6 +29,28 @@ int32_t main(int32_t argc, char *argv[])
 
 		if(data.size())
 		{
+			wire::string output_directory(argv[2]);
+
+			auto backslash = output_directory.find_last_of('\\');
+			auto slash = output_directory.find_last_of('/');
+
+			if((backslash != wire::string::npos) || (slash != wire::string::npos))
+			{
+				if((backslash != wire::string::npos) && (slash != wire::string::npos))
+					output_directory = output_directory.substr(0, (backslash > slash) ? backslash : slash);
+
+				else if(backslash != wire::string::npos)
+					output_directory = output_directory.substr(0, backslash);
+
+				else
+					output_directory = output_directory.substr(0, slash);
+			}
+
+			apathy::path path(output_directory);
+
+			if(((backslash != wire::string::npos) || (slash != wire::string::npos)) && !path.exists())
+				apathy::path::md(path);
+
 			auto sha1 = cocoa::SHA1(data);
 
 			if(apathy::file(argv[2]).overwrite(sha1))

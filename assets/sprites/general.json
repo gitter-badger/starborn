@@ -1,0 +1,179 @@
+{
+	"main_menu_background": {
+		"scale": true,
+		"shader": "stars",
+		"state": "main_menu",
+		"type": "background"
+	},
+
+	"new_game_background": {
+		"scale": true,
+		"shader": "stars",
+		"state": "new_game",
+		"type": "background"
+	},
+
+	"snailsoft_background": {
+		"shader": "pixels",
+		"state": "snailsoft_logo",
+		"type": "background"
+	},
+
+	"starborn_background": {
+		"shader": "starfield",
+		"state": "starborn_logo",
+		"type": "background"
+	},
+
+	"copyright": {
+		"dynamic_position": false,
+		"ending_animation": "",
+		"starting_animation": "fade_in",
+		"state": "main_menu",
+		"texture": "assets/textures/general/copyright.png",
+		"type": "animated",
+
+		"animations": [
+			"fade_in"
+		],
+
+		"position": {
+			"anchor": "bottom_left",
+			"x": 4,
+			"y": -4
+		}
+	},
+
+	"copyright_new_game": {
+		"dynamic_position": false,
+		"ending_animation": "fade_out",
+		"starting_animation": "",
+		"state": "new_game",
+		"texture": "assets/textures/general/copyright.png",
+		"type": "animated",
+
+		"animations": [
+			"fade_out"
+		],
+
+		"position": {
+			"anchor": "bottom_left",
+			"x": 4,
+			"y": -4
+		}
+	},
+
+	"snailsoft": {
+		"dynamic_position": false,
+		"ending_animation": "fade",
+		"starting_animation": "",
+		"state": "snailsoft_logo",
+		"texture": "assets/textures/general/snailsoft.png",
+		"type": "animated",
+
+		"animations": [
+			"fade"
+		],
+
+		"position": {
+			"anchor": "center",
+			"x": 0,
+			"y": 0
+		}
+	},
+
+	"starborn_horizontal": {
+		"dynamic_position": false,
+		"ending_animation": "",
+		"starting_animation": "fade_in",
+		"state": "main_menu",
+		"texture": "assets/textures/general/starborn_horizontal.png",
+		"type": "animated",
+
+		"animations": [
+			"fade_in"
+		],
+
+		"position": {
+			"anchor": "center_top",
+			"x": 0,
+			"y": 0
+		}
+	},
+
+	"starborn_horizontal_new_game": {
+		"dynamic_position": false,
+		"ending_animation": "fade_out",
+		"starting_animation": "",
+		"state": "new_game",
+		"texture": "assets/textures/general/starborn_horizontal.png",
+		"type": "animated",
+
+		"animations": [
+			"fade_out"
+		],
+
+		"position": {
+			"anchor": "center_top",
+			"x": 0,
+			"y": 0
+		}
+	},
+
+	"starborn_vertical": {
+		"dynamic_position": false,
+		"ending_animation": "fade",
+		"starting_animation": "",
+		"state": "starborn_logo",
+		"texture": "assets/textures/general/starborn_vertical.png",
+		"type": "animated",
+
+		"animations": [
+			"fade"
+		],
+
+		"position": {
+			"anchor": "center",
+			"x": 0,
+			"y": 0
+		}
+	},
+
+	"version": {
+		"dynamic_position": false,
+		"ending_animation": "",
+		"starting_animation": "fade_in",
+		"state": "main_menu",
+		"texture": "assets/textures/general/version.png",
+		"type": "animated",
+
+		"animations": [
+			"fade_in"
+		],
+
+		"position": {
+			"anchor": "bottom_right",
+			"x": -4,
+			"y": -4
+		}
+	},
+
+	"version_new_game": {
+		"dynamic_position": false,
+		"ending_animation": "fade_out",
+		"starting_animation": "",
+		"state": "new_game",
+		"texture": "assets/textures/general/version.png",
+		"type": "animated",
+
+		"animations": [
+			"fade_out"
+		],
+
+		"position": {
+			"anchor": "bottom_right",
+			"x": -4,
+			"y": -4
+		}
+	}
+}

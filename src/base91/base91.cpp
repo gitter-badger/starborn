@@ -29,7 +29,29 @@ int32_t main(int32_t argc, char *argv[])
 
 		if(data.size())
 		{
-			auto base91 = (wire::string(argv[1]) == "-d") ? base64::decode(data) : base64::encode(data);
+			wire::string output_directory(argv[3]);
+
+			auto backslash = output_directory.find_last_of('\\');
+			auto slash = output_directory.find_last_of('/');
+
+			if((backslash != wire::string::npos) || (slash != wire::string::npos))
+			{
+				if((backslash != wire::string::npos) && (slash != wire::string::npos))
+					output_directory = output_directory.substr(0, (backslash > slash) ? backslash : slash);
+
+				else if(backslash != wire::string::npos)
+					output_directory = output_directory.substr(0, backslash);
+
+				else
+					output_directory = output_directory.substr(0, slash);
+			}
+
+			apathy::path path(output_directory);
+
+			if(((backslash != wire::string::npos) || (slash != wire::string::npos)) && !path.exists())
+				apathy::path::md(path);
+
+			auto base91 = (wire::string(argv[1]) == "-d") ? base91::decode(data) : base91::encode(data);
 
 			if(apathy::file(argv[3]).overwrite(base91))
 				std::cout << ((wire::string(argv[1]) == "-d") ? "Decoded " : "Encoded ");
@@ -37,7 +59,7 @@ int32_t main(int32_t argc, char *argv[])
 			else
 				std::cout << "Error: Could not write ";
 
-			std::cout << std::setprecision(2) << std::fixed << ((base91.size() / 1024.0f) / 1024.0f) << " mb for '" << argv[2] << "' to file: " << argv[3] << std::endl;
+			std::cout << std::setprecision(2) << std::fixed << ((base91.size() / 1024.0f) / 1024.0f) << " MiB for '" << argv[2] << "' to file: " << argv[3] << std::endl;
 		}
 		else
 		{

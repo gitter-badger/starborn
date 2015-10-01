@@ -171,7 +171,10 @@ void ss::Starborn::load()
 				this->shader_sources[file] = data;
 
 			else if(file.matchesi("assets/textures/*.png"))
-				this->textures.acquire(file, thor::Resources::fromMemory<sf::Texture>(data.c_str(), data.size()), thor::Resources::Reuse);
+			{ $
+				auto texture = base91::decode(data);
+				this->textures.acquire(file, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
+			}
 		}
 	}
 

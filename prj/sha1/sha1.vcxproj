@@ -74,7 +74,6 @@ set /a REVISION=%REVISION2%+1
 
 del /Q temp
 
-echo %REVISION% &gt; patch\revision.txt
 echo #define GIT_BRANCH "%BRANCH%" &gt; src\git.hpp
 echo #define GIT_REVISION "%REVISION%" &gt;&gt; src\git.hpp
 echo #define GIT_REVISION_NUMBER %REVISION% &gt;&gt; src\git.hpp</Command>

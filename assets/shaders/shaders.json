@@ -1,0 +1,21 @@
+{
+	"pixels": {
+		"fragment": "assets/shaders/pixels.frag"
+	},
+
+	"planet": {
+		"fragment": "assets/shaders/planet.frag"
+	},
+
+	"starfield": {
+		"fragment": "assets/shaders/starfield.frag"
+	},
+
+	"stars": {
+		"fragment": "assets/shaders/stars.frag"
+	},
+
+	"vignette": {
+		"fragment": "assets/shaders/vignette.frag"
+	}
+}
