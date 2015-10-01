@@ -22,25 +22,31 @@
 
 bool ss::Starborn::update()
 { $
-	wire::string url = "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/bin/";
+	wire::string url = "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/";
 
 	if(GIT_REVISION_NUMBER < wire::string(flow::download(url + "revision.txt?raw=true").data).as<int32_t>())
 	{ $
-		this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip?raw=true");
-		this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe?raw=true");
+		if(!apathy::file("assets.zip").exists())
+			this->update_file("assets.zip", url + "assets.zip.sha1?raw=true", url + "assets.zip.b91?raw=true");
 
-		if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe?raw=true", false))
+		if(!apathy::file("bundler.exe").exists())
+			this->update_file("bundler.exe", url + "bundler.exe.sha1?raw=true", url + "bundler.exe.b91?raw=true");
+
+		if(!apathy::file("starborn.exe").exists())
 		{ $
-			PROCESS_INFORMATION process_info;
-			STARTUPINFO startup_info;
+			if(this->update_file("starborn.exe", url + "starborn.exe.sha1?raw=true", url + "starborn.exe.b91?raw=true", false))
+			{ $
+				PROCESS_INFORMATION process_info;
+				STARTUPINFO startup_info;
 
-			memset(&process_info, 0, sizeof(process_info));
-			memset(&startup_info, 0, sizeof(startup_info));
+				memset(&process_info, 0, sizeof(process_info));
+				memset(&startup_info, 0, sizeof(startup_info));
 
-			startup_info.cb = sizeof(startup_info);
-			CreateProcess(nullptr, "starborn.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
+				startup_info.cb = sizeof(startup_info);
+				CreateProcess(nullptr, "starborn.exe", nullptr, nullptr, false, 0, nullptr, nullptr, &startup_info, &process_info);
 
-			return true;
+				return true;
+			}
 		}
 	}
 
@@ -53,7 +59,7 @@ bool ss::Starborn::update_file(wire::string source_filename, wire::string sha1_u
 
 	if(wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
 	{ $
-		file.patch(flow::download(destination_url).data, delete_old_file);
+		file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
 
 		return true;
 	}

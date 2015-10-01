@@ -16,6 +16,7 @@
  */
 
 #include <apathy/apathy.hpp>
+#include <base91/base91.hpp>
 #include <bubble/bubble.hpp>
 #include <bundle/bundle.hpp>
 #include <cocoa/cocoa.hpp>

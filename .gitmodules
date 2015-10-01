@@ -10,9 +10,6 @@
 [submodule "third_party/apathy"]
 	path = third_party/apathy
 	url = https://github.com/snail23/apathy.git
-[submodule "third_party/heal"]
-	path = third_party/heal
-	url = https://github.com/snail23/heal.git
 [submodule "third_party/metrics"]
 	path = third_party/metrics
 	url = https://github.com/snail23/metrics.git
@@ -49,3 +46,6 @@
 [submodule "third_party/eval"]
 	path = third_party/eval
 	url = https://github.com/snail23/eval.git
+[submodule "third_party/heal"]
+	path = third_party/heal
+	url = https://github.com/snail23/heal.git

@@ -7,8 +7,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{092C3DA9-7890-40CE-8951-B3CCF0CE1CDE}</ProjectGuid>
-    <RootNamespace>sha1</RootNamespace>
+    <ProjectGuid>{866D5A6E-B931-4FD5-BB09-ACB9CE39A74D}</ProjectGuid>
+    <RootNamespace>base91</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,8 +43,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
+      <DisableSpecificWarnings>4267</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <OptimizeReferences>true</OptimizeReferences>
@@ -56,48 +55,33 @@
       <GenerateDebugInformation>No</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>cd $(SolutionDir)
+bin\sha1.exe bin\base91.exe patch\base91.exe.sha1
+bin\base91.exe -e bin\base91.exe patch\base91.exe.b91</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>cd $(SolutionDir)
-
-git submodule update --init --recursive
-
-git rev-parse --abbrev-ref HEAD &gt; temp
-set /p BRANCH=&lt;temp
-
-git rev-list --count --first-parent HEAD &gt; temp
-
-set /p REVISION2=&lt;temp
-set /a REVISION=%REVISION2%+1
-
-del /Q temp
-
-echo %REVISION% &gt; patch\revision.txt
-echo #define GIT_BRANCH "%BRANCH%" &gt; src\git.hpp
-echo #define GIT_REVISION "%REVISION%" &gt;&gt; src\git.hpp
-echo #define GIT_REVISION_NUMBER %REVISION% &gt;&gt; src\git.hpp</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\sha1\version.hpp" />
+    <ClInclude Include="..\..\src\base91\version.hpp" />
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\src\sha1\sha1.rc" />
+    <ResourceCompile Include="..\..\src\base91\base91.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\sha1\sha1.cpp" />
+    <ClCompile Include="..\..\src\base91\base91.cpp" />
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244</DisableSpecificWarnings>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\src\sha1\sha1.ico" />
+    <Image Include="..\..\src\base91\base91.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -59,7 +59,8 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-bin\sha1.exe bin\bundler.exe</Command>
+bin\sha1.exe bin\bundler.exe  patch\bundler.exe.sha1
+bin\base91.exe -e bin\bundler.exe patch\bundler.exe.b91</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>

@@ -1,11 +1,8 @@
-*.$old
-*.iobj
-*.ipdb
 *.opensdf
 *.sdf
 
 .vs/*
-bin/logs/*
+bin/*
 ipch/*
 prj/*/obj/*
 src/git.hpp
