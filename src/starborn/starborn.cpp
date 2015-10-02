@@ -381,8 +381,11 @@ void ss::Starborn::run()
 		this->actions.update(this->window);
 		this->actions.invokeCallbacks(this->callbacks, nullptr);
 
-		this->window.clear();
-		this->state.update(last_frame_time, this->window);
-		this->window.display();
+		if(this->window.isOpen())
+		{ $
+			this->window.clear();
+			this->state.update(last_frame_time, this->window);
+			this->window.display();
+		}
 	}
 }
