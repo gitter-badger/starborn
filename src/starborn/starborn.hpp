@@ -90,6 +90,7 @@ namespace ss
 			maps::Shaders shaders;
 			maps::ShaderSources shader_sources;
 
+			resources::Fonts fonts;
 			resources::Textures textures;
 
 			sf::RenderWindow window;

@@ -19,6 +19,7 @@ namespace ss
 {
 	namespace resources
 	{
+		typedef thor::ResourceHolder<sf::Font, wire::string> Fonts;
 		typedef thor::ResourceHolder<sf::Texture, wire::string> Textures;
 	};
 }

@@ -5,6 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "starborn", "prj\starborn\starborn.vcxproj", "{4D3340D3-B627-4AC3-B759-C58E7A926687}"
 	ProjectSection(ProjectDependencies) = postProject
+		{DBB92405-9E4B-4B56-93DA-2CB64E91F511} = {DBB92405-9E4B-4B56-93DA-2CB64E91F511}
 		{866D5A6E-B931-4FD5-BB09-ACB9CE39A74D} = {866D5A6E-B931-4FD5-BB09-ACB9CE39A74D}
 		{85470197-F0CF-4474-A631-EAFAF42C25A2} = {85470197-F0CF-4474-A631-EAFAF42C25A2}
 		{092C3DA9-7890-40CE-8951-B3CCF0CE1CDE} = {092C3DA9-7890-40CE-8951-B3CCF0CE1CDE}
@@ -29,6 +30,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base91", "prj\base91\base91
 		{092C3DA9-7890-40CE-8951-B3CCF0CE1CDE} = {092C3DA9-7890-40CE-8951-B3CCF0CE1CDE}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "format", "prj\format\format.vcxproj", "{DBB92405-9E4B-4B56-93DA-2CB64E91F511}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|x64 = Release|x64
@@ -44,6 +47,8 @@ Global
 		{D09D15EB-99C4-4197-9B34-0E8FBCD50808}.Release|x64.Build.0 = Release|x64
 		{866D5A6E-B931-4FD5-BB09-ACB9CE39A74D}.Release|x64.ActiveCfg = Release|x64
 		{866D5A6E-B931-4FD5-BB09-ACB9CE39A74D}.Release|x64.Build.0 = Release|x64
+		{DBB92405-9E4B-4B56-93DA-2CB64E91F511}.Release|x64.ActiveCfg = Release|x64
+		{DBB92405-9E4B-4B56-93DA-2CB64E91F511}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

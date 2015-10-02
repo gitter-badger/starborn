@@ -18,22 +18,22 @@
 #include <starborn/starborn.hpp>
 
 ss::constants::State &ss::entities::State::get_state()
-{
+{ $
 	return this->state;
 }
 
 ss::entities::State::State()
-{
+{ $
 	this->state = constants::STATE_SNAILSOFT_LOGO;
 }
 
 ss::vectors::Drawables &ss::entities::State::get_drawables()
-{
+{ $
 	return this->drawables[this->state];
 }
 
 void ss::entities::State::attach_drawable(constants::State state, std::string name, sf::Drawable *drawable, constants::DrawableType type)
-{
+{ $
 	structs::Drawable drawable_struct;
 
 	drawable_struct.drawable = drawable;
@@ -44,9 +44,9 @@ void ss::entities::State::attach_drawable(constants::State state, std::string na
 }
 
 void ss::entities::State::switch_state(constants::State state)
-{
+{ $
 	for(auto &&drawable : this->drawables[this->state])
-	{
+	{ $
 		if(drawable.type == constants::DRAWABLE_TYPE_ANIMATED_SPRITE)
 			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->stopAnimation();
 	}
@@ -54,11 +54,11 @@ void ss::entities::State::switch_state(constants::State state)
 	this->state = state;
 
 	for(auto &&drawable : this->drawables[this->state])
-	{
+	{ $
 		if((drawable.type == constants::DRAWABLE_TYPE_ANIMATED_SPRITE) && ((drawable.name == ASSET_SNAILSOFT) || (drawable.name == ASSET_STARBORN_HORIZONTAL) || (drawable.name == ASSET_STARBORN_VERTICAL)))
-		{
+		{ $
 			switch(this->state)
-			{
+			{ $
 				case constants::STATE_SNAILSOFT_LOGO:
 				case constants::STATE_STARBORN_LOGO:
 					reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->playAnimation("fade");
@@ -73,16 +73,16 @@ void ss::entities::State::switch_state(constants::State state)
 }
 
 void ss::entities::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
-{
+{ $
 	for(auto &&drawable : this->drawables[this->state])
-	{
+	{ $
 		if(drawable.type == constants::DRAWABLE_TYPE_ANIMATED_SPRITE)
-		{
+		{ $
 			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->update(last_frame_time);
 			reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->animate(*reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable));
 
 			switch(this->state)
-			{
+			{ $
 				case constants::STATE_SNAILSOFT_LOGO:
 					if((drawable.name == ASSET_SNAILSOFT) && !reinterpret_cast<entities::AnimatedSprite *>(drawable.drawable)->isPlayingAnimation())
 						this->switch_state(constants::STATE_STARBORN_LOGO);

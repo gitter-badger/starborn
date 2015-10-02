@@ -91,6 +91,11 @@ void ss::Starborn::load()
 				auto texture = base91::decode(data);
 				this->textures.acquire(file, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
 			}
+			else if(file.matchesi("assets/fonts/*.ttf"))
+			{ $
+				auto font = base91::decode(data);
+				this->fonts.acquire(file, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
+			}
 		}
 	}
 
@@ -108,7 +113,7 @@ void ss::Starborn::load()
 
 			if(animation)
 				this->load_animation(data);
-
+			
 			else if(shader)
 				this->load_shader(data);
 
@@ -275,7 +280,7 @@ void ss::Starborn::on_right()
 
 void ss::Starborn::on_screenshot()
 { $
-	sf::Image(this->window.capture()).saveToFile(utilities::get_filename("screenshots", "starborn", ".png"));
+	sf::Image(this->window.capture()).saveToFile(utilities::get_timestamped_filename("screenshots", "starborn", ".png"));
 }
 
 void ss::Starborn::on_select()

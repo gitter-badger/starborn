@@ -34,6 +34,6 @@ namespace ss
 		void log_cpu_usage();
 		void stack_trace();
 
-		wire::string get_filename(wire::string directory, wire::string filename_prefix, wire::string extension);
+		wire::string get_timestamped_filename(wire::string directory, wire::string filename_prefix, wire::string extension);
 	}
 }

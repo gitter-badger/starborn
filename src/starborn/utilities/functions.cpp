@@ -114,7 +114,7 @@ void ss::utilities::log(bool open, bool feed, bool close, const std::string &lin
 	if(open || close)
 	{ $
 		if(open)
-			logger.open(get_filename("logs", "starborn", ".txt").c_str(), std::ios::app | std::ios::binary | std::ios::out);
+			logger.open(get_timestamped_filename("logs", "starborn", ".txt").c_str(), std::ios::app | std::ios::binary | std::ios::out);
 		
 		logger << line << std::endl;
 
@@ -153,7 +153,7 @@ void ss::utilities::stack_trace()
 	table.print(std::cout, false);
 }
 
-wire::string ss::utilities::get_filename(wire::string directory, wire::string filename_prefix, wire::string extension)
+wire::string ss::utilities::get_timestamped_filename(wire::string directory, wire::string filename_prefix, wire::string extension)
 { $
 	apathy::path path(directory);
 

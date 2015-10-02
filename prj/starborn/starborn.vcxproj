@@ -50,7 +50,7 @@
       <ImportLibrary>
       </ImportLibrary>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>advapi32.lib;gdi32.lib;jpeg.lib;opengl32.lib;sfml-graphics-s.lib;sfml-system-s.lib;sfml-window-s.lib;thor-s.lib;user32.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;freetype.lib;gdi32.lib;jpeg.lib;opengl32.lib;sfml-graphics-s.lib;sfml-system-s.lib;sfml-window-s.lib;thor-s.lib;user32.lib;winmm.lib</AdditionalDependencies>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
@@ -73,8 +73,8 @@ set /a REVISION=%REVISION2%+1
 echo %REVISION% &gt; patch\revision.txt</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>cd $(SolutionDir)
+bin\format.exe . .\src\starborn\*.cpp</Command>
     </PreBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>
