@@ -24,8 +24,8 @@ namespace ss
 
 	namespace utilities
 	{
-		bool update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file = true);
-		bool update_files(vectors::Strings &files, vectors::Strings &critical_files, wire::string github_url);
+		bool update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file = true, std::function<void (wire::string &filename)> callback = [](wire::string &filename){});
+		bool update_files(vectors::Strings &files, vectors::Strings &critical_files, wire::string github_url, std::function<void (uint32_t file, wire::string &filename)> callback = [](uint32_t file, wire::string &filename){});
 
 		bundle::string unpack_asset(bundle::file &asset);
 

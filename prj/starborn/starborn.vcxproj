@@ -73,8 +73,8 @@ set /a REVISION=%REVISION2%+1
 echo %REVISION% &gt; patch\revision.txt</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>cd $(SolutionDir)
-bin\format.exe . .\src\starborn\*.cpp</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>

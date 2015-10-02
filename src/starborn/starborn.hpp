@@ -68,7 +68,7 @@ namespace ss
 		struct Animation
 		{
 			sf::Time duration;
-			std::function<void(sf::Sprite &, float)> animation;
+			std::function<void (sf::Sprite &, float)> animation;
 		};
 	};
 
@@ -121,6 +121,8 @@ namespace ss
 			void on_up();
 
 		public:
+			game::State &get_state();
+
 			~Starborn();
 			Starborn();
 

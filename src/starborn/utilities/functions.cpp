@@ -21,7 +21,7 @@
 std::ofstream logger;
 wire::string logger_cache;
 
-bool ss::utilities::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file)
+bool ss::utilities::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file, std::function<void (wire::string &filename)> callback)
 { $
 	apathy::file file(source_filename);
 
@@ -33,20 +33,25 @@ bool ss::utilities::update_file(wire::string source_filename, wire::string sha1_
 		else 
 			file.overwrite(base91::decode(flow::download(destination_url).data));
 
+		callback(source_filename);
+
 		return true;
 	}
 
 	return false;
 }
 
-bool ss::utilities::update_files(vectors::Strings &files, vectors::Strings &critical_files, wire::string github_url)
+bool ss::utilities::update_files(vectors::Strings &files, vectors::Strings &critical_files, wire::string github_url, std::function<void (uint32_t file, wire::string &filename)> callback)
 { $
 	auto revision = wire::string(flow::download(github_url + "revision.txt?raw=true").data).as<int32_t>();
+	uint32_t files_updated = 0;
 
 	for(auto &&file : files)
 	{ $
 		if(!apathy::file(file).exists() || (GIT_REVISION_NUMBER < revision))
 			update_file(file, github_url + file + ".sha1?raw=true", github_url + file + ".b91?raw=true");
+
+		callback(++files_updated, file);
 	}
 
 	auto restart_required = false;
@@ -57,6 +62,8 @@ bool ss::utilities::update_files(vectors::Strings &files, vectors::Strings &crit
 		{ $
 			if(update_file(critical_file, github_url + critical_file + ".sha1?raw=true", github_url + critical_file + ".b91?raw=true", false))
 				restart_required = true;
+
+			callback(++files_updated, critical_file);
 		}
 	}
 

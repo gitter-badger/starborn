@@ -63,10 +63,9 @@
       <Command>cd $(SolutionDir)
 
 git submodule update --init --recursive
-
 git rev-parse --abbrev-ref HEAD &gt; temp
-set /p BRANCH=&lt;temp
 
+set /p BRANCH=&lt;temp
 git rev-list --count --first-parent HEAD &gt; temp
 
 set /p REVISION2=&lt;temp

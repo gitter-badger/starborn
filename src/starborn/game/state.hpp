@@ -55,11 +55,14 @@ namespace ss
 
 				maps::Drawables drawables;
 
+				sf::RectangleShape loading_bar;
+				sf::RectangleShape loading_bar_border;
+
 				sf::RenderTexture background;
 				sf::Sprite background_sprite;
 				sf::Time time;
 
-				std::function<void()> callback;
+				std::function<void ()> callback;
 
 				wire::string next_state;
 				wire::string state;
@@ -79,7 +82,9 @@ namespace ss
 				State();
 				wire::string &get_state();
 
-				void switch_state(wire::string state, bool reverse_animations = false, std::function<void()> callback = [](){});
+				void on_updated();
+				void set_loading_bar_percent(uint32_t value, uint32_t total);
+				void switch_state(wire::string state, bool reverse_animations = false, std::function<void ()> callback = [](){});
 				void update(sf::Time &last_frame_time, sf::RenderWindow &window);
 		};
 	}

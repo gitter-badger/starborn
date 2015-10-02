@@ -19,17 +19,6 @@
 
 int32_t _stdcall WinMain()
 { $
-	ss::vectors::Strings critical_files =
-	{
-		"starborn.pdb", "starborn.exe"
-	};
-
-	ss::vectors::Strings files =
-	{
-		"assets.zip", "base91.exe", "bundler.exe", "uuid.exe"
-	};
-
-	ss::utilities::handle_updated(critical_files);
 	apathy::ostream::attach(std::cout, &ss::utilities::log);
 
 	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << std::endl;
@@ -38,10 +27,9 @@ int32_t _stdcall WinMain()
 	std::cout << "[" << GIT_BRANCH << "] " << __DATE__ << " " << __TIME__ << std::endl;
 	std::cout << std::endl;
 
-	if(!ss::utilities::update_files(files, critical_files, "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/"))
-		ss::Starborn().run();
-
+	ss::Starborn().run();
 	ss::utilities::log_cpu_usage();
+
 	apathy::ostream::detach(std::cout);
 
 	return EXIT_SUCCESS;

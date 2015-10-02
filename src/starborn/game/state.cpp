@@ -31,6 +31,37 @@ ss::game::State::State()
 { $
 	this->background.create(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM));
 	this->background.clear(); 
+
+	auto height = 8.0f;
+	auto width = static_cast<float>((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM);
+
+	auto x = static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (width / 2.0f));
+	auto y = static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (height / 2.0f));
+
+	this->loading_bar.setFillColor(sf::Color(0, 192, 192));
+	this->loading_bar.setPosition(x, y);
+	this->loading_bar.setSize(sf::Vector2f(0.0f, height));
+	
+	this->loading_bar_border.setFillColor(sf::Color::Transparent);
+	this->loading_bar_border.setOutlineColor(sf::Color(0, 192, 192));
+	this->loading_bar_border.setOutlineThickness(1.0f);
+	this->loading_bar_border.setPosition(x, y);
+	this->loading_bar_border.setSize(sf::Vector2f(width, height));
+
+	structs::Drawable loading_bar;
+
+	loading_bar.drawable = &this->loading_bar;
+	loading_bar.name = "loading_bar";
+	loading_bar.reversible = false;
+	loading_bar.scale = false;
+	loading_bar.type = DRAWABLE_TYPE_LOADING_BAR;
+
+	this->drawables[STATE_LOADING].push_back(loading_bar);
+
+	loading_bar.drawable = &this->loading_bar_border;
+	loading_bar.name = "loading_bar_border";
+
+	this->drawables[STATE_LOADING].push_back(loading_bar);
 	
 	this->reverse_animations = false;
 	this->running = false;
@@ -71,7 +102,20 @@ void ss::game::State::on_update_sprite(structs::Drawable &drawable)
 		const_cast<sf::Shader *>(drawable.render_states.shader)->setParameter("resolution", static_cast<float>((sprite.getTexture()->getSize().x * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)), static_cast<float>((sprite.getTexture()->getSize().y * SETTING_ZOOM) / (drawable.scale ? SETTING_ZOOM : 1)));
 }
 
-void ss::game::State::switch_state(wire::string state, bool reverse_animations, std::function<void()> callback)
+void ss::game::State::on_updated()
+{
+	this->loading_bar.setFillColor(sf::Color(192, 0, 64));
+	this->loading_bar_border.setOutlineColor(sf::Color(192, 0, 64));
+
+	this->set_loading_bar_percent(0, 1);
+}
+
+void ss::game::State::set_loading_bar_percent(uint32_t value, uint32_t total)
+{ $
+	this->loading_bar.setSize(sf::Vector2f(this->loading_bar_border.getSize().x * (static_cast<float>(value) / static_cast<float>(total)), this->loading_bar.getSize().y));
+}
+
+void ss::game::State::switch_state(wire::string state, bool reverse_animations, std::function<void ()> callback)
 { $
 	this->callback = callback;
 	this->next_state = state;
@@ -118,7 +162,10 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::RenderWindow &window
 
 	if(this->next_state.length() && this->update_state)
 	{ $
-		if(((this->state == STATE_MAIN_MENU) && ((this->next_state != STATE_LOAD_GAME) && (this->next_state != STATE_NEW_GAME) && (this->next_state != STATE_OPTIONS))) || ((this->next_state != STATE_MAIN_MENU) && ((this->state == STATE_LOAD_GAME) || (this->state == STATE_NEW_GAME) || (this->state == STATE_OPTIONS))))
+		if((this->state == STATE_MAIN_MENU) && ((this->next_state != STATE_LOAD_GAME) && (this->next_state != STATE_NEW_GAME) && (this->next_state != STATE_OPTIONS)))
+			this->time = sf::Time::Zero;
+		
+		else if((this->next_state != STATE_MAIN_MENU) && ((this->state == STATE_LOAD_GAME) || (this->state == STATE_NEW_GAME) || (this->state == STATE_OPTIONS)))
 			this->time = sf::Time::Zero;
 
 		else

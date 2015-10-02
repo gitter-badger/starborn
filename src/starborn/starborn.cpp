@@ -17,6 +17,11 @@
 
 #include <starborn/starborn.hpp>
 
+ss::game::State &ss::Starborn::get_state()
+{
+	return this->state;
+}
+
 ss::Starborn::~Starborn()
 { $
 	this->loading_thread.join();
@@ -65,8 +70,35 @@ void ss::Starborn::load()
 { $
 	if(this->window.isOpen())
 	{ $
+		ss::vectors::Strings critical_files =
+		{
+			"starborn.pdb", "starborn.exe"
+		};
+
+		ss::vectors::Strings files =
+		{
+			"assets.zip", "base91.exe", "bundler.exe", "uuid.exe"
+		};
+
+		ss::utilities::handle_updated(critical_files);
+
+		if(ss::utilities::update_files(files, critical_files, "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/", [this, critical_files, files](uint32_t file, wire::string &filename)
+		{
+			this->get_state().set_loading_bar_percent(file, critical_files.size() + files.size());
+		}))
+			this->on_exit();
+
+		this->state.on_updated();
+			
 		bundle::archive assets;
 		assets.bin(apathy::file("assets.zip").read());
+
+		std::sort(assets.begin(), assets.end(), [](bundle::file &file1, bundle::file &file2)
+		{
+			return file1["data"].size() < file2["data"].size();
+		});
+
+		auto files_loaded = 0;
 
 		for(auto &&asset : assets)
 		{ $
@@ -93,6 +125,8 @@ void ss::Starborn::load()
 					auto font = base91::decode(data);
 					this->fonts.acquire(file, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
 				}
+
+				this->state.set_loading_bar_percent(++files_loaded, assets.size());
 			}
 
 			if(!this->window.isOpen())
@@ -121,6 +155,8 @@ void ss::Starborn::load()
 
 					else if(sprite)
 						this->load_sprite(data);
+
+					this->state.set_loading_bar_percent(++files_loaded, assets.size());
 				}
 
 				if(!this->window.isOpen())
