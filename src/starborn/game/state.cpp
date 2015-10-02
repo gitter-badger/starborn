@@ -22,6 +22,11 @@ bool &ss::game::State::is_running()
 	return this->running;
 }
 
+sf::Time &ss::game::State::get_time()
+{ $
+	return this->time;
+}
+
 ss::game::State::State()
 { $
 	this->background.create(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM));
@@ -79,7 +84,7 @@ void ss::game::State::switch_state(wire::string state, bool reverse_animations, 
 	}
 }
 
-void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window)
+void ss::game::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 { $
 	if(this->next_state.length())
 		this->update_state = true;
@@ -96,7 +101,7 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 			this->on_update_sprite(drawable);
 
 		if(drawable.render_states.shader)
-			this->update_shader_parameters(total_time, *const_cast<sf::Shader *>(drawable.render_states.shader));
+			this->update_shader_parameters(*const_cast<sf::Shader *>(drawable.render_states.shader));
 
 		if(drawable.scale)
 		{ $
@@ -113,8 +118,15 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 
 	if(this->next_state.length() && this->update_state)
 	{ $
+		if(((this->state == STATE_MAIN_MENU) && ((this->next_state != STATE_LOAD_GAME) && (this->next_state != STATE_NEW_GAME) && (this->next_state != STATE_OPTIONS))) || ((this->next_state != STATE_MAIN_MENU) && ((this->state == STATE_LOAD_GAME) || (this->state == STATE_NEW_GAME) || (this->state == STATE_OPTIONS))))
+			this->time = sf::Time::Zero;
+
+		else
+			this->time = sf::Time::Zero;
+
 		this->state = this->next_state;
 		this->next_state.clear();
+
 		this->update_state = false;
 
 		for(auto &&drawable : this->drawables[this->state])
@@ -130,9 +142,9 @@ void ss::game::State::update(sf::Time &last_frame_time, sf::Time &total_time, sf
 	}
 }
 
-void ss::game::State::update_shader_parameters(sf::Time &total_time, sf::Shader &shader)
+void ss::game::State::update_shader_parameters(sf::Shader &shader)
 { $
-	shader.setParameter("time", total_time.asSeconds());
+	shader.setParameter("time", this->time.asSeconds());
 }
 
 wire::string &ss::game::State::get_state()

@@ -34,6 +34,6 @@ void main()
 		color += (((max(0.0, 0.5 - (((abs(fract(((time + (fract(angle2 * fract(angle2 * 0.7235) * 45.1) * 100.0)) * 0.2) + distance) - 0.5)) * 25.0) / distance)) * (0.5 - abs(fract(angle * 360.0) - 0.5))) * 5.0) / distance) / radian_distance;
 	}
 
-	gl_FragColor = vec4((vec3(color) * vec3(0.0, 1.0, 1.0)) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), ((time - 4.0) < 3.0) ? min(1.0, (time - 4.0)) : (1.0 - ((time - 4.0) - 3.0))) * 0.3;
+	gl_FragColor = vec4((vec3(color) * vec3(0.0, 1.0, 1.0)) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), (time < 3.0) ? min(1.0, time) : (1.0 - (time - 3.0))) * 0.3;
 }
     

@@ -19,6 +19,7 @@ namespace ss
 {
 	namespace constants
 	{
+		#define STATE_LOADING			"loading"
 		#define STATE_LOAD_GAME			"load_game"
 		#define STATE_MAIN_MENU			"main_menu"
 		#define STATE_NEW_GAME			"new_game"

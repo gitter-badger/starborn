@@ -57,6 +57,7 @@ namespace ss
 
 				sf::RenderTexture background;
 				sf::Sprite background_sprite;
+				sf::Time time;
 
 				std::function<void()> callback;
 
@@ -67,17 +68,19 @@ namespace ss
 				void on_update_background(structs::Drawable &drawable);
 				void on_update_sprite(structs::Drawable &drawable);
 
-				void update_shader_parameters(sf::Time &total_time, sf::Shader &shader);
+				void update_shader_parameters(sf::Shader &shader);
 
 			public:
 				bool &is_running();
 
 				maps::Drawables &get_drawables();
+				sf::Time &get_time();
+
 				State();
 				wire::string &get_state();
 
 				void switch_state(wire::string state, bool reverse_animations = false, std::function<void()> callback = [](){});
-				void update(sf::Time &last_frame_time, sf::Time &total_time, sf::RenderWindow &window);
+				void update(sf::Time &last_frame_time, sf::RenderWindow &window);
 		};
 	}
 }

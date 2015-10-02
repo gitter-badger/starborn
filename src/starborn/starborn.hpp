@@ -96,6 +96,8 @@ namespace ss
 			sf::RenderWindow window;
 			sf::View view;
 
+			std::thread loading_thread;
+
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
