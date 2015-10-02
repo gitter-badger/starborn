@@ -121,6 +121,7 @@ namespace ss
 			void on_up();
 
 		public:
+			~Starborn();
 			Starborn();
 
 			void run();

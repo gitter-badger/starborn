@@ -17,6 +17,11 @@
 
 #include <starborn/starborn.hpp>
 
+ss::Starborn::~Starborn()
+{ $
+	this->loading_thread.join();
+}
+
 ss::Starborn::Starborn()
 { $
 	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
@@ -58,11 +63,11 @@ ss::Starborn::Starborn()
 
 void ss::Starborn::load()
 { $
-	bundle::archive assets;
-	assets.bin(apathy::file("assets.zip").read());
-
 	if(this->window.isOpen())
 	{ $
+		bundle::archive assets;
+		assets.bin(apathy::file("assets.zip").read());
+
 		for(auto &&asset : assets)
 		{ $
 			wire::string file = asset["name"];
@@ -93,49 +98,49 @@ void ss::Starborn::load()
 			if(!this->window.isOpen())
 				break;
 		}
-	}
 
-	if(this->window.isOpen())
-	{ $
-		for(auto &&asset : assets)
+		if(this->window.isOpen())
 		{ $
-			wire::string file = asset["name"];
-
-			auto animation = file.matchesi("assets/animations/*.json");
-			auto shader = file.matchesi("assets/shaders/*.json");
-			auto sprite = file.matchesi("assets/sprites/*.json");
-
-			if(animation || shader || sprite)
+			for(auto &&asset : assets)
 			{ $
-				auto data = utilities::unpack_asset(asset);
+				wire::string file = asset["name"];
 
-				if(animation)
-					this->load_animation(data);
+				auto animation = file.matchesi("assets/animations/*.json");
+				auto shader = file.matchesi("assets/shaders/*.json");
+				auto sprite = file.matchesi("assets/sprites/*.json");
+
+				if(animation || shader || sprite)
+				{ $
+					auto data = utilities::unpack_asset(asset);
+
+					if(animation)
+						this->load_animation(data);
 			
-				else if(shader)
-					this->load_shader(data);
+					else if(shader)
+						this->load_shader(data);
 
-				else if(sprite)
-					this->load_sprite(data);
+					else if(sprite)
+						this->load_sprite(data);
+				}
+
+				if(!this->window.isOpen())
+					break;
 			}
 
-			if(!this->window.isOpen())
-				break;
-		}
-	}
-
-	if(this->window.isOpen())
-	{ $
-		this->menus[STATE_MAIN_MENU].init(this->textures);
-		this->menus[STATE_NEW_GAME].init(this->textures);
-
-		this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
-		{ $
-			this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
+			if(this->window.isOpen())
 			{ $
-				this->state.switch_state(STATE_MAIN_MENU);
-			});
-		});
+				this->menus[STATE_MAIN_MENU].init(this->textures);
+				this->menus[STATE_NEW_GAME].init(this->textures);
+
+				this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
+				{ $
+					this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
+					{ $
+						this->state.switch_state(STATE_MAIN_MENU);
+					});
+				});
+			}
+		}
 	}
 }
 
@@ -262,7 +267,7 @@ void ss::Starborn::on_down()
 
 void ss::Starborn::on_escape()
 { $
-	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
+	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_LOADING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
 		this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? false : true);
 
 	else
@@ -275,9 +280,7 @@ void ss::Starborn::on_exit()
 	std::cout << std::endl;
 
 	utilities::stack_trace();
-
 	this->window.close();
-	this->loading_thread.join();
 }
 
 void ss::Starborn::on_left()
