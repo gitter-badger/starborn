@@ -27,7 +27,12 @@ bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::
 
 	if(!file.exists() || wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
 	{ $
-		file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
+		if(file.exists())
+			file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
+
+		else
+			file.overwrite(base91::decode(flow::download(destination_url).data));
+
 		callback(source_filename);
 		
 		return true;
