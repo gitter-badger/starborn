@@ -19,7 +19,7 @@
 
 int32_t _stdcall WinMain()
 { $
-	apathy::ostream::attach(std::cout, &ss::utilities::log);
+	apathy::ostream::attach(std::cout, &ss::log);
 
 	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << std::endl;
 	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
@@ -28,7 +28,7 @@ int32_t _stdcall WinMain()
 	std::cout << std::endl;
 
 	ss::Starborn().run();
-	ss::utilities::log_cpu_usage();
+	ss::log_cpu_usage();
 
 	apathy::ostream::detach(std::cout);
 

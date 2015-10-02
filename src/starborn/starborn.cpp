@@ -17,11 +17,6 @@
 
 #include <starborn/starborn.hpp>
 
-ss::game::State &ss::Starborn::get_state()
-{ $
-	return this->state;
-}
-
 ss::Starborn::~Starborn()
 { $
 	this->loading_thread.join();
@@ -66,23 +61,28 @@ ss::Starborn::Starborn()
 	this->loading_thread = std::thread(&Starborn::load, this);
 }
 
+ss::State &ss::Starborn::get_state()
+{ $
+	return this->state;
+}
+
 void ss::Starborn::load()
 { $
 	if(this->window.isOpen())
 	{ $
-		ss::vectors::Strings critical_files =
+		std::vector<wire::string> critical_files =
 		{
 			"starborn.pdb", "starborn.exe"
 		};
 
-		ss::vectors::Strings files =
+		std::vector<wire::string> files =
 		{
 			"assets.zip", "base91.exe", "bundler.exe", "uuid.exe"
 		};
 
-		ss::utilities::handle_updated(critical_files);
+		ss::handle_updated(critical_files);
 
-		if(ss::utilities::update_files(files, critical_files, "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/", [this, critical_files, files](uint32_t file, wire::string &filename)
+		if(ss::update_files(files, critical_files, "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/", [this, critical_files, files](uint32_t file, wire::string &filename)
 		{ $
 			this->get_state().set_loading_bar_percent(file, critical_files.size() + files.size());
 		}))
@@ -107,7 +107,7 @@ void ss::Starborn::load()
 
 				if(!animation && !shader && !sprite)
 				{ $
-					auto data = utilities::unpack_asset(asset);
+					auto data = unpack_asset(asset);
 
 					if(file.matchesi("assets/shaders/*.frag") || file.matchesi("assets/shaders/*.vert"))
 						this->shader_sources[file] = data;
@@ -142,7 +142,7 @@ void ss::Starborn::load()
 
 					if(animation || shader || sprite)
 					{ $
-						auto data = utilities::unpack_asset(asset);
+						auto data = unpack_asset(asset);
 
 						if(animation)
 							this->load_animation(data);
@@ -180,7 +180,7 @@ void ss::Starborn::load()
 
 void ss::Starborn::load_animation(bundle::string &json_data)
 { $
-	utilities::Json json(json_data);
+	Json json(json_data);
 
 	for(auto animation = json.get_document().MemberBegin(); animation != json.get_document().MemberEnd(); ++animation)
 	{ $
@@ -203,7 +203,7 @@ void ss::Starborn::load_animation(bundle::string &json_data)
 
 void ss::Starborn::load_shader(bundle::string &json_data)
 { $
-	utilities::Json json(json_data);
+	Json json(json_data);
 
 	for(auto shader = json.get_document().MemberBegin(); shader != json.get_document().MemberEnd(); ++shader)
 	{ $
@@ -223,7 +223,7 @@ void ss::Starborn::load_shader(bundle::string &json_data)
 
 void ss::Starborn::load_sprite(bundle::string &json_data)
 { $
-	utilities::Json json(json_data);
+	Json json(json_data);
 
 	for(auto sprite = json.get_document().MemberBegin(); sprite != json.get_document().MemberEnd(); ++sprite)
 	{ $
@@ -231,18 +231,18 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 
 		if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE))
 		{ $
-			new_sprite = new entities::AnimatedSprite();
+			new_sprite = new AnimatedSprite();
 
 			for(auto animation = sprite->value["animations"].Begin(); animation != sprite->value["animations"].End(); ++animation)
-				reinterpret_cast<entities::AnimatedSprite *>(new_sprite)->addAnimation(animation->GetString(), this->animations[animation->GetString()].animation, this->animations[animation->GetString()].duration);
+				reinterpret_cast<AnimatedSprite *>(new_sprite)->addAnimation(animation->GetString(), this->animations[animation->GetString()].animation, this->animations[animation->GetString()].duration);
 		
 			if(!strcmp(sprite->name.GetString(), BUTTON_CONTINUE) || !strcmp(sprite->name.GetString(), BUTTON_EXIT) || !strcmp(sprite->name.GetString(), BUTTON_LOAD_GAME) ||
 				!strcmp(sprite->name.GetString(), BUTTON_MIDNIGHT) || !strcmp(sprite->name.GetString(), BUTTON_NEW_GAME) || !strcmp(sprite->name.GetString(), BUTTON_NIGHTFALL) ||
 				!strcmp(sprite->name.GetString(), BUTTON_OPTIONS))
 			{ $
-				structs::Button button;
+				Button button;
 
-				button.animated_sprite = reinterpret_cast<entities::AnimatedSprite *>(new_sprite);
+				button.animated_sprite = reinterpret_cast<AnimatedSprite *>(new_sprite);
 				button.name = sprite->name.GetString();
 				button.selected_texture = sprite->value["selected_texture"].GetString();
 				button.texture = sprite->value["texture"].GetString();
@@ -251,7 +251,7 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 			}
 		}
 		else if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_SPRITE))
-			new_sprite = new entities::Sprite();
+			new_sprite = new Sprite();
 
 		if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_BACKGROUND))
 		{ $
@@ -260,14 +260,14 @@ void ss::Starborn::load_sprite(bundle::string &json_data)
 		}
 		else
 		{ $
-			auto &final_sprite = *reinterpret_cast<entities::Sprite *>(new_sprite);
+			auto &final_sprite = *reinterpret_cast<Sprite *>(new_sprite);
 
 			final_sprite.has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
 			final_sprite.setTexture(this->textures[sprite->value["texture"].GetString()]);
 			final_sprite.set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble(), sprite->value.HasMember("size") ? sprite->value["size"]["x"].GetDouble() : 0.0f, sprite->value.HasMember("size") ? sprite->value["size"]["y"].GetDouble() : 0.0f);
 		}
 
-		structs::Drawable drawable;
+		Drawable drawable;
 
 		drawable.ending_animation = !strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE) ? sprite->value["ending_animation"].GetString() : "";
 		drawable.drawable = reinterpret_cast<sf::Drawable *>(new_sprite);
@@ -313,7 +313,7 @@ void ss::Starborn::on_exit()
 	std::cout << "on_exit() stack trace:" << std::endl;
 	std::cout << std::endl;
 
-	utilities::stack_trace();
+	stack_trace();
 	this->window.close();
 }
 
@@ -335,7 +335,7 @@ void ss::Starborn::on_right()
 
 void ss::Starborn::on_screenshot()
 { $
-	sf::Image(this->window.capture()).saveToFile(utilities::get_timestamped_filename("screenshots", "starborn", ".png"));
+	sf::Image(this->window.capture()).saveToFile(get_timestamped_filename("screenshots", "starborn", ".png"));
 }
 
 void ss::Starborn::on_select()

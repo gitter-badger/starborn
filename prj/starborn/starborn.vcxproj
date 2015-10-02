@@ -81,22 +81,17 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\starborn\constants\actions.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\anchors.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\animation_types.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\buttons.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\sprites.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\drawable_types.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\settings.hpp" />
-    <ClInclude Include="..\..\src\starborn\constants\states.hpp" />
-    <ClInclude Include="..\..\src\starborn\entities\animated_sprite.hpp" />
-    <ClInclude Include="..\..\src\starborn\entities\sprite.hpp" />
-    <ClInclude Include="..\..\src\starborn\game\state.hpp" />
-    <ClInclude Include="..\..\src\starborn\resources\resources.hpp" />
+    <ClInclude Include="..\..\src\starborn\animated_rectangle.hpp" />
+    <ClInclude Include="..\..\src\starborn\animated_sprite.hpp" />
+    <ClInclude Include="..\..\src\starborn\constants.hpp" />
+    <ClInclude Include="..\..\src\starborn\functions.hpp" />
+    <ClInclude Include="..\..\src\starborn\json.hpp" />
+    <ClInclude Include="..\..\src\starborn\menu.hpp" />
+    <ClInclude Include="..\..\src\starborn\rectangle.hpp" />
+    <ClInclude Include="..\..\src\starborn\sprite.hpp" />
     <ClInclude Include="..\..\src\starborn\starborn.hpp" />
-    <ClInclude Include="..\..\src\starborn\ui\menu.hpp" />
-    <ClInclude Include="..\..\src\starborn\utilities\functions.hpp" />
-    <ClInclude Include="..\..\src\starborn\utilities\json.hpp" />
+    <ClInclude Include="..\..\src\starborn\state.hpp" />
+    <ClInclude Include="..\..\src\starborn\structs.hpp" />
     <ClInclude Include="..\..\src\starborn\version.hpp" />
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
     <ClInclude Include="..\..\third_party\bubble\bubble.hpp" />
@@ -109,32 +104,18 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\starborn\entities\sprite.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\src\starborn\game\state.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\src\starborn\main.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\..\src\starborn\functions.cpp" />
+    <ClCompile Include="..\..\src\starborn\json.cpp" />
+    <ClCompile Include="..\..\src\starborn\main.cpp" />
+    <ClCompile Include="..\..\src\starborn\menu.cpp" />
     <ClCompile Include="..\..\src\starborn\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="..\..\src\starborn\starborn.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\src\starborn\ui\menu.cpp" />
-    <ClCompile Include="..\..\src\starborn\utilities\functions.cpp" />
-    <ClCompile Include="..\..\src\starborn\utilities\json.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">starborn/starborn.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\..\src\starborn\rectangle.cpp" />
+    <ClCompile Include="..\..\src\starborn\sprite.cpp" />
+    <ClCompile Include="..\..\src\starborn\starborn.cpp" />
+    <ClCompile Include="..\..\src\starborn\state.cpp" />
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244</DisableSpecificWarnings>
     </ClCompile>

@@ -39,67 +39,45 @@
 
 #include <wire/wire.hpp>
 
-#include <starborn/constants/actions.hpp>
-#include <starborn/constants/anchors.hpp>
-#include <starborn/constants/animation_types.hpp>
-#include <starborn/constants/buttons.hpp>
-#include <starborn/constants/drawable_types.hpp>
-#include <starborn/constants/settings.hpp>
-#include <starborn/constants/sprites.hpp>
-#include <starborn/constants/states.hpp>
+#include <starborn/constants.hpp>
 
-#include <starborn/entities/sprite.hpp>
-#include <starborn/entities/animated_sprite.hpp>
+#include <starborn/sprite.hpp>
+#include <starborn/animated_sprite.hpp>
+#include <starborn/structs.hpp>
 
-#include <starborn/resources/resources.hpp>
-#include <starborn/game/state.hpp>
+#include <starborn/rectangle.hpp>
+#include <starborn/animated_rectangle.hpp>
 
-#include <starborn/ui/menu.hpp>
-
-#include <starborn/utilities/functions.hpp>
-#include <starborn/utilities/json.hpp>
+#include <starborn/functions.hpp>
+#include <starborn/json.hpp>
+#include <starborn/menu.hpp>
+#include <starborn/state.hpp>
 
 #include <starborn/version.hpp>
 
 namespace ss
 {
-	namespace structs
-	{
-		struct Animation
-		{
-			sf::Time duration;
-			std::function<void (sf::Sprite &, float)> animation;
-		};
-	};
-
-	namespace maps
-	{
-		typedef std::map<wire::string, bundle::string> ShaderSources;
-		typedef std::map<wire::string, sf::Shader> Shaders;
-		typedef std::map<wire::string, structs::Animation> Animations;
-		typedef std::map<wire::string, ui::Menu> Menus;
-	};
-
 	class Starborn
 	{
 		private:
-			game::State state;
-
-			maps::Animations animations;
-			maps::Menus menus;
-			maps::Shaders shaders;
-			maps::ShaderSources shader_sources;
-
-			resources::Fonts fonts;
-			resources::Textures textures;
-
 			sf::RenderWindow window;
 			sf::View view;
 
-			std::thread loading_thread;
+			State state;
 
+			std::map<wire::string, Animation> animations;
+			std::map<wire::string, Menu> menus;
+
+			std::map<wire::string, sf::Shader> shaders;
+			std::map<wire::string, wire::string> shader_sources;
+
+			std::thread loading_thread;
+			
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
+
+			thor::ResourceHolder<sf::Font, wire::string> fonts;
+			thor::ResourceHolder<sf::Texture, wire::string> textures;
 
 			void load();
 
@@ -121,10 +99,10 @@ namespace ss
 			void on_up();
 
 		public:
-			game::State &get_state();
-
 			~Starborn();
 			Starborn();
+
+			State &get_state();
 
 			void run();
 	};
