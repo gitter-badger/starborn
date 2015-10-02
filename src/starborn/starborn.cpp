@@ -72,7 +72,7 @@ void ss::Starborn::load()
 	{ $
 		std::vector<wire::string> critical_files =
 		{
-			"starborn.pdb", "starborn.exe"
+			"starborn.exe", "starborn.pdb"
 		};
 
 		std::vector<wire::string> files =

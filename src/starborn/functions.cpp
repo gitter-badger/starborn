@@ -24,21 +24,23 @@ wire::string logger_cache;
 bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file, std::function<void (wire::string &filename)> callback)
 { $
 	apathy::file file(source_filename);
+	auto updated = false;
 
-	if(!file.exists() || (wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data))
+	if(!file.exists())
 	{ $
-		if(file.exists())
-			file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
-
-		else 
-			file.overwrite(base91::decode(flow::download(destination_url).data));
-
-		callback(source_filename);
-
-		return true;
+		file.overwrite(base91::decode(flow::download(destination_url).data));
+		updated = true;
+	}
+	else if(wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
+	{ $
+		file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
+		updated = true;
 	}
 
-	return false;
+	if(updated)
+		callback(source_filename);
+
+	return updated;
 }
 
 bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string> &critical_files, wire::string github_url, std::function<void (uint32_t file, wire::string &filename)> callback)
@@ -101,16 +103,16 @@ bundle::string ss::unpack_asset(bundle::file &asset)
 
 void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 { $
-	for(auto i = 0; i < old_critical_files.size(); ++i)
+	for(auto &&old_critical_file : old_critical_files)
 	{ $
-		apathy::file old_critical_file(old_critical_files[i] + ".$old");
+		apathy::file old_critical_file(old_critical_file + ".$old");
 
 		if(old_critical_file.exists())
 		{ $
 			while(old_critical_file.exists())
 				old_critical_file.remove();
 
-			if((i + 1) == old_critical_files.size())
+			if(apathy::file(old_critical_file).ext() == ".exe")
 				bubble::notify("Updated to version " STARBORN_VERSION, STARBORN_NAME);
 		}
 	}
