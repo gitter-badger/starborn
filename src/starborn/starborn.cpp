@@ -82,7 +82,7 @@ void ss::Starborn::load()
 
 		ss::handle_updated(critical_files);
 
-		if(ss::update_files(files, critical_files, "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/", [this, critical_files, files](uint32_t file, wire::string &filename)
+		if(ss::update_files(files, critical_files, "https://raw.githubusercontent.com/snailsoft/starborn/" GIT_BRANCH "/patch/", [this, critical_files, files](uint32_t file, wire::string &filename)
 		{ $
 			this->get_state().set_loading_bar_percent(file, critical_files.size() + files.size());
 		}))

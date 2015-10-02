@@ -24,34 +24,27 @@ wire::string logger_cache;
 bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file, std::function<void (wire::string &filename)> callback)
 { $
 	apathy::file file(source_filename);
-	auto updated = false;
 
-	if(!file.exists())
-	{ $
-		file.overwrite(base91::decode(flow::download(destination_url).data));
-		updated = true;
-	}
-	else if(wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
+	if(wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
 	{ $
 		file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
-		updated = true;
+		callback(source_filename);
+		
+		return true;
 	}
 
-	if(updated)
-		callback(source_filename);
-
-	return updated;
+	return false;
 }
 
 bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string> &critical_files, wire::string github_url, std::function<void (uint32_t file, wire::string &filename)> callback)
 { $
-	auto revision = wire::string(flow::download(github_url + "revision.txt?raw=true").data).as<int32_t>();
+	auto revision = wire::string(flow::download(github_url + "revision.txt").data).as<int32_t>();
 	uint32_t files_updated = 0;
 
 	for(auto &&file : files)
 	{ $
 		if(!apathy::file(file).exists() || (GIT_REVISION_NUMBER < revision))
-			update_file(file, github_url + file + ".sha1?raw=true", github_url + file + ".b91?raw=true");
+			update_file(file, github_url + file + ".sha1", github_url + file + ".b91");
 
 		callback(++files_updated, file);
 	}
@@ -62,7 +55,7 @@ bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string
 	{ $
 		if(!apathy::file(critical_file).exists() || (GIT_REVISION_NUMBER < revision))
 		{ $
-			if(update_file(critical_file, github_url + critical_file + ".sha1?raw=true", github_url + critical_file + ".b91?raw=true", false))
+			if(update_file(critical_file, github_url + critical_file + ".sha1", github_url + critical_file + ".b91", false))
 				restart_required = true;
 
 			callback(++files_updated, critical_file);
@@ -106,15 +99,18 @@ void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 	for(auto &&old_critical_file : old_critical_files)
 	{ $
 		apathy::file old_critical_file(old_critical_file + ".$old");
+		auto updated = false;
 
 		if(old_critical_file.exists())
 		{ $
 			while(old_critical_file.exists())
 				old_critical_file.remove();
 
-			if(apathy::file(old_critical_file).ext() == "exe")
-				bubble::notify("Updated to version " STARBORN_VERSION, STARBORN_NAME);
+			updated = true;
 		}
+
+		if(updated)
+			bubble::notify("Updated to version " STARBORN_VERSION, STARBORN_NAME);
 	}
 }
 
