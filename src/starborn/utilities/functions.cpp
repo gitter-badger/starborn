@@ -25,7 +25,7 @@ bool ss::utilities::update_file(wire::string source_filename, wire::string sha1_
 { $
 	apathy::file file(source_filename);
 
-	if(wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
+	if(!file.exists() || wire::string(cocoa::SHA1(file.read())) != flow::download(sha1_url).data)
 	{ $
 		if(file.exists())
 			file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);

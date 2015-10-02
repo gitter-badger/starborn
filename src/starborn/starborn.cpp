@@ -18,7 +18,7 @@
 #include <starborn/starborn.hpp>
 
 ss::game::State &ss::Starborn::get_state()
-{
+{ $
 	return this->state;
 }
 
@@ -83,58 +83,20 @@ void ss::Starborn::load()
 		ss::utilities::handle_updated(critical_files);
 
 		if(ss::utilities::update_files(files, critical_files, "https://github.com/snailsoft/starborn/blob/" GIT_BRANCH "/patch/", [this, critical_files, files](uint32_t file, wire::string &filename)
-		{
+		{ $
 			this->get_state().set_loading_bar_percent(file, critical_files.size() + files.size());
 		}))
 			this->on_exit();
 
-		this->state.on_updated();
-			
-		bundle::archive assets;
-		assets.bin(apathy::file("assets.zip").read());
-
-		std::sort(assets.begin(), assets.end(), [](bundle::file &file1, bundle::file &file2)
-		{
-			return file1["data"].size() < file2["data"].size();
-		});
-
-		auto files_loaded = 0;
-
-		for(auto &&asset : assets)
-		{ $
-			wire::string file = asset["name"];
-
-			auto animation = file.matchesi("assets/animations/*.json");
-			auto shader = file.matchesi("assets/shaders/*.json");
-			auto sprite = file.matchesi("assets/sprites/*.json");
-
-			if(!animation && !shader && !sprite)
-			{ $
-				auto data = utilities::unpack_asset(asset);
-
-				if(file.matchesi("assets/shaders/*.frag") || file.matchesi("assets/shaders/*.vert"))
-					this->shader_sources[file] = data;
-
-				else if(file.matchesi("assets/textures/*.png"))
-				{ $
-					auto texture = base91::decode(data);
-					this->textures.acquire(file, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
-				}
-				else if(file.matchesi("assets/fonts/*.ttf"))
-				{ $
-					auto font = base91::decode(data);
-					this->fonts.acquire(file, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
-				}
-
-				this->state.set_loading_bar_percent(++files_loaded, assets.size());
-			}
-
-			if(!this->window.isOpen())
-				break;
-		}
-
 		if(this->window.isOpen())
 		{ $
+			this->state.on_updated();
+			
+			bundle::archive assets;
+			assets.bin(apathy::file("assets.zip").read());
+
+			auto files_loaded = 0;
+
 			for(auto &&asset : assets)
 			{ $
 				wire::string file = asset["name"];
@@ -143,18 +105,23 @@ void ss::Starborn::load()
 				auto shader = file.matchesi("assets/shaders/*.json");
 				auto sprite = file.matchesi("assets/sprites/*.json");
 
-				if(animation || shader || sprite)
+				if(!animation && !shader && !sprite)
 				{ $
 					auto data = utilities::unpack_asset(asset);
 
-					if(animation)
-						this->load_animation(data);
-			
-					else if(shader)
-						this->load_shader(data);
+					if(file.matchesi("assets/shaders/*.frag") || file.matchesi("assets/shaders/*.vert"))
+						this->shader_sources[file] = data;
 
-					else if(sprite)
-						this->load_sprite(data);
+					else if(file.matchesi("assets/textures/*.png"))
+					{ $
+						auto texture = base91::decode(data);
+						this->textures.acquire(file, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
+					}
+					else if(file.matchesi("assets/fonts/*.ttf"))
+					{ $
+						auto font = base91::decode(data);
+						this->fonts.acquire(file, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
+					}
 
 					this->state.set_loading_bar_percent(++files_loaded, assets.size());
 				}
@@ -165,16 +132,47 @@ void ss::Starborn::load()
 
 			if(this->window.isOpen())
 			{ $
-				this->menus[STATE_MAIN_MENU].init(this->textures);
-				this->menus[STATE_NEW_GAME].init(this->textures);
-
-				this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
+				for(auto &&asset : assets)
 				{ $
-					this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
+					wire::string file = asset["name"];
+
+					auto animation = file.matchesi("assets/animations/*.json");
+					auto shader = file.matchesi("assets/shaders/*.json");
+					auto sprite = file.matchesi("assets/sprites/*.json");
+
+					if(animation || shader || sprite)
 					{ $
-						this->state.switch_state(STATE_MAIN_MENU);
+						auto data = utilities::unpack_asset(asset);
+
+						if(animation)
+							this->load_animation(data);
+			
+						else if(shader)
+							this->load_shader(data);
+
+						else if(sprite)
+							this->load_sprite(data);
+
+						this->state.set_loading_bar_percent(++files_loaded, assets.size());
+					}
+
+					if(!this->window.isOpen())
+						break;
+				}
+
+				if(this->window.isOpen())
+				{ $
+					this->menus[STATE_MAIN_MENU].init(this->textures);
+					this->menus[STATE_NEW_GAME].init(this->textures);
+
+					this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
+					{ $
+						this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
+						{ $
+							this->state.switch_state(STATE_MAIN_MENU);
+						});
 					});
-				});
+				}
 			}
 		}
 	}

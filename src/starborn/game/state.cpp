@@ -103,7 +103,7 @@ void ss::game::State::on_update_sprite(structs::Drawable &drawable)
 }
 
 void ss::game::State::on_updated()
-{
+{ $
 	this->loading_bar.setFillColor(sf::Color(192, 0, 64));
 	this->loading_bar_border.setOutlineColor(sf::Color(192, 0, 64));
 
