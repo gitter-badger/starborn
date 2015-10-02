@@ -29,6 +29,8 @@ namespace ss
 
 			sf::RenderTexture background;
 			sf::Sprite background_sprite;
+
+			sf::Time fade_time;
 			sf::Time time;
 
 			std::function<void ()> callback;

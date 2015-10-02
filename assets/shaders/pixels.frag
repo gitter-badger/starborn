@@ -28,5 +28,5 @@ void main()
 	float rand = random(floor(((gl_FragCoord * 0.0139) + vec2(time * 1.5, 0.0)) + 2.0));	
 	float value = (rand < 0.05) ? rand : random(floor(((gl_FragCoord * 0.042) + vec2(time, 0.0)) + 4.0));
 	
-	gl_FragColor = vec4(((value < 0.05) ? vec3(0.0, 1.0, 0.5) : mix(vec3(0.0), vec3(0.0, 1.0, 1.0), pow(value, 8.0))) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), (time < 3.0) ? min(1.0, time) : (1.0 - (time - 3.0)));
+	gl_FragColor = vec4(((value < 0.05) ? vec3(0.0, 1.0, 0.5) : mix(vec3(0.0), vec3(0.0, 1.0, 1.0), pow(value, 8.0))) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), (time < 3.0) ? min(1.0, time) : max(0.0, 1.0 - (time - 3.0)));
 }

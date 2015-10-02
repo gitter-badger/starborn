@@ -143,6 +143,9 @@ void ss::State::switch_state(wire::string state, bool reverse_animations, std::f
 	this->next_state = state;
 	this->reverse_animations = reverse_animations;
 
+	if(next_state == STATE_RUNNING)
+		this->fade_time = this->time;
+
 	for(auto &&drawable : this->drawables[this->state])
 	{ $
 		if(((!this->reverse_animations && drawable.ending_animation.length()) || (this->reverse_animations && drawable.starting_animation.length())) || (!drawable.reversible && drawable.ending_animation.length()))
@@ -193,14 +196,11 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 
 	if(this->next_state.length() && this->update_state)
 	{ $
-		if((this->state == STATE_MAIN_MENU) && ((this->next_state != STATE_LOAD_GAME) && (this->next_state != STATE_NEW_GAME) && (this->next_state != STATE_OPTIONS)))
+		if((this->state == STATE_LOADING) || (this->state == STATE_RUNNING) || (this->state == STATE_SNAILSOFT_LOGO) || (this->state == STATE_STARBORN_LOGO))
+		{ $
+			this->fade_time = sf::Time::Zero;
 			this->time = sf::Time::Zero;
-		
-		else if((this->next_state != STATE_MAIN_MENU) && ((this->state == STATE_LOAD_GAME) || (this->state == STATE_NEW_GAME) || (this->state == STATE_OPTIONS)))
-			this->time = sf::Time::Zero;
-
-		else
-			this->time = sf::Time::Zero;
+		}
 
 		this->state = this->next_state;
 		this->next_state.clear();
@@ -228,6 +228,7 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 
 void ss::State::update_shader_parameters(sf::Shader &shader)
 { $
+	shader.setParameter("fade_time", this->fade_time.asSeconds());
 	shader.setParameter("time", this->time.asSeconds());
 }
 
