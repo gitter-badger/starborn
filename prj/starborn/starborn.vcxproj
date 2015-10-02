@@ -61,7 +61,7 @@ bin\base91.exe -e bin\starborn.exe patch\starborn.exe.b91
 bin\sha1.exe bin\starborn.pdb patch\starborn.pdb.sha1
 bin\base91.exe -e bin\starborn.pdb patch\starborn.pdb.b91
 
-bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all
+bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all  -d zpaq
 
 bin\sha1.exe bin\assets.zip patch\assets.zip.sha1
 bin\base91.exe -e bin\assets.zip patch\assets.zip.b91
