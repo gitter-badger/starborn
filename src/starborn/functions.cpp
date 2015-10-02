@@ -112,7 +112,7 @@ void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 			while(old_critical_file.exists())
 				old_critical_file.remove();
 
-			if(apathy::file(old_critical_file).ext() == ".exe")
+			if(apathy::file(old_critical_file).ext() == "exe")
 				bubble::notify("Updated to version " STARBORN_VERSION, STARBORN_NAME);
 		}
 	}
