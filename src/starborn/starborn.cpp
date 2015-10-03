@@ -29,7 +29,7 @@ ss::Starborn::Starborn()
 		"starborn.exe", "starborn.pdb"
 	};
 
-	ss::handle_updated(critical_files);
+	std::thread(&ss::handle_updated, critical_files).detach();
 
 	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
 
