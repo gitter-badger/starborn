@@ -143,7 +143,7 @@ void ss::State::switch_state(wire::string state, bool reverse_animations, std::f
 	this->next_state = state;
 	this->reverse_animations = reverse_animations;
 
-	if(next_state == STATE_RUNNING)
+	if((next_state == STATE_CLOSING) || (next_state == STATE_RUNNING))
 		this->fade_time = this->time;
 
 	for(auto &&drawable : this->drawables[this->state])
@@ -230,6 +230,11 @@ void ss::State::update_shader_parameters(sf::Shader &shader)
 { $
 	shader.setParameter("fade_time", this->fade_time.asSeconds());
 	shader.setParameter("time", this->time.asSeconds());
+}
+
+wire::string &ss::State::get_next_state()
+{ $
+	return this->next_state;
 }
 
 wire::string &ss::State::get_state()

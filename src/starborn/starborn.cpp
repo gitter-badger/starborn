@@ -310,11 +310,23 @@ void ss::Starborn::on_escape()
 
 void ss::Starborn::on_exit()
 { $
-	std::cout << "on_exit() stack trace:" << std::endl;
-	std::cout << std::endl;
+	if(this->state.get_next_state() != STATE_CLOSING)
+	{ $
+		auto exit = [this]()
+		{ $
+			std::cout << "on_exit() stack trace:" << std::endl;
+			std::cout << std::endl;
 
-	stack_trace();
-	this->window.close();
+			stack_trace();
+			this->window.close();
+		};
+
+		if((this->state.get_state() == STATE_LOADING) || (this->state.get_state() == STATE_RUNNING) || (this->state.get_state() == STATE_SNAILSOFT_LOGO) || (this->state.get_state() == STATE_STARBORN_LOGO))
+			exit();
+
+		else
+			this->state.switch_state(STATE_CLOSING, false, exit);
+	}
 }
 
 void ss::Starborn::on_left()

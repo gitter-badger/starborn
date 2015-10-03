@@ -53,6 +53,8 @@ namespace ss
 			State();
 
 			std::map<wire::string, std::vector<Drawable>> &get_drawables();
+
+			wire::string &get_next_state();
 			wire::string &get_state();
 
 			void on_updated();

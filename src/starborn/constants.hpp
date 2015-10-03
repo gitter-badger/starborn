@@ -68,6 +68,7 @@ namespace ss
 		#define SPRITE_STARBORN_HORIZONTAL			"starborn_horizontal"
 		#define SPRITE_STARBORN_VERTICAL			"starborn_vertical"
 
+		#define STATE_CLOSING						"closing"
 		#define STATE_LOADING						"loading"
 		#define STATE_LOAD_GAME						"load_game"
 		#define STATE_MAIN_MENU						"main_menu"
