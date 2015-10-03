@@ -101,10 +101,11 @@ bundle::string ss::unpack_asset(bundle::file &asset)
 
 void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 { $
+	auto updated = false;
+
 	for(auto &&old_critical_file : old_critical_files)
 	{ $
 		apathy::file old_critical_file(old_critical_file + ".$old");
-		auto updated = false;
 
 		if(old_critical_file.exists())
 		{ $
@@ -113,10 +114,10 @@ void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 
 			updated = true;
 		}
-
-		if(updated)
-			bubble::notify("Updated to version " STARBORN_VERSION, STARBORN_NAME);
 	}
+
+	if(updated)
+		bubble::notify("Updated to version " STARBORN_VERSION, STARBORN_NAME);
 }
 
 void ss::log(bool open, bool feed, bool close, const std::string &line)
