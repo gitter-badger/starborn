@@ -19,7 +19,6 @@
 #include <base91/base91.hpp>
 #include <bubble/bubble.hpp>
 #include <bundle/bundle.hpp>
-#include <cocoa/cocoa.hpp>
 #include <flow/flow.hpp>
 #include <git.hpp>
 #include <heal/heal.hpp>
@@ -30,6 +29,7 @@
 #include <rapidjson/filereadstream.h>
 
 #include <sand/sand.hpp>
+#include <sha1/sha1.hpp>
 
 #include <SFML/Graphics.hpp>
 

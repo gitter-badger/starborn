@@ -99,6 +99,7 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
     <ClInclude Include="..\..\third_party\flow\flow.hpp" />
     <ClInclude Include="..\..\third_party\heal\heal.hpp" />
     <ClInclude Include="..\..\third_party\sand\sand.hpp" />
+    <ClInclude Include="..\..\third_party\sha1\sha1.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc" />
@@ -131,6 +132,9 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
     </ClCompile>
     <ClCompile Include="..\..\third_party\sand\sand.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\sha1\sha1.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244;4267;4309</DisableSpecificWarnings>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

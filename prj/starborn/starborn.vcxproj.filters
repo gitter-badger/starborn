@@ -90,6 +90,9 @@
     <ClInclude Include="..\..\src\starborn\rectangle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\third_party\sha1\sha1.hpp">
+      <Filter>Third Party\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc">
@@ -141,6 +144,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\starborn\rectangle.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\sha1\sha1.cpp">
+      <Filter>Third Party\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

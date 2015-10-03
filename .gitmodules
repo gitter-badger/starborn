@@ -16,9 +16,6 @@
 [submodule "third_party/flow"]
 	path = third_party/flow
 	url = https://github.com/snail23/flow.git
-[submodule "third_party/cocoa"]
-	path = third_party/cocoa
-	url = https://github.com/snail23/cocoa.git
 [submodule "third_party/profit"]
 	path = third_party/profit
 	url = https://github.com/snail23/profit.git
@@ -49,3 +46,6 @@
 [submodule "third_party/safe_event"]
 	path = third_party/safe_event
 	url = https://github.com/snail23/safe_event.git
+[submodule "third_party/sha1"]
+	path = third_party/sha1
+	url = https://github.com/snail23/sha1.git

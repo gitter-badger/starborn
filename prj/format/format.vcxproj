@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\format\version.hpp" />
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
+    <ClInclude Include="..\..\third_party\sha1\sha1.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\format\format.rc" />
@@ -78,6 +79,9 @@
     <ClCompile Include="..\..\src\format\format.cpp" />
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\sha1\sha1.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244;4309</DisableSpecificWarnings>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

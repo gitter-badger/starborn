@@ -84,14 +84,18 @@ echo #define GIT_REVISION_NUMBER %REVISION% &gt;&gt; src\git.hpp</Command>
   <ItemGroup>
     <ClInclude Include="..\..\src\sha1\version.hpp" />
     <ClInclude Include="..\..\third_party\apathy\apathy.hpp" />
+    <ClInclude Include="..\..\third_party\sha1\sha1.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\sha1\sha1.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\sha1\sha1.cpp" />
+    <ClCompile Include="..\..\src\sha1\main.cpp" />
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
       <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\sha1\sha1.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4244;4309</DisableSpecificWarnings>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

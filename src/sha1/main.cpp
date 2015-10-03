@@ -16,8 +16,8 @@
 */
 
 #include <apathy/apathy.hpp>
-#include <cocoa/cocoa.hpp>
 #include <git.hpp>
+#include <sha1/sha1.hpp>
 #include <sha1/version.hpp>
 #include <wire/wire.hpp>
 
@@ -25,9 +25,9 @@ int32_t main(int32_t argc, char *argv[])
 {
 	if(argc == 3)
 	{
-		auto data = apathy::file(argv[1]).read();
+		auto sha1 = SHA1::from_file(argv[1]);
 
-		if(data.size())
+		if(sha1.size())
 		{
 			wire::string output_directory(argv[2]);
 
@@ -50,9 +50,7 @@ int32_t main(int32_t argc, char *argv[])
 
 			if(((backslash != wire::string::npos) || (slash != wire::string::npos)) && !path.exists())
 				apathy::path::md(path);
-
-			auto sha1 = cocoa::SHA1(data);
-
+			
 			if(apathy::file(argv[2]).overwrite(sha1))
 				std::cout << "Wrote ";
 
