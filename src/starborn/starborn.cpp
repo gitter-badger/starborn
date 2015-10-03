@@ -24,6 +24,13 @@ ss::Starborn::~Starborn()
 
 ss::Starborn::Starborn()
 { $
+	std::vector<wire::string> critical_files =
+	{
+		"starborn.exe", "starborn.pdb"
+	};
+
+	ss::handle_updated(critical_files);
+
 	this->window.create(sf::VideoMode::getDesktopMode(), STARBORN_NAME " " STARBORN_VERSION, sf::Style::None);
 
 	this->window.setKeyRepeatEnabled(false);
@@ -58,7 +65,7 @@ ss::Starborn::Starborn()
 	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
 
 	this->state.switch_state(STATE_LOADING);
-	this->loading_thread = std::thread(&Starborn::load, this);
+	this->loading_thread = std::thread(&Starborn::load, this, critical_files);
 }
 
 ss::State &ss::Starborn::get_state()
@@ -66,21 +73,14 @@ ss::State &ss::Starborn::get_state()
 	return this->state;
 }
 
-void ss::Starborn::load()
+void ss::Starborn::load(std::vector<wire::string> &critical_files)
 { $
 	if(this->window.isOpen())
 	{ $
-		std::vector<wire::string> critical_files =
-		{
-			"starborn.exe", "starborn.pdb"
-		};
-
 		std::vector<wire::string> files =
 		{
 			"assets.zip", "base91.exe", "bundler.exe", "uuid.exe"
 		};
-
-		ss::handle_updated(critical_files);
 
 		if(ss::update_files(files, critical_files, "https://raw.githubusercontent.com/snailsoft/starborn/" GIT_BRANCH "/patch/", [this, critical_files, files](uint32_t file, wire::string &filename)
 		{ $

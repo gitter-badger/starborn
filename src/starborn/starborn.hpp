@@ -79,7 +79,7 @@ namespace ss
 			thor::ResourceHolder<sf::Font, wire::string> fonts;
 			thor::ResourceHolder<sf::Texture, wire::string> textures;
 
-			void load();
+			void load(std::vector<wire::string> &critical_files);
 
 			void load_animation(bundle::string &json_data);
 			void load_shader(bundle::string &json_data);
