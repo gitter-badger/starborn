@@ -38,15 +38,9 @@ ss::State::State()
 	auto x = static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - (width / 2.0f));
 	auto y = static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - (height / 2.0f));
 
-	this->loading_bar.addAnimation(ANIMATION_FADE_IN, thor::FadeAnimation(1.0f, 0.0f), sf::seconds(1.0f));
-	this->loading_bar.addAnimation(ANIMATION_FADE_OUT, thor::FadeAnimation(0.0f, 1.0f), sf::seconds(1.0f));
-
 	this->loading_bar.setFillColor(sf::Color(0, 192, 192));
 	this->loading_bar.setPosition(x, y);
 	this->loading_bar.setSize(sf::Vector2f(0.0f, height));
-
-	this->loading_bar_border.addAnimation(ANIMATION_FADE_IN, thor::FadeAnimation(1.0f, 0.0f), sf::seconds(1.0f));
-	this->loading_bar_border.addAnimation(ANIMATION_FADE_OUT, thor::FadeAnimation(0.0f, 1.0f), sf::seconds(1.0f));
 	
 	this->loading_bar_border.setFillColor(sf::Color::Transparent);
 	this->loading_bar_border.setOutlineColor(sf::Color(0, 192, 192));
@@ -57,11 +51,9 @@ ss::State::State()
 	Drawable loading_bar;
 
 	loading_bar.drawable = &this->loading_bar;
-	//loading_bar.ending_animation = ANIMATION_FADE_OUT;
 	loading_bar.name = "loading_bar";
 	loading_bar.reversible = true;
 	loading_bar.scale = false;
-	//loading_bar.starting_animation = ANIMATION_FADE_IN;
 	loading_bar.type = DRAWABLE_TYPE_ANIMATED_RECTANGLE;
 
 	this->drawables[STATE_LOADING].push_back(loading_bar);
@@ -108,6 +100,17 @@ void ss::State::on_update_animated_sprite(sf::Time &last_frame_time, Drawable &d
 		this->update_state = false;
 }
 
+void ss::State::on_update_animated_string(sf::Time &last_frame_time, Drawable &drawable)
+{ $
+	auto &animated_string = *reinterpret_cast<AnimatedString *>(drawable.drawable);
+
+	animated_string.update(last_frame_time);
+	animated_string.animate(animated_string);
+
+	if(this->next_state.length() && animated_string.isPlayingAnimation() && (animated_string.getPlayingAnimation() == drawable.ending_animation))
+		this->update_state = false;
+}
+
 void ss::State::on_update_background(Drawable &drawable)
 { $
 	auto &background = *reinterpret_cast<sf::RectangleShape *>(drawable.drawable);
@@ -150,11 +153,16 @@ void ss::State::switch_state(wire::string state, bool reverse_animations, std::f
 	{ $
 		if(((!this->reverse_animations && drawable.ending_animation.length()) || (this->reverse_animations && drawable.starting_animation.length())) || (!drawable.reversible && drawable.ending_animation.length()))
 		{ $
+			auto animation = this->reverse_animations ? (drawable.reversible ? drawable.starting_animation : drawable.ending_animation) : drawable.ending_animation;
+
 			if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
-				reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(this->reverse_animations ? (drawable.reversible ? drawable.starting_animation : drawable.ending_animation) : drawable.ending_animation);
+				reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(animation);
 
 			else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-				reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(this->reverse_animations ? (drawable.reversible ? drawable.starting_animation : drawable.ending_animation) : drawable.ending_animation);
+				reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(animation);
+
+			else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
+				reinterpret_cast<AnimatedString *>(drawable.drawable)->playAnimation(animation);
 		}
 	}
 }
@@ -171,6 +179,9 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 
 		else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
 			this->on_update_animated_sprite(last_frame_time, drawable);
+
+		else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
+			this->on_update_animated_string(last_frame_time, drawable);
 
 		else if(drawable.type == DRAWABLE_TYPE_BACKGROUND)
 			this->on_update_background(drawable);
@@ -211,11 +222,16 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 		{ $
 			if(((!this->reverse_animations && drawable.starting_animation.length()) || (this->reverse_animations && drawable.ending_animation.length())) || (!drawable.reversible && drawable.starting_animation.length()))
 			{ $
+				auto animation = this->reverse_animations ? (drawable.reversible ? drawable.ending_animation : drawable.starting_animation) : drawable.starting_animation;
+
 				if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
-					reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(this->reverse_animations ? (drawable.reversible ? drawable.ending_animation : drawable.starting_animation) : drawable.starting_animation);
+					reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(animation);
 		
 				else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-					reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(this->reverse_animations ? (drawable.reversible ? drawable.ending_animation : drawable.starting_animation) : drawable.starting_animation);
+					reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(animation);
+			
+				else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
+					reinterpret_cast<AnimatedString *>(drawable.drawable)->playAnimation(animation);
 			}
 		}
 

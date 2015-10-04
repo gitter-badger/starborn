@@ -99,28 +99,34 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 
 			for(auto &&asset : assets)
 			{ $
-				wire::string file = asset["name"];
+				wire::string filename = asset["name"];
 
-				auto animation = file.matchesi("assets/animations/*.json");
-				auto drawable = file.matchesi("assets/drawables/*.json");
-				auto shader = file.matchesi("assets/shaders/*.json");
+				auto animations = filename.matchesi("assets/animations/*.json");
+				auto drawables = filename.matchesi("assets/drawables/*.json");
+				auto shaders = filename.matchesi("assets/shaders/*.json");
 
-				if(!animation && !drawable && !shader)
+				if(!animations && !drawables && !shaders)
 				{ $
 					auto data = unpack_asset(asset);
 
-					if(file.matchesi("assets/shaders/*.frag") || file.matchesi("assets/shaders/*.vert"))
-						this->shader_sources[file] = data;
-
-					else if(file.matchesi("assets/textures/*.png"))
+					if(filename.matchesi("assets/shaders/*.frag") || filename.matchesi("assets/shaders/*.vert"))
+					{ $
+						this->shader_sources[filename] = data;
+						std::cout << "Loaded shader: " << filename << std::endl;
+					}
+					else if(filename.matchesi("assets/textures/*.png"))
 					{ $
 						auto texture = base91::decode(data);
-						this->textures.acquire(file, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
+						this->textures.acquire(filename, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
+						
+						std::cout << "Loaded texture: " << filename << std::endl;
 					}
-					else if(file.matchesi("assets/fonts/*.ttf"))
+					else if(filename.matchesi("assets/fonts/*.ttf"))
 					{ $
 						auto font = base91::decode(data);
-						this->fonts.acquire(file, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
+						this->fonts.acquire(filename, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
+						
+						std::cout << "Loaded font: " << filename << std::endl;
 					}
 
 					this->state.set_loading_bar_percent(++files_loaded, assets.size());
@@ -134,24 +140,31 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 			{ $
 				for(auto &&asset : assets)
 				{ $
-					wire::string file = asset["name"];
+					wire::string filename = asset["name"];
 
-					auto animation = file.matchesi("assets/animations/*.json");
-					auto drawable = file.matchesi("assets/drawables/*.json");
-					auto shader = file.matchesi("assets/shaders/*.json");
+					auto animations = filename.matchesi("assets/animations/*.json");
+					auto drawables = filename.matchesi("assets/drawables/*.json");
+					auto shaders = filename.matchesi("assets/shaders/*.json");
 
-					if(animation || drawable || shader)
+					if(animations || drawables || shaders)
 					{ $
 						auto data = unpack_asset(asset);
 
-						if(animation)
-							this->load_animation(data);
-
-						else if(drawable)
-							this->load_drawable(data);
-			
-						else if(shader)
-							this->load_shader(data);
+						if(animations)
+						{ $
+							this->load_animations(data);
+							std::cout << "Loaded animations: " << filename << std::endl;
+						}
+						else if(drawables)
+						{ $
+							this->load_drawables(data);
+							std::cout << "Loaded drawables: " << filename << std::endl;
+						}
+						else if(shaders)
+						{ $
+							this->load_shaders(data);
+							std::cout << "Loaded shaders: " << filename << std::endl;
+						}
 
 						this->state.set_loading_bar_percent(++files_loaded, assets.size());
 					}
@@ -178,7 +191,7 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 	}
 }
 
-void ss::Starborn::load_animation(bundle::string &json_data)
+void ss::Starborn::load_animations(bundle::string &json_data)
 { $
 	Json json(json_data);
 
@@ -205,7 +218,7 @@ void ss::Starborn::load_animation(bundle::string &json_data)
 	}
 }
 
-void ss::Starborn::load_drawable(bundle::string &json_data)
+void ss::Starborn::load_drawables(bundle::string &json_data)
 { $
 	Json json(json_data);
 
@@ -243,7 +256,7 @@ void ss::Starborn::load_drawable(bundle::string &json_data)
 			string.setCharacterSize(drawable->value["size"].GetUint());
 			string.setFont(this->fonts[drawable->value["font"].GetString()]);
 			string.setString(wire::string(drawable->value["text"].GetString()).replace("$branch", GIT_BRANCH).replace("$compile_date", __DATE__).replace("$compile_time", __TIME__).replace("$version", STARBORN_VERSION).c_str());
-			string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble(), drawable->value.HasMember("size") ? drawable->value["size"]["x"].GetDouble() : 0.0f, drawable->value.HasMember("size") ? drawable->value["size"]["y"].GetDouble() : 0.0f);
+			string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
 			
 			for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
 				string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);
@@ -267,20 +280,20 @@ void ss::Starborn::load_drawable(bundle::string &json_data)
 
 		Drawable drawable_struct;
 
-		drawable_struct.ending_animation = type.starts_with("animation_") ? drawable->value["ending_animation"].GetString() : "";
+		drawable_struct.ending_animation = type.starts_with("animated_") ? drawable->value["ending_animation"].GetString() : "";
 		drawable_struct.drawable = reinterpret_cast<sf::Drawable *>(new_drawable);
 		drawable_struct.name = name;
 		drawable_struct.render_states.shader = drawable->value.HasMember("shader") ? &this->shaders[drawable->value["shader"].GetString()] : nullptr;
 		drawable_struct.reversible = drawable->value.HasMember("reversible") ? drawable->value["reversible"].GetBool() : true;
 		drawable_struct.scale = drawable->value.HasMember("scale") ? drawable->value["scale"].GetBool() : false;
-		drawable_struct.starting_animation = type.starts_with("animation_") ? drawable->value["starting_animation"].GetString() : "";
+		drawable_struct.starting_animation = type.starts_with("animated_") ? drawable->value["starting_animation"].GetString() : "";
 		drawable_struct.type = type;
 
 		this->state.get_drawables()[drawable->value["state"].GetString()].push_back(drawable_struct);
 	}
 }
 
-void ss::Starborn::load_shader(bundle::string &json_data)
+void ss::Starborn::load_shaders(bundle::string &json_data)
 { $
 	Json json(json_data);
 
@@ -334,6 +347,7 @@ void ss::Starborn::on_exit()
 	{ $
 		auto exit = [this]()
 		{ $
+			std::cout << std::endl;
 			std::cout << "on_exit() stack trace:" << std::endl;
 			std::cout << std::endl;
 

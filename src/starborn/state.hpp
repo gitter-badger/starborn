@@ -41,6 +41,7 @@ namespace ss
 
 			void on_update_animated_rectangle(sf::Time &last_frame_time, Drawable &drawable);
 			void on_update_animated_sprite(sf::Time &last_frame_time, Drawable &drawable);
+			void on_update_animated_string(sf::Time &last_frame_time, Drawable &drawable);
 			void on_update_background(Drawable &drawable);
 			void on_update_sprite(Drawable &drawable);
 
