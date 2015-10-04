@@ -21,10 +21,9 @@ int32_t _stdcall WinMain()
 { $
 	apathy::ostream::attach(std::cout, &ss::log);
 
-	std::cout << STARBORN_NAME << " " << STARBORN_VERSION << std::endl;
+	std::cout << STARBORN_NAME << std::endl;
+	std::cout << "Version " << STARBORN_VERSION << " [" << GIT_BRANCH << "] (" << __DATE__ << " " << __TIME__ << ")" << std::endl;
 	std::cout << "Copyright (C) 2013-2015 " << STARBORN_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
-	std::cout << std::endl;
-	std::cout << "[" << GIT_BRANCH << "] " << __DATE__ << " " << __TIME__ << std::endl;
 	std::cout << std::endl;
 
 	ss::Starborn().run();

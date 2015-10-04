@@ -1,0 +1,27 @@
+{
+	"main_menu_background": {
+		"scale": true,
+		"shader": "stars",
+		"state": "main_menu",
+		"type": "background"
+	},
+
+	"new_game_background": {
+		"scale": true,
+		"shader": "stars",
+		"state": "new_game",
+		"type": "background"
+	},
+
+	"snailsoft_background": {
+		"shader": "pixels",
+		"state": "snailsoft_logo",
+		"type": "background"
+	},
+
+	"starborn_background": {
+		"shader": "starfield",
+		"state": "starborn_logo",
+		"type": "background"
+	}
+}

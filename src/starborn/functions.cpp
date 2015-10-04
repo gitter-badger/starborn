@@ -21,13 +21,27 @@
 std::ofstream logger;
 wire::string logger_cache;
 
+bool ss::file_exists(wire::string filename)
+{ $
+	std::ifstream file(filename, std::ios::binary | std::ios::in);
+
+	if(file.is_open())
+	{ $
+		file.close();
+
+		return true;
+	}
+
+	return false;
+}
+
 bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file, std::function<void (wire::string &filename)> callback)
 { $
-	apathy::file file(source_filename);
-
-	if(!file.exists() || (SHA1::from_file(source_filename) != flow::download(sha1_url).data))
+	if(!file_exists(source_filename) || (SHA1::from_file(source_filename) != flow::download(sha1_url).data))
 	{ $
-		if(file.exists())
+		apathy::file file(source_filename);
+
+		if(file_exists(source_filename))
 			file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
 
 		else
@@ -46,24 +60,24 @@ bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string
 	auto revision = wire::string(flow::download(github_url + "revision.txt").data).as<int32_t>();
 	uint32_t files_updated = 0;
 
-	for(auto &&file : files)
+	for(auto &&filename : files)
 	{ $
-		if(!apathy::file(file).exists() || (GIT_REVISION_NUMBER < revision))
-			update_file(file, github_url + file + ".sha1", github_url + file + ".b91");
+		if(!file_exists(filename) || (GIT_REVISION_NUMBER < revision))
+			update_file(filename, github_url + filename + ".sha1", github_url + filename + ".b91");
 
-		callback(++files_updated, file);
+		callback(++files_updated, filename);
 	}
 
 	auto restart_required = false;
 
-	for(auto &&critical_file : critical_files)
+	for(auto &&filename : critical_files)
 	{ $
-		if(!apathy::file(critical_file).exists() || (GIT_REVISION_NUMBER < revision))
+		if(!file_exists(filename) || (GIT_REVISION_NUMBER < revision))
 		{ $
-			if(update_file(critical_file, github_url + critical_file + ".sha1", github_url + critical_file + ".b91", false))
+			if(update_file(filename, github_url + filename + ".sha1", github_url + filename + ".b91", false))
 				restart_required = true;
 
-			callback(++files_updated, critical_file);
+			callback(++files_updated, filename);
 		}
 	}
 
@@ -103,14 +117,12 @@ void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 { $
 	auto updated = false;
 
-	for(auto &&old_critical_file : old_critical_files)
+	for(auto &&old_critical_filename : old_critical_files)
 	{ $
-		apathy::file old_critical_file(old_critical_file + ".$old");
-
-		if(old_critical_file.exists())
+		if(file_exists(old_critical_filename + ".$old"))
 		{ $
-			while(old_critical_file.exists())
-				old_critical_file.remove();
+			while(file_exists(old_critical_filename))
+				apathy::file(old_critical_filename).remove();
 
 			updated = true;
 		}

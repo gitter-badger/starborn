@@ -102,10 +102,10 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 				wire::string file = asset["name"];
 
 				auto animation = file.matchesi("assets/animations/*.json");
+				auto drawable = file.matchesi("assets/drawables/*.json");
 				auto shader = file.matchesi("assets/shaders/*.json");
-				auto sprite = file.matchesi("assets/sprites/*.json");
 
-				if(!animation && !shader && !sprite)
+				if(!animation && !drawable && !shader)
 				{ $
 					auto data = unpack_asset(asset);
 
@@ -137,21 +137,21 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 					wire::string file = asset["name"];
 
 					auto animation = file.matchesi("assets/animations/*.json");
+					auto drawable = file.matchesi("assets/drawables/*.json");
 					auto shader = file.matchesi("assets/shaders/*.json");
-					auto sprite = file.matchesi("assets/sprites/*.json");
 
-					if(animation || shader || sprite)
+					if(animation || drawable || shader)
 					{ $
 						auto data = unpack_asset(asset);
 
 						if(animation)
 							this->load_animation(data);
+
+						else if(drawable)
+							this->load_drawable(data);
 			
 						else if(shader)
 							this->load_shader(data);
-
-						else if(sprite)
-							this->load_sprite(data);
 
 						this->state.set_loading_bar_percent(++files_loaded, assets.size());
 					}
@@ -184,9 +184,13 @@ void ss::Starborn::load_animation(bundle::string &json_data)
 
 	for(auto animation = json.get_document().MemberBegin(); animation != json.get_document().MemberEnd(); ++animation)
 	{ $
-		if(!strcmp(animation->value["type"].GetString(), ANIMATION_TYPE_FADE))
-			this->animations[animation->name.GetString()].animation = thor::FadeAnimation(animation->value["inRatio"].GetDouble(), animation->value["outRatio"].GetDouble());
+		wire::string name(animation->name.GetString());
 
+		if(wire::string(animation->value["type"].GetString()) == ANIMATION_TYPE_FADE)
+		{ $
+			this->animations[name].sprite_animation = thor::FadeAnimation(animation->value["inRatio"].GetDouble(), animation->value["outRatio"].GetDouble());
+			this->animations[name].string_animation = thor::FadeAnimation(animation->value["inRatio"].GetDouble(), animation->value["outRatio"].GetDouble());
+		}
 		else
 		{ $
 			auto frame_animation = thor::FrameAnimation();
@@ -194,10 +198,85 @@ void ss::Starborn::load_animation(bundle::string &json_data)
 			for(auto frame = animation->value["frames"].Begin(); frame != animation->value["frames"].End(); ++frame)
 				frame_animation.addFrame((*frame)["ratio"].GetDouble(), sf::IntRect((*frame)["x"].GetInt(), (*frame)["y"].GetInt(), (*frame)["width"].GetInt(), (*frame)["height"].GetInt()));
 
-			this->animations[animation->name.GetString()].animation = frame_animation;
+			this->animations[name].sprite_animation = frame_animation;
 		}
 
-		this->animations[animation->name.GetString()].duration = sf::seconds(animation->value["duration"].GetDouble());
+		this->animations[name].duration = sf::seconds(animation->value["duration"].GetDouble());
+	}
+}
+
+void ss::Starborn::load_drawable(bundle::string &json_data)
+{ $
+	Json json(json_data);
+
+	for(auto drawable = json.get_document().MemberBegin(); drawable != json.get_document().MemberEnd(); ++drawable)
+	{ $
+		wire::string name(drawable->name.GetString());
+		wire::string type(drawable->value["type"].GetString());
+
+		void *new_drawable = nullptr;
+
+		if(type == DRAWABLE_TYPE_ANIMATED_SPRITE)
+		{ $
+			new_drawable = new AnimatedSprite();
+
+			for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
+				reinterpret_cast<AnimatedSprite *>(new_drawable)->addAnimation(animation->GetString(), this->animations[animation->GetString()].sprite_animation, this->animations[animation->GetString()].duration);
+
+			if((name == BUTTON_CONTINUE) || (name == BUTTON_EXIT) || (name == BUTTON_LOAD_GAME) || (name == BUTTON_MIDNIGHT) || (name == BUTTON_NEW_GAME) || (name == BUTTON_NIGHTFALL) || (name == BUTTON_OPTIONS))
+			{ $
+				Button button;
+
+				button.animated_sprite = reinterpret_cast<AnimatedSprite *>(new_drawable);
+				button.name = name;
+				button.selected_texture = drawable->value["selected_texture"].GetString();
+				button.texture = drawable->value["texture"].GetString();
+
+				this->menus[drawable->value["state"].GetString()].get_buttons().push_back(button);
+			}
+		}
+		else if(type == DRAWABLE_TYPE_ANIMATED_STRING)
+		{ $
+			new_drawable = new AnimatedString();
+			auto &string = *reinterpret_cast<AnimatedString *>(new_drawable);
+
+			string.setCharacterSize(drawable->value["size"].GetUint());
+			string.setFont(this->fonts[drawable->value["font"].GetString()]);
+			string.setString(wire::string(drawable->value["text"].GetString()).replace("$branch", GIT_BRANCH).replace("$compile_date", __DATE__).replace("$compile_time", __TIME__).replace("$version", STARBORN_VERSION).c_str());
+			string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble(), drawable->value.HasMember("size") ? drawable->value["size"]["x"].GetDouble() : 0.0f, drawable->value.HasMember("size") ? drawable->value["size"]["y"].GetDouble() : 0.0f);
+			
+			for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
+				string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);
+		}
+		else if(type == DRAWABLE_TYPE_SPRITE)
+			new_drawable = new Sprite();
+
+		if(type == DRAWABLE_TYPE_BACKGROUND)
+		{ $
+			new_drawable = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
+			reinterpret_cast<sf::RectangleShape *>(new_drawable)->setFillColor(sf::Color::Transparent);
+		}
+		else if(type != DRAWABLE_TYPE_ANIMATED_STRING)
+		{ $
+			auto &sprite = *reinterpret_cast<Sprite *>(new_drawable);
+
+			sprite.has_dynamic_position() = drawable->value["dynamic_position"].GetBool();
+			sprite.setTexture(this->textures[drawable->value["texture"].GetString()]);
+			sprite.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble(), drawable->value.HasMember("size") ? drawable->value["size"]["x"].GetDouble() : 0.0f, drawable->value.HasMember("size") ? drawable->value["size"]["y"].GetDouble() : 0.0f);
+		}
+
+		Drawable drawable_struct;
+
+		drawable_struct.ending_animation = type.starts_with("animation_") ? drawable->value["ending_animation"].GetString() : "";
+		drawable_struct.drawable = reinterpret_cast<sf::Drawable *>(new_drawable);
+		drawable_struct.name = name;
+		drawable_struct.render_states.shader = drawable->value.HasMember("shader") ? &this->shaders[drawable->value["shader"].GetString()] : nullptr;
+		drawable_struct.reversible = drawable->value.HasMember("reversible") ? drawable->value["reversible"].GetBool() : true;
+		drawable_struct.scale = drawable->value.HasMember("scale") ? drawable->value["scale"].GetBool() : false;
+		drawable_struct.starting_animation = type.starts_with("animation_") ? drawable->value["starting_animation"].GetString() : "";
+		drawable_struct.type = type;
+
+		this->state.get_drawables()[drawable->value["state"].GetString()].push_back(drawable_struct);
 	}
 }
 
@@ -207,78 +286,19 @@ void ss::Starborn::load_shader(bundle::string &json_data)
 
 	for(auto shader = json.get_document().MemberBegin(); shader != json.get_document().MemberEnd(); ++shader)
 	{ $
+		wire::string name(shader->name.GetString());
+
 		if(shader->value.HasMember("fragment") && shader->value.HasMember("vertex"))
-			this->shaders[shader->name.GetString()].loadFromMemory(this->shader_sources[shader->value["vertex"].GetString()], this->shader_sources[shader->value["fragment"].GetString()]);
+			this->shaders[name].loadFromMemory(this->shader_sources[shader->value["vertex"].GetString()], this->shader_sources[shader->value["fragment"].GetString()]);
 
 		else if(shader->value.HasMember("fragment"))
-			this->shaders[shader->name.GetString()].loadFromMemory(this->shader_sources[shader->value["fragment"].GetString()], sf::Shader::Fragment);
+			this->shaders[name].loadFromMemory(this->shader_sources[shader->value["fragment"].GetString()], sf::Shader::Fragment);
 
 		else if(shader->value.HasMember("vertex"))
-			this->shaders[shader->name.GetString()].loadFromMemory(this->shader_sources[shader->value["vertex"].GetString()], sf::Shader::Vertex);
+			this->shaders[name].loadFromMemory(this->shader_sources[shader->value["vertex"].GetString()], sf::Shader::Vertex);
 
 		if(shader->value.HasMember("fragment") || shader->value.HasMember("vertex"))
-			this->shaders[shader->name.GetString()].setParameter("texture", sf::Shader::CurrentTexture);
-	}
-}
-
-void ss::Starborn::load_sprite(bundle::string &json_data)
-{ $
-	Json json(json_data);
-
-	for(auto sprite = json.get_document().MemberBegin(); sprite != json.get_document().MemberEnd(); ++sprite)
-	{ $
-		void *new_sprite = nullptr;
-
-		if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE))
-		{ $
-			new_sprite = new AnimatedSprite();
-
-			for(auto animation = sprite->value["animations"].Begin(); animation != sprite->value["animations"].End(); ++animation)
-				reinterpret_cast<AnimatedSprite *>(new_sprite)->addAnimation(animation->GetString(), this->animations[animation->GetString()].animation, this->animations[animation->GetString()].duration);
-		
-			if(!strcmp(sprite->name.GetString(), BUTTON_CONTINUE) || !strcmp(sprite->name.GetString(), BUTTON_EXIT) || !strcmp(sprite->name.GetString(), BUTTON_LOAD_GAME) ||
-				!strcmp(sprite->name.GetString(), BUTTON_MIDNIGHT) || !strcmp(sprite->name.GetString(), BUTTON_NEW_GAME) || !strcmp(sprite->name.GetString(), BUTTON_NIGHTFALL) ||
-				!strcmp(sprite->name.GetString(), BUTTON_OPTIONS))
-			{ $
-				Button button;
-
-				button.animated_sprite = reinterpret_cast<AnimatedSprite *>(new_sprite);
-				button.name = sprite->name.GetString();
-				button.selected_texture = sprite->value["selected_texture"].GetString();
-				button.texture = sprite->value["texture"].GetString();
-
-				this->menus[sprite->value["state"].GetString()].get_buttons().push_back(button);
-			}
-		}
-		else if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_SPRITE))
-			new_sprite = new Sprite();
-
-		if(!strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_BACKGROUND))
-		{ $
-			new_sprite = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
-			reinterpret_cast<sf::RectangleShape *>(new_sprite)->setFillColor(sf::Color::Transparent);
-		}
-		else
-		{ $
-			auto &final_sprite = *reinterpret_cast<Sprite *>(new_sprite);
-
-			final_sprite.has_dynamic_position() = sprite->value["dynamic_position"].GetBool();
-			final_sprite.setTexture(this->textures[sprite->value["texture"].GetString()]);
-			final_sprite.set_position(sprite->value["position"]["anchor"].GetString(), sprite->value["position"]["x"].GetDouble(), sprite->value["position"]["y"].GetDouble(), sprite->value.HasMember("size") ? sprite->value["size"]["x"].GetDouble() : 0.0f, sprite->value.HasMember("size") ? sprite->value["size"]["y"].GetDouble() : 0.0f);
-		}
-
-		Drawable drawable;
-
-		drawable.ending_animation = !strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE) ? sprite->value["ending_animation"].GetString() : "";
-		drawable.drawable = reinterpret_cast<sf::Drawable *>(new_sprite);
-		drawable.name = sprite->name.GetString();
-		drawable.render_states.shader = sprite->value.HasMember("shader") ? &this->shaders[sprite->value["shader"].GetString()] : nullptr;
-		drawable.reversible = sprite->value.HasMember("reversible") ? sprite->value["reversible"].GetBool() : true;
-		drawable.scale = sprite->value.HasMember("scale") ? sprite->value["scale"].GetBool() : false;
-		drawable.starting_animation = !strcmp(sprite->value["type"].GetString(), DRAWABLE_TYPE_ANIMATED_SPRITE) ? sprite->value["starting_animation"].GetString() : "";
-		drawable.type = sprite->value["type"].GetString();
-
-		this->state.get_drawables()[sprite->value["state"].GetString()].push_back(drawable);
+			this->shaders[name].setParameter("texture", sf::Shader::CurrentTexture);
 	}
 }
 

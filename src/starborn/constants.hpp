@@ -59,6 +59,7 @@ namespace ss
 
 		#define DRAWABLE_TYPE_ANIMATED_RECTANGLE	"animated_rectangle"
 		#define DRAWABLE_TYPE_ANIMATED_SPRITE		"animated_sprite"
+		#define DRAWABLE_TYPE_ANIMATED_STRING		"animated_string"
 		#define DRAWABLE_TYPE_BACKGROUND			"background"
 		#define DRAWABLE_TYPE_SPRITE				"sprite"
 

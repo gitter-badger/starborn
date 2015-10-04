@@ -43,6 +43,7 @@
 
 #include <starborn/sprite.hpp>
 #include <starborn/animated_sprite.hpp>
+#include <starborn/animated_string.hpp>
 #include <starborn/structs.hpp>
 
 #include <starborn/rectangle.hpp>
@@ -82,8 +83,8 @@ namespace ss
 			void load(std::vector<wire::string> &critical_files);
 
 			void load_animation(bundle::string &json_data);
+			void load_drawable(bundle::string &json_data);
 			void load_shader(bundle::string &json_data);
-			void load_sprite(bundle::string &json_data);
 
 			void new_game(bool midnight = true);
 

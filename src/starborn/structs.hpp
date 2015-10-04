@@ -20,7 +20,9 @@ namespace ss
 	struct Animation
 	{
 		sf::Time duration;
-		std::function<void (Sprite &, float)> animation;
+
+		std::function<void (sf::Text &, float)> string_animation;
+		std::function<void (Sprite &, float)> sprite_animation;
 	};
 
 	struct Button

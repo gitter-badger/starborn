@@ -17,6 +17,7 @@
 
 namespace ss
 {
+	bool file_exists(wire::string filename);
 	bool update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file = true, std::function<void (wire::string &filename)> callback = [](wire::string &filename){});
 	bool update_files(std::vector<wire::string> &files, std::vector<wire::string> &critical_files, wire::string github_url, std::function<void (uint32_t file, wire::string &filename)> callback = [](uint32_t file, wire::string &filename){});
 

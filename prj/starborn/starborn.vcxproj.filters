@@ -16,9 +16,6 @@
     <Filter Include="Resource Files\Assets">
       <UniqueIdentifier>{1bf3e8df-a647-4c3b-8dec-366eaebb2708}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Assets\sprites">
-      <UniqueIdentifier>{8e72683e-1a65-4674-b6e0-42ce7ba402cf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Assets\animations">
       <UniqueIdentifier>{cb3a3797-ff0c-4df0-ad58-96f76c8fef27}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="Third Party\Header Files">
       <UniqueIdentifier>{5856a760-31a0-4b1a-b9e0-33562fc2d84d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Assets\drawables">
+      <UniqueIdentifier>{e55e6a2d-422e-427c-98d1-61b2aa44965e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +93,9 @@
     <ClInclude Include="..\..\third_party\sha1\sha1.hpp">
       <Filter>Third Party\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\starborn\animated_string.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc">
@@ -148,6 +151,9 @@
     <ClCompile Include="..\..\third_party\sha1\sha1.cpp">
       <Filter>Third Party\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\starborn\animated_string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\src\starborn\starborn.ico">
@@ -157,9 +163,6 @@
   <ItemGroup>
     <None Include="..\..\assets\animations\general.json">
       <Filter>Resource Files\Assets\animations</Filter>
-    </None>
-    <None Include="..\..\assets\sprites\general.json">
-      <Filter>Resource Files\Assets\sprites</Filter>
     </None>
     <None Include="..\..\assets\shaders\pixels.frag">
       <Filter>Resource Files\Assets\shaders</Filter>
@@ -173,11 +176,20 @@
     <None Include="..\..\assets\shaders\shaders.json">
       <Filter>Resource Files\Assets\shaders</Filter>
     </None>
-    <None Include="..\..\assets\sprites\ui.json">
-      <Filter>Resource Files\Assets\sprites</Filter>
-    </None>
     <None Include="..\..\assets\shaders\vignette.frag">
       <Filter>Resource Files\Assets\shaders</Filter>
+    </None>
+    <None Include="..\..\assets\drawables\backgrounds.json">
+      <Filter>Resource Files\Assets\drawables</Filter>
+    </None>
+    <None Include="..\..\assets\drawables\images.json">
+      <Filter>Resource Files\Assets\drawables</Filter>
+    </None>
+    <None Include="..\..\assets\drawables\strings.json">
+      <Filter>Resource Files\Assets\drawables</Filter>
+    </None>
+    <None Include="..\..\assets\drawables\ui.json">
+      <Filter>Resource Files\Assets\drawables</Filter>
     </None>
   </ItemGroup>
 </Project>

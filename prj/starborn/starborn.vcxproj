@@ -83,6 +83,7 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
   <ItemGroup>
     <ClInclude Include="..\..\src\starborn\animated_rectangle.hpp" />
     <ClInclude Include="..\..\src\starborn\animated_sprite.hpp" />
+    <ClInclude Include="..\..\src\starborn\animated_string.hpp" />
     <ClInclude Include="..\..\src\starborn\constants.hpp" />
     <ClInclude Include="..\..\src\starborn\functions.hpp" />
     <ClInclude Include="..\..\src\starborn\json.hpp" />
@@ -105,6 +106,7 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
     <ResourceCompile Include="..\..\src\starborn\starborn.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\starborn\animated_string.cpp" />
     <ClCompile Include="..\..\src\starborn\functions.cpp" />
     <ClCompile Include="..\..\src\starborn\json.cpp" />
     <ClCompile Include="..\..\src\starborn\main.cpp" />
@@ -142,13 +144,15 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\animations\general.json" />
+    <None Include="..\..\assets\drawables\backgrounds.json" />
+    <None Include="..\..\assets\drawables\images.json" />
+    <None Include="..\..\assets\drawables\strings.json" />
+    <None Include="..\..\assets\drawables\ui.json" />
     <None Include="..\..\assets\shaders\shaders.json" />
     <None Include="..\..\assets\shaders\pixels.frag" />
     <None Include="..\..\assets\shaders\vignette.frag" />
     <None Include="..\..\assets\shaders\starfield.frag" />
     <None Include="..\..\assets\shaders\stars.frag" />
-    <None Include="..\..\assets\sprites\general.json" />
-    <None Include="..\..\assets\sprites\ui.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
