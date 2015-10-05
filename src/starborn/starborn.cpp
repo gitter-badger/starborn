@@ -254,10 +254,11 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 			auto &string = *reinterpret_cast<AnimatedString *>(new_drawable);
 
 			string.setCharacterSize(drawable->value["size"].GetUint());
+			string.setColor(sf::Color::White);
 			string.setFont(this->fonts[drawable->value["font"].GetString()]);
 			string.setString(wire::string(drawable->value["text"].GetString()).replace("$branch", GIT_BRANCH).replace("$compile_date", __DATE__).replace("$compile_time", __TIME__).replace("$version", STARBORN_VERSION).c_str());
 			string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
-			
+
 			for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
 				string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);
 		}
