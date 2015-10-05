@@ -149,21 +149,25 @@ void ss::State::switch_state(wire::string state, bool reverse_animations, std::f
 	if((next_state == STATE_CLOSING) || (next_state == STATE_RUNNING))
 		this->fade_time = this->time;
 
+	auto play_animation = [this](Drawable &drawable, wire::string &animation)
+	{ $
+		if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
+			reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(animation);
+
+		else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
+			reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(animation);
+
+		else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
+			reinterpret_cast<AnimatedString *>(drawable.drawable)->playAnimation(animation);
+	};
+
 	for(auto &&drawable : this->drawables[this->state])
 	{ $
-		if(((!this->reverse_animations && drawable.ending_animation.length()) || (this->reverse_animations && drawable.starting_animation.length())) || (!drawable.reversible && drawable.ending_animation.length()))
-		{ $
-			auto animation = this->reverse_animations ? (drawable.reversible ? drawable.starting_animation : drawable.ending_animation) : drawable.ending_animation;
+		if(drawable.extra_animation.length() && (this->next_state == STATE_CLOSING))
+			play_animation(drawable, drawable.extra_animation);
 
-			if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
-				reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(animation);
-
-			else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-				reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(animation);
-
-			else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
-				reinterpret_cast<AnimatedString *>(drawable.drawable)->playAnimation(animation);
-		}
+		else if(((!this->reverse_animations && drawable.ending_animation.length()) || (this->reverse_animations && drawable.starting_animation.length())) || (!drawable.reversible && drawable.ending_animation.length()))
+			play_animation(drawable, this->reverse_animations ? (drawable.reversible ? drawable.starting_animation : drawable.ending_animation) : drawable.ending_animation);
 	}
 }
 

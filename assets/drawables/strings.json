@@ -1,6 +1,7 @@
 {
 	"copyright": {
 		"ending_animation": "",
+		"extra_animation": "fade_out",
 		"font": "assets/fonts/04B_03__.ttf",
 		"size": 8,
 		"starting_animation": "fade_in",
@@ -9,7 +10,8 @@
 		"type": "animated_string",
 
 		"animations": [
-			"fade_in"
+			"fade_in",
+			"fade_out"
 		],
 
 		"position": {
@@ -41,15 +43,17 @@
 
 	"version": {
 		"ending_animation": "",
-		"starting_animation": "fade_in",
+		"extra_animation": "fade_out",
 		"font": "assets/fonts/04B_03__.ttf",
 		"size": 8,
+		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"text": "Version $version [$branch] ($compile_date $compile_time)",
 		"type": "animated_string",
 
 		"animations": [
-			"fade_in"
+			"fade_in",
+			"fade_out"
 		],
 
 		"position": {

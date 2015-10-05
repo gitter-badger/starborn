@@ -282,6 +282,7 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 		Drawable drawable_struct;
 
 		drawable_struct.ending_animation = type.starts_with("animated_") ? drawable->value["ending_animation"].GetString() : "";
+		drawable_struct.extra_animation = type.starts_with("animated_") ? (drawable->value.HasMember("extra_animation") ? drawable->value["extra_animation"].GetString() : "") : "";
 		drawable_struct.drawable = reinterpret_cast<sf::Drawable *>(new_drawable);
 		drawable_struct.name = name;
 		drawable_struct.render_states.shader = drawable->value.HasMember("shader") ? &this->shaders[drawable->value["shader"].GetString()] : nullptr;

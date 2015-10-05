@@ -21,13 +21,15 @@
 	"starborn_horizontal": {
 		"dynamic_position": false,
 		"ending_animation": "",
+		"extra_animation": "fade_out",
 		"starting_animation": "fade_in",
 		"state": "main_menu",
 		"texture": "assets/textures/general/starborn_horizontal.png",
 		"type": "animated_sprite",
 
 		"animations": [
-			"fade_in"
+			"fade_in",
+			"fade_out"
 		],
 
 		"position": {
