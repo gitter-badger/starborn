@@ -30,9 +30,6 @@
     <ClInclude Include="..\..\src\sha1\version.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sha1\sha1.hpp">
-      <Filter>Third Party\Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\sha1\sha1.rc">
@@ -41,9 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\third_party\apathy\apathy.cpp">
-      <Filter>Third Party\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\sha1\sha1.cpp">
       <Filter>Third Party\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\sha1\main.cpp">

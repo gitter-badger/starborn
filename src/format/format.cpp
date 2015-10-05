@@ -16,10 +16,10 @@
 */
 
 #include <apathy/apathy.hpp>
+#include <cocoa/cocoa.hpp>
 #include <git.hpp>
 #include <format/version.hpp>
 #include <regex>
-#include <sha1/sha1.hpp>
 #include <wire/wire.hpp>
 
 int32_t main(int32_t argc, char *argv[])
@@ -40,16 +40,10 @@ int32_t main(int32_t argc, char *argv[])
 
 			if(data.size())
 			{
-				SHA1 sha1;
-				sha1.update(data);
-
-				auto original_sha1 = sha1.final();
+				auto original_sha1 = cocoa::SHA1(data);
 				data = std::regex_replace(data.replace("{ $", "{").replace("{", "{ $"), std::regex("=(\\s*)\\{ \\$"), "=$1{");
-
-				SHA1 new_sha1;
-				new_sha1.update(data);
-
-				if(original_sha1 != new_sha1.final())
+				
+				if(original_sha1 != cocoa::SHA1(data))
 				{
 					if(file.overwrite(data))
 						std::cout << "Formatted file: " << file.name() << std::endl;

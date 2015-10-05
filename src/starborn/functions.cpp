@@ -37,7 +37,7 @@ bool ss::file_exists(wire::string filename)
 
 bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file, std::function<void (wire::string &filename)> callback)
 { $
-	if(!file_exists(source_filename) || (SHA1::from_file(source_filename) != flow::download(sha1_url).data))
+	if(!file_exists(source_filename) || (cocoa::SHA1(apathy::file(source_filename).read()).str() != flow::download(sha1_url).data))
 	{ $
 		apathy::file file(source_filename);
 
