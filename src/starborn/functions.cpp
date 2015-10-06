@@ -139,8 +139,8 @@ void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 	{ $
 		if(file_exists(old_critical_filename + ".$old"))
 		{ $
-			while(file_exists(old_critical_filename))
-				apathy::file(old_critical_filename).remove();
+			while(file_exists(old_critical_filename + ".$old"))
+				apathy::file(old_critical_filename + ".$old").remove();
 
 			updated = true;
 		}
