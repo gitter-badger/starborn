@@ -23,6 +23,7 @@ namespace ss
 			AnimatedRectangle loading_bar;
 			AnimatedRectangle loading_bar_border;
 
+			bool play_animations;
 			bool reverse_animations;
 			bool running;
 			bool update_state;
@@ -38,13 +39,15 @@ namespace ss
 
 			wire::string next_state;
 			wire::string state;
-
+			
 			void on_update_animated_rectangle(sf::Time &last_frame_time, Drawable &drawable);
 			void on_update_animated_sprite(sf::Time &last_frame_time, Drawable &drawable);
 			void on_update_animated_string(sf::Time &last_frame_time, Drawable &drawable);
 			void on_update_background(Drawable &drawable);
 			void on_update_sprite(Drawable &drawable);
 
+			void play_animation(Drawable &drawable, wire::string animation);
+			void reset_animation(Drawable &drawable);
 			void update_shader_parameters(sf::Shader &shader);
 
 		public:
@@ -60,7 +63,7 @@ namespace ss
 
 			void on_updated();
 			void set_loading_bar_percent(uint32_t value, uint32_t total);
-			void switch_state(wire::string state, bool reverse_animations = false, std::function<void ()> callback = [](){});
+			void switch_state(wire::string state, bool play_animations = true, std::function<void ()> callback = [](){});
 			void update(sf::Time &last_frame_time, sf::RenderWindow &window);
 	};
 }

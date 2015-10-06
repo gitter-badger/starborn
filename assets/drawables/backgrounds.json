@@ -2,26 +2,29 @@
 	"main_menu_background": {
 		"scale": true,
 		"shader": "stars",
-		"state": "main_menu",
-		"type": "background"
-	},
+		"type": "background",
 
-	"new_game_background": {
-		"scale": true,
-		"shader": "stars",
-		"state": "new_game",
-		"type": "background"
+		"states": [
+			"main_menu",
+			"new_game"
+		]
 	},
 
 	"snailsoft_background": {
 		"shader": "pixels",
-		"state": "snailsoft_logo",
-		"type": "background"
+		"type": "background",
+
+		"states": [
+			"snailsoft_logo"
+		]
 	},
 
 	"starborn_background": {
 		"shader": "starfield",
-		"state": "starborn_logo",
-		"type": "background"
+		"type": "background",
+
+		"states": [
+			"starborn_logo"
+		]
 	}
 }

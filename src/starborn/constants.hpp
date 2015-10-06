@@ -43,19 +43,15 @@ namespace ss
 		#define ANCHOR_TOP_LEFT						"top_left"
 		#define ANCHOR_TOP_RIGHT					"top_right"
 
+		#define ANIMATED_DRAWABLE_PREFIX			"animated_"
+				
 		#define ANIMATION_FADE_IN					"fade_in"
 		#define ANIMATION_FADE_OUT					"fade_out"
 
 		#define ANIMATION_TYPE_DEFAULT				"default"
 		#define ANIMATION_TYPE_FADE					"fade"
 
-		#define BUTTON_CONTINUE						"continue"
-		#define BUTTON_EXIT							"exit"
-		#define BUTTON_LOAD_GAME					"load_game"
-		#define BUTTON_MIDNIGHT						"midnight"
-		#define BUTTON_NEW_GAME						"new_game"
-		#define BUTTON_NIGHTFALL					"nightfall"
-		#define BUTTON_OPTIONS						"options"
+		#define BUTTON_PREFIX						"button_"
 
 		#define DRAWABLE_TYPE_ANIMATED_RECTANGLE	"animated_rectangle"
 		#define DRAWABLE_TYPE_ANIMATED_SPRITE		"animated_sprite"

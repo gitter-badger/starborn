@@ -36,14 +36,12 @@ namespace ss
 
 	struct Drawable
 	{
-		bool reversible;
 		bool scale;
 
 		sf::Drawable *drawable;
 		sf::RenderStates render_states;
 
 		wire::string ending_animation;
-		wire::string extra_animation;
 		wire::string name;
 		wire::string starting_animation;
 		wire::string type;

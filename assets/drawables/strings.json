@@ -1,11 +1,9 @@
 {
 	"copyright": {
-		"ending_animation": "",
-		"extra_animation": "fade_out",
+		"ending_animation": "fade_out",
 		"font": "assets/fonts/04B_03__.ttf",
 		"size": 8,
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"text": "Copyright (C) 2013-2015 Snailsoft",
 		"type": "animated_string",
 
@@ -18,36 +16,19 @@
 			"anchor": "bottom_left",
 			"x": 4,
 			"y": -4
-		}
-	},
+		},
 
-	"copyright_new_game": {
-		"ending_animation": "fade_out",
-		"font": "assets/fonts/04B_03__.ttf",
-		"size": 8,
-		"starting_animation": "",
-		"state": "new_game",
-		"text": "Copyright (C) 2013-2015 Snailsoft",
-		"type": "animated_string",
-
-		"animations": [
-			"fade_out"
-		],
-
-		"position": {
-			"anchor": "bottom_left",
-			"x": 4,
-			"y": -4
-		}
+		"states": [
+			"main_menu",
+			"new_game"
+		]
 	},
 
 	"version": {
-		"ending_animation": "",
-		"extra_animation": "fade_out",
+		"ending_animation": "fade_out",
 		"font": "assets/fonts/04B_03__.ttf",
 		"size": 8,
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"text": "Version $version [$branch] ($compile_date $compile_time)",
 		"type": "animated_string",
 
@@ -60,26 +41,11 @@
 			"anchor": "bottom_right",
 			"x": -4,
 			"y": -4
-		}
-	},
+		},
 
-	"version_new_game": {
-		"ending_animation": "fade_out",
-		"font": "assets/fonts/04B_03__.ttf",
-		"size": 8,
-		"starting_animation": "",
-		"state": "new_game",
-		"text": "Version $version [$branch] ($compile_date $compile_time)",
-		"type": "animated_string",
-
-		"animations": [
-			"fade_out"
-		],
-
-		"position": {
-			"anchor": "bottom_right",
-			"x": -4,
-			"y": -4
-		}
+		"states": [
+			"main_menu",
+			"new_game"
+		]
 	}
 }

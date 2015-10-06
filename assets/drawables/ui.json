@@ -1,11 +1,9 @@
 {
-	"continue": {
+	"button_continue": {
 		"dynamic_position": false,
 		"ending_animation": "fade_out",
-		"reversible": false,
 		"selected_texture": "assets/textures/ui/continue_selected.png",
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"texture": "assets/textures/ui/continue.png",
 		"type": "animated_sprite",
 
@@ -18,16 +16,18 @@
 			"anchor": "center",
 			"x": 0,
 			"y": -42
-		}
+		},
+
+		"states": [
+			"main_menu"
+		]
 	},
 
-	"new_game": {
+	"button_new_game": {
 		"dynamic_position": false,
 		"ending_animation": "fade_out",
-		"reversible": false,
 		"selected_texture": "assets/textures/ui/new_game_selected.png",
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"texture": "assets/textures/ui/new_game.png",
 		"type": "animated_sprite",
 
@@ -40,16 +40,18 @@
 			"anchor": "center",
 			"x": 0,
 			"y": -21
-		}
+		},
+
+		"states": [
+			"main_menu"
+		]
 	},
 
-	"load_game": {
+	"button_load_game": {
 		"dynamic_position": false,
 		"ending_animation": "fade_out",
-		"reversible": false,
 		"selected_texture": "assets/textures/ui/load_game_selected.png",
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"texture": "assets/textures/ui/load_game.png",
 		"type": "animated_sprite",
 
@@ -62,16 +64,18 @@
 			"anchor": "center",
 			"x": 0,
 			"y": 0
-		}
+		},
+
+		"states": [
+			"main_menu"
+		]
 	},
 
-	"midnight": {
+	"button_midnight": {
 		"dynamic_position": false,
 		"ending_animation": "fade_out",
-		"reversible": false,
 		"selected_texture": "assets/textures/ui/midnight_selected.png",
 		"starting_animation": "fade_in",
-		"state": "new_game",
 		"texture": "assets/textures/ui/midnight.png",
 		"type": "animated_sprite",
 
@@ -84,16 +88,18 @@
 			"anchor": "center",
 			"x": -29,
 			"y": 0
-		}
+		},
+
+		"states": [
+			"new_game"
+		]
 	},
 
-	"nightfall": {
+	"button_nightfall": {
 		"dynamic_position": false,
 		"ending_animation": "fade_out",
-		"reversible": false,
 		"selected_texture": "assets/textures/ui/nightfall_selected.png",
 		"starting_animation": "fade_in",
-		"state": "new_game",
 		"texture": "assets/textures/ui/nightfall.png",
 		"type": "animated_sprite",
 
@@ -106,16 +112,18 @@
 			"anchor": "center",
 			"x": 30,
 			"y": 0
-		}
+		},
+
+		"states": [
+			"new_game"
+		]
 	},
 
-	"options": {
+	"button_options": {
 		"dynamic_position": false,
 		"ending_animation": "fade_out",
-		"reversible": false,
 		"selected_texture": "assets/textures/ui/options_selected.png",
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"texture": "assets/textures/ui/options.png",
 		"type": "animated_sprite",
 
@@ -128,16 +136,18 @@
 			"anchor": "center",
 			"x": 0,
 			"y": 21
-		}
+		},
+
+		"states": [
+			"main_menu"
+		]
 	},
 
-	"exit": {
+	"button_exit": {
 		"dynamic_position": false,
 		"ending_animation": "fade_out",
-		"reversible": false,
 		"selected_texture": "assets/textures/ui/exit_selected.png",
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"texture": "assets/textures/ui/exit.png",
 		"type": "animated_sprite",
 
@@ -150,6 +160,10 @@
 			"anchor": "center",
 			"x": 0,
 			"y": 42
-		}
+		},
+
+		"states": [
+			"main_menu"
+		]
 	}
 }

@@ -3,7 +3,6 @@
 		"dynamic_position": false,
 		"ending_animation": "fade",
 		"starting_animation": "",
-		"state": "snailsoft_logo",
 		"texture": "assets/textures/general/snailsoft.png",
 		"type": "animated_sprite",
 
@@ -15,15 +14,17 @@
 			"anchor": "center",
 			"x": 0,
 			"y": 0
-		}
+		},
+
+		"states": [
+			"snailsoft_logo"
+		]
 	},
 
 	"starborn_horizontal": {
 		"dynamic_position": false,
-		"ending_animation": "",
-		"extra_animation": "fade_out",
+		"ending_animation": "fade_out",
 		"starting_animation": "fade_in",
-		"state": "main_menu",
 		"texture": "assets/textures/general/starborn_horizontal.png",
 		"type": "animated_sprite",
 
@@ -36,33 +37,18 @@
 			"anchor": "center_top",
 			"x": 0,
 			"y": 0
-		}
-	},
+		},
 
-	"starborn_horizontal_new_game": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"starting_animation": "",
-		"state": "new_game",
-		"texture": "assets/textures/general/starborn_horizontal.png",
-		"type": "animated_sprite",
-
-		"animations": [
-			"fade_out"
-		],
-
-		"position": {
-			"anchor": "center_top",
-			"x": 0,
-			"y": 0
-		}
+		"states": [
+			"main_menu",
+			"new_game"
+		]
 	},
 
 	"starborn_vertical": {
 		"dynamic_position": false,
 		"ending_animation": "fade",
 		"starting_animation": "",
-		"state": "starborn_logo",
 		"texture": "assets/textures/general/starborn_vertical.png",
 		"type": "animated_sprite",
 
@@ -74,6 +60,10 @@
 			"anchor": "center",
 			"x": 0,
 			"y": 0
-		}
+		},
+
+		"states": [
+			"starborn_logo"
+		]
 	}
 }

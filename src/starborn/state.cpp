@@ -52,7 +52,6 @@ ss::State::State()
 
 	loading_bar.drawable = &this->loading_bar;
 	loading_bar.name = "loading_bar";
-	loading_bar.reversible = true;
 	loading_bar.scale = false;
 	loading_bar.type = DRAWABLE_TYPE_ANIMATED_RECTANGLE;
 
@@ -63,6 +62,7 @@ ss::State::State()
 
 	this->drawables[STATE_LOADING].push_back(loading_bar);
 	
+	this->play_animations = false;
 	this->reverse_animations = false;
 	this->running = false;
 	this->update_state = false;
@@ -140,34 +140,68 @@ void ss::State::set_loading_bar_percent(uint32_t value, uint32_t total)
 	this->loading_bar.setSize(sf::Vector2f(this->loading_bar_border.getSize().x * (static_cast<float>(value) / static_cast<float>(total)), this->loading_bar.getSize().y));
 }
 
-void ss::State::switch_state(wire::string state, bool reverse_animations, std::function<void ()> callback)
+void ss::State::switch_state(wire::string state, bool play_animations, std::function<void ()> callback)
 { $
 	this->callback = callback;
 	this->next_state = state;
+	this->play_animations = play_animations;
 	this->reverse_animations = reverse_animations;
 
 	if((next_state == STATE_CLOSING) || (next_state == STATE_RUNNING))
 		this->fade_time = this->time;
-
-	auto play_animation = [this](Drawable &drawable, wire::string &animation)
-	{ $
-		if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
-			reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(animation);
-
-		else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-			reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(animation);
-
-		else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
-			reinterpret_cast<AnimatedString *>(drawable.drawable)->playAnimation(animation);
-	};
-
+	
 	for(auto &&drawable : this->drawables[this->state])
 	{ $
-		if(drawable.extra_animation.length() && (this->next_state == STATE_CLOSING))
-			play_animation(drawable, drawable.extra_animation);
+		if(this->next_state == STATE_CLOSING)
+			this->play_animation(drawable, ANIMATION_FADE_OUT);
 
-		else if(((!this->reverse_animations && drawable.ending_animation.length()) || (this->reverse_animations && drawable.starting_animation.length())) || (!drawable.reversible && drawable.ending_animation.length()))
-			play_animation(drawable, this->reverse_animations ? (drawable.reversible ? drawable.starting_animation : drawable.ending_animation) : drawable.ending_animation);
+		else if(this->next_state == STATE_RUNNING)
+			this->play_animation(drawable, ANIMATION_FADE_OUT);
+
+		else if(drawable.ending_animation.length() && (drawable.name.starts_with(BUTTON_PREFIX) || this->play_animations))
+			this->play_animation(drawable, drawable.ending_animation);
+	}
+}
+
+void ss::State::play_animation(Drawable &drawable, wire::string animation)
+{ $
+	if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
+		reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(animation);
+
+	else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
+		reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(animation);
+
+	else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
+		reinterpret_cast<AnimatedString *>(drawable.drawable)->playAnimation(animation);
+
+	std::cout << "[" << this->state << (this->next_state.length() ? (" => " + this->next_state) : "") << "] (" << drawable.name << ") Playing animation: " << animation << std::endl;
+}
+
+void ss::State::reset_animation(Drawable &drawable)
+{ $
+	if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
+	{ $
+		auto &animated_rectangle = *reinterpret_cast<AnimatedRectangle *>(drawable.drawable);
+		auto color = animated_rectangle.getColor();
+
+		color.a = 255;
+		animated_rectangle.setColor(color);
+	}
+	else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
+	{ $
+		auto &animated_sprite = *reinterpret_cast<AnimatedSprite *>(drawable.drawable);
+		auto color = animated_sprite.getColor();
+
+		color.a = 255;
+		animated_sprite.setColor(color);
+	}
+	else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
+	{ $
+		auto &animated_string = *reinterpret_cast<AnimatedString *>(drawable.drawable);
+		auto color = animated_string.getColor();
+
+		color.a = 255;
+		animated_string.setColor(color);
 	}
 }
 
@@ -217,6 +251,12 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 			this->time = sf::Time::Zero;
 		}
 
+		for(auto &&drawable : this->drawables[this->state])
+		{ $
+			if(drawable.ending_animation.length() && (drawable.ending_animation == ANIMATION_FADE_OUT))
+				this->reset_animation(drawable);
+		}
+
 		this->state = this->next_state;
 		this->next_state.clear();
 
@@ -224,19 +264,8 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 
 		for(auto &&drawable : this->drawables[this->state])
 		{ $
-			if(((!this->reverse_animations && drawable.starting_animation.length()) || (this->reverse_animations && drawable.ending_animation.length())) || (!drawable.reversible && drawable.starting_animation.length()))
-			{ $
-				auto animation = this->reverse_animations ? (drawable.reversible ? drawable.ending_animation : drawable.starting_animation) : drawable.starting_animation;
-
-				if(drawable.type == DRAWABLE_TYPE_ANIMATED_RECTANGLE)
-					reinterpret_cast<AnimatedRectangle *>(drawable.drawable)->playAnimation(animation);
-		
-				else if(drawable.type == DRAWABLE_TYPE_ANIMATED_SPRITE)
-					reinterpret_cast<AnimatedSprite *>(drawable.drawable)->playAnimation(animation);
-			
-				else if(drawable.type == DRAWABLE_TYPE_ANIMATED_STRING)
-					reinterpret_cast<AnimatedString *>(drawable.drawable)->playAnimation(animation);
-			}
+			if(drawable.starting_animation.length() && (drawable.name.starts_with(BUTTON_PREFIX) || this->play_animations))
+				this->play_animation(drawable, drawable.starting_animation);
 		}
 
 		if(this->state == STATE_RUNNING)

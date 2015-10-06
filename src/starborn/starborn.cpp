@@ -178,9 +178,9 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 					this->menus[STATE_MAIN_MENU].init(this->textures);
 					this->menus[STATE_NEW_GAME].init(this->textures);
 
-					this->state.switch_state(STATE_SNAILSOFT_LOGO, false, [this]()
+					this->state.switch_state(STATE_SNAILSOFT_LOGO, true, [this]()
 					{ $
-						this->state.switch_state(STATE_STARBORN_LOGO, false, [this]()
+						this->state.switch_state(STATE_STARBORN_LOGO, true, [this]()
 						{ $
 							this->state.switch_state(STATE_MAIN_MENU);
 						});
@@ -224,74 +224,78 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 
 	for(auto drawable = json.get_document().MemberBegin(); drawable != json.get_document().MemberEnd(); ++drawable)
 	{ $
+		auto &states = drawable->value["states"];
+
 		wire::string name(drawable->name.GetString());
 		wire::string type(drawable->value["type"].GetString());
 
-		void *new_drawable = nullptr;
-
-		if(type == DRAWABLE_TYPE_ANIMATED_SPRITE)
+		for(auto i = 0u; i < states.Size(); ++i)
 		{ $
-			new_drawable = new AnimatedSprite();
+			void *new_drawable = nullptr;
 
-			for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
-				reinterpret_cast<AnimatedSprite *>(new_drawable)->addAnimation(animation->GetString(), this->animations[animation->GetString()].sprite_animation, this->animations[animation->GetString()].duration);
-
-			if((name == BUTTON_CONTINUE) || (name == BUTTON_EXIT) || (name == BUTTON_LOAD_GAME) || (name == BUTTON_MIDNIGHT) || (name == BUTTON_NEW_GAME) || (name == BUTTON_NIGHTFALL) || (name == BUTTON_OPTIONS))
+			if(type == DRAWABLE_TYPE_ANIMATED_SPRITE)
 			{ $
-				Button button;
+				new_drawable = new AnimatedSprite();
+				auto &animated_sprite = *reinterpret_cast<AnimatedSprite *>(new_drawable);
 
-				button.animated_sprite = reinterpret_cast<AnimatedSprite *>(new_drawable);
-				button.name = name;
-				button.selected_texture = drawable->value["selected_texture"].GetString();
-				button.texture = drawable->value["texture"].GetString();
+				for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
+					animated_sprite.addAnimation(animation->GetString(), this->animations[animation->GetString()].sprite_animation, this->animations[animation->GetString()].duration);
 
-				this->menus[drawable->value["state"].GetString()].get_buttons().push_back(button);
+				if(name.starts_with(BUTTON_PREFIX))
+				{ $
+					Button button;
+
+					button.animated_sprite = &animated_sprite;
+					button.name = name;
+					button.selected_texture = drawable->value["selected_texture"].GetString();
+					button.texture = drawable->value["texture"].GetString();
+
+					this->menus[states[i].GetString()].get_buttons().push_back(button);
+				}
 			}
+			else if(type == DRAWABLE_TYPE_ANIMATED_STRING)
+			{ $
+				new_drawable = new AnimatedString();
+				auto &animated_string = *reinterpret_cast<AnimatedString *>(new_drawable);
+
+				animated_string.setCharacterSize(drawable->value["size"].GetUint());
+				animated_string.setColor(sf::Color::White);
+				animated_string.setFont(this->fonts[drawable->value["font"].GetString()]);
+				animated_string.setString(wire::string(drawable->value["text"].GetString()).replace("$branch", GIT_BRANCH).replace("$compile_date", __DATE__).replace("$compile_time", __TIME__).replace("$version", STARBORN_VERSION).c_str());
+				animated_string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
+
+				for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
+					animated_string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);
+			}
+			else if(type == DRAWABLE_TYPE_SPRITE)
+				new_drawable = new Sprite();
+
+			if(type == DRAWABLE_TYPE_BACKGROUND)
+			{ $
+				new_drawable = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
+				reinterpret_cast<sf::RectangleShape *>(new_drawable)->setFillColor(sf::Color::Transparent);
+			}
+			else if(type != DRAWABLE_TYPE_ANIMATED_STRING)
+			{ $
+				auto &sprite = *reinterpret_cast<Sprite *>(new_drawable);
+
+				sprite.has_dynamic_position() = drawable->value["dynamic_position"].GetBool();
+				sprite.setTexture(this->textures[drawable->value["texture"].GetString()]);
+				sprite.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble(), drawable->value.HasMember("size") ? drawable->value["size"]["x"].GetDouble() : 0.0f, drawable->value.HasMember("size") ? drawable->value["size"]["y"].GetDouble() : 0.0f);
+			}
+
+			Drawable drawable_struct;
+
+			drawable_struct.ending_animation = type.starts_with(ANIMATED_DRAWABLE_PREFIX) ? ((i == (states.Size() - 1)) ? drawable->value["ending_animation"].GetString() : "") : "";
+			drawable_struct.drawable = reinterpret_cast<sf::Drawable *>(new_drawable);
+			drawable_struct.name = name;
+			drawable_struct.render_states.shader = drawable->value.HasMember("shader") ? &this->shaders[drawable->value["shader"].GetString()] : nullptr;
+			drawable_struct.scale = drawable->value.HasMember("scale") ? drawable->value["scale"].GetBool() : false;
+			drawable_struct.starting_animation = type.starts_with(ANIMATED_DRAWABLE_PREFIX) ? (!i ? drawable->value["starting_animation"].GetString() : "") : "";
+			drawable_struct.type = type;
+
+			this->state.get_drawables()[states[i].GetString()].push_back(drawable_struct);
 		}
-		else if(type == DRAWABLE_TYPE_ANIMATED_STRING)
-		{ $
-			new_drawable = new AnimatedString();
-			auto &string = *reinterpret_cast<AnimatedString *>(new_drawable);
-
-			string.setCharacterSize(drawable->value["size"].GetUint());
-			string.setColor(sf::Color::White);
-			string.setFont(this->fonts[drawable->value["font"].GetString()]);
-			string.setString(wire::string(drawable->value["text"].GetString()).replace("$branch", GIT_BRANCH).replace("$compile_date", __DATE__).replace("$compile_time", __TIME__).replace("$version", STARBORN_VERSION).c_str());
-			string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
-
-			for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
-				string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);
-		}
-		else if(type == DRAWABLE_TYPE_SPRITE)
-			new_drawable = new Sprite();
-
-		if(type == DRAWABLE_TYPE_BACKGROUND)
-		{ $
-			new_drawable = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
-			reinterpret_cast<sf::RectangleShape *>(new_drawable)->setFillColor(sf::Color::Transparent);
-		}
-		else if(type != DRAWABLE_TYPE_ANIMATED_STRING)
-		{ $
-			auto &sprite = *reinterpret_cast<Sprite *>(new_drawable);
-
-			sprite.has_dynamic_position() = drawable->value["dynamic_position"].GetBool();
-			sprite.setTexture(this->textures[drawable->value["texture"].GetString()]);
-			sprite.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble(), drawable->value.HasMember("size") ? drawable->value["size"]["x"].GetDouble() : 0.0f, drawable->value.HasMember("size") ? drawable->value["size"]["y"].GetDouble() : 0.0f);
-		}
-
-		Drawable drawable_struct;
-
-		drawable_struct.ending_animation = type.starts_with("animated_") ? drawable->value["ending_animation"].GetString() : "";
-		drawable_struct.extra_animation = type.starts_with("animated_") ? (drawable->value.HasMember("extra_animation") ? drawable->value["extra_animation"].GetString() : "") : "";
-		drawable_struct.drawable = reinterpret_cast<sf::Drawable *>(new_drawable);
-		drawable_struct.name = name;
-		drawable_struct.render_states.shader = drawable->value.HasMember("shader") ? &this->shaders[drawable->value["shader"].GetString()] : nullptr;
-		drawable_struct.reversible = drawable->value.HasMember("reversible") ? drawable->value["reversible"].GetBool() : true;
-		drawable_struct.scale = drawable->value.HasMember("scale") ? drawable->value["scale"].GetBool() : false;
-		drawable_struct.starting_animation = type.starts_with("animated_") ? drawable->value["starting_animation"].GetString() : "";
-		drawable_struct.type = type;
-
-		this->state.get_drawables()[drawable->value["state"].GetString()].push_back(drawable_struct);
 	}
 }
 
@@ -337,8 +341,10 @@ void ss::Starborn::on_down()
 void ss::Starborn::on_escape()
 { $
 	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_LOADING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
-		this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? false : true);
-
+	{ $
+		if(!this->state.get_next_state().length())
+			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false);
+	}
 	else
 		this->on_exit();
 }
@@ -361,7 +367,7 @@ void ss::Starborn::on_exit()
 			exit();
 
 		else
-			this->state.switch_state(STATE_CLOSING, false, exit);
+			this->state.switch_state(STATE_CLOSING, true, exit);
 	}
 }
 
@@ -393,19 +399,19 @@ void ss::Starborn::on_select()
 		auto &menu = this->menus[this->state.get_state()];
 		auto &button_name = menu.get_buttons()[menu.get_position()].name;
 		
-		if(button_name == BUTTON_CONTINUE)
+		if(button_name == (BUTTON_PREFIX "continue"))
 			this->on_continue();
 
-		else if(button_name == BUTTON_EXIT)
+		else if(button_name == (BUTTON_PREFIX "exit"))
 			this->on_exit();
 
-		else if(button_name == BUTTON_MIDNIGHT)
+		else if(button_name == (BUTTON_PREFIX "midnight"))
 			this->new_game();
 
-		else if(button_name == BUTTON_NEW_GAME)
+		else if(button_name == (BUTTON_PREFIX "new_game"))
 			this->state.switch_state(STATE_NEW_GAME);
 
-		else if(button_name == BUTTON_NIGHTFALL)
+		else if(button_name == (BUTTON_PREFIX "nightfall"))
 			this->new_game(false);
 	}
 }
