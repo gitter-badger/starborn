@@ -42,10 +42,10 @@ bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::
 		apathy::file file(source_filename);
 
 		if(file_exists(source_filename))
-			file.patch(base91::decode(flow::download(destination_url).data), delete_old_file);
+			file.patch(base91::decode(unpack_asset(flow::download(destination_url).data, source_filename)), delete_old_file);
 
 		else
-			file.overwrite(base91::decode(flow::download(destination_url).data));
+			file.overwrite(base91::decode(unpack_asset(flow::download(destination_url).data, source_filename)));
 
 		callback(source_filename);
 		
@@ -63,7 +63,7 @@ bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string
 	for(auto &&filename : files)
 	{ $
 		if(!file_exists(filename) || (GIT_REVISION_NUMBER < revision))
-			update_file(filename, github_url + filename + ".sha1", github_url + filename + ".b91");
+			update_file(filename, github_url + filename + ".sha1", github_url + filename + (filename.ends_with(".zip") ? "" : ".zip") + ".b91");
 
 		callback(++files_updated, filename);
 	}
@@ -111,6 +111,20 @@ bundle::string ss::unpack_asset(bundle::file &asset)
 		bundle::unpack(data, asset["data"]);
 
 	return data;
+}
+
+bundle::string ss::unpack_asset(wire::string data, wire::string &asset_filename)
+{ $
+	bundle::archive assets;
+	assets.bin(data);
+
+	for(auto &&asset : assets)
+	{ $
+		if(asset["name"] == asset_filename)
+			return unpack_asset(asset);
+	}
+
+	return bundle::string();
 }
 
 void ss::handle_updated(std::vector<wire::string> &old_critical_files)

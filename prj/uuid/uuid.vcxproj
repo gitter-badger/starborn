@@ -56,9 +56,8 @@
       <GenerateDebugInformation>No</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir)
-bin\sha1.exe bin\uuid.exe patch\uuid.exe.sha1
-bin\base91.exe -e bin\uuid.exe patch\uuid.exe.b91</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>

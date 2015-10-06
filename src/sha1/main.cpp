@@ -25,11 +25,11 @@ int32_t main(int32_t argc, char *argv[])
 {
 	if(argc == 3)
 	{
-		auto data = apathy::file(argv[1]).read();
+		auto data = apathy::file(argv[argc - 2]).read();
 
 		if(data.size())
 		{
-			wire::string output_directory(argv[2]);
+			wire::string output_directory(argv[argc - 1]);
 
 			auto backslash = output_directory.find_last_of('\\');
 			auto slash = output_directory.find_last_of('/');
@@ -53,17 +53,17 @@ int32_t main(int32_t argc, char *argv[])
 			
 			auto sha1 = cocoa::SHA1(data);
 
-			if(apathy::file(argv[2]).overwrite(sha1))
+			if(apathy::file(argv[argc - 1]).overwrite(sha1))
 				std::cout << "Wrote ";
 
 			else
 				std::cout << "Error: Could not write ";
 
-			std::cout << "SHA1 (" << sha1 << ") for '" << argv[1] << "' to file: " << argv[2] << std::endl;
+			std::cout << "SHA1 (" << sha1 << ") for '" << argv[argc - 2] << "' to file: " << argv[argc - 1] << std::endl;
 		}
 		else
 		{
-			std::cout << "Error: Could not read from file: " << argv[1] << std::endl;
+			std::cout << "Error: Could not read from file: " << argv[argc - 2] << std::endl;
 
 			return EXIT_FAILURE;
 		}

@@ -54,23 +54,8 @@
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir)
-bin\sha1.exe bin\starborn.exe patch\starborn.exe.sha1
-bin\base91.exe -e bin\starborn.exe patch\starborn.exe.b91
-
-bin\sha1.exe bin\starborn.pdb patch\starborn.pdb.sha1
-bin\base91.exe -e bin\starborn.pdb patch\starborn.pdb.b91
-
-bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all  -d zpaq
-
-bin\sha1.exe bin\assets.zip patch\assets.zip.sha1
-bin\base91.exe -e bin\assets.zip patch\assets.zip.b91
-
-git rev-list --count --first-parent HEAD &gt; patch\revision.txt
-
-set /p REVISION2=&lt;patch\revision.txt
-set /a REVISION=%REVISION2%+1
-echo %REVISION% &gt; patch\revision.txt</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>cd $(SolutionDir)

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F6FDE763-108E-4F61-8C14-09E0E36BA8A0}</ProjectGuid>
+    <RootNamespace>assets</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+    <OutDir>$(SolutionDir)bin\</OutDir>
+    <IntDir>$(ProjectDir)obj\</IntDir>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)third_party</AdditionalIncludeDirectories>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>
+      </ImportLibrary>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <GenerateDebugInformation>No</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>cd $(SolutionDir)
+
+bin\sha1.exe bin\bundler.exe patch\bundler.exe.sha1
+
+bin\bundler.exe a patch\bundler.exe.zip bin\bundler.exe -f -i 100 -u all -d zpaq
+bin\base91.exe -e patch\bundler.exe.zip patch\bundler.exe.zip.b91
+
+bin\sha1.exe bin\base91.exe patch\base91.exe.sha1
+
+bin\bundler.exe a patch\base91.exe.zip bin\base91.exe -f -i 100 -u all -d zpaq
+bin\base91.exe -e patch\base91.exe.zip patch\base91.exe.zip.b91
+
+bin\sha1.exe bin\starborn.exe patch\starborn.exe.sha1
+
+bin\bundler.exe a patch\starborn.exe.zip bin\starborn.exe -f -i 100 -u all -d zpaq
+bin\base91.exe -e patch\starborn.exe.zip patch\starborn.exe.zip.b91
+
+bin\sha1.exe bin\starborn.pdb patch\starborn.pdb.sha1
+
+bin\bundler.exe a patch\starborn.pdb.zip bin\starborn.pdb -f -i 100 -u all -d zpaq
+bin\base91.exe -e patch\starborn.pdb.zip patch\starborn.pdb.zip.b91
+
+bin\sha1.exe bin\uuid.exe patch\uuid.exe.sha1
+
+bin\bundler.exe a patch\uuid.exe.zip bin\uuid.exe -f -i 100 -u all -d zpaq
+bin\base91.exe -e patch\uuid.exe.zip patch\uuid.exe.zip.b91
+
+del /Q patch\*.zip
+
+bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all -d zpaq
+bin\sha1.exe bin\assets.zip patch\assets.zip.sha1
+bin\base91.exe -e bin\assets.zip patch\assets.zip.b91
+
+git rev-list --count --first-parent HEAD &gt; patch\revision.txt
+
+set /p REVISION2=&lt;patch\revision.txt
+set /a REVISION=%REVISION2%+1
+echo %REVISION% &gt; patch\revision.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

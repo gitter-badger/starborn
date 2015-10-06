@@ -25,11 +25,11 @@ int32_t main(int32_t argc, char *argv[])
 {
 	if((argc == 4) && ((wire::string(argv[1]) == "-d") || (wire::string(argv[1]) == "-e")))
 	{
-		auto data = apathy::file(argv[2]).read();
+		auto data = apathy::file(argv[argc - 2]).read();
 
 		if(data.size())
 		{
-			wire::string output_directory(argv[3]);
+			wire::string output_directory(argv[argc - 1]);
 
 			auto backslash = output_directory.find_last_of('\\');
 			auto slash = output_directory.find_last_of('/');
@@ -53,17 +53,17 @@ int32_t main(int32_t argc, char *argv[])
 
 			auto base91 = (wire::string(argv[1]) == "-d") ? base91::decode(data) : base91::encode(data);
 
-			if(apathy::file(argv[3]).overwrite(base91))
+			if(apathy::file(argv[argc - 1]).overwrite(base91))
 				std::cout << ((wire::string(argv[1]) == "-d") ? "Decoded " : "Encoded ");
 
 			else
 				std::cout << "Error: Could not write ";
 
-			std::cout << std::setprecision(2) << std::fixed << ((base91.size() / 1024.0f) / 1024.0f) << " MiB for '" << argv[2] << "' to file: " << argv[3] << std::endl;
+			std::cout << std::setprecision(2) << std::fixed << ((base91.size() / 1024.0f) / 1024.0f) << " MiB for '" << argv[argc - 2] << "' to file: " << argv[argc - 1] << std::endl;
 		}
 		else
 		{
-			std::cout << "Error: Could not read from file: " << argv[2] << std::endl;
+			std::cout << "Error: Could not read from file: " << argv[argc - 2] << std::endl;
 
 			return EXIT_FAILURE;
 		}
@@ -75,6 +75,7 @@ int32_t main(int32_t argc, char *argv[])
 		std::cout << std::endl;
 		std::cout << "Usage:" << std::endl;
 		std::cout << "    " << argv[0] << " [options] <input_file> <output_file>" << std::endl;
+		std::cout << std::endl;
 		std::cout << "Options:" << std::endl;
 		std::cout << "    -d        decode file" << std::endl;
 		std::cout << "    -e        encode file" << std::endl;
