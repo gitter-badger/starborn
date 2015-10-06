@@ -345,7 +345,7 @@ void ss::Starborn::on_escape()
 		if(!this->state.get_next_state().length())
 			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false);
 	}
-	else if(!this->state.get_next_state().length())
+	else if(!this->state.get_next_state().length() || (this->state.get_state() == STATE_LOADING) || (this->state.get_state() == STATE_SNAILSOFT_LOGO) || (this->state.get_state() == STATE_STARBORN_LOGO))
 		this->on_exit();
 }
 
