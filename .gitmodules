@@ -49,3 +49,6 @@
 [submodule "third_party/cocoa"]
 	path = third_party/cocoa
 	url = https://github.com/snail23/cocoa.git
+[submodule "third_party/fsm"]
+	path = third_party/fsm
+	url = https://github.com/snail23/fsm.git

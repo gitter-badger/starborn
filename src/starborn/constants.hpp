@@ -62,6 +62,8 @@ namespace ss
 
 		#define SETTING_ZOOM						3
 
+		#define SOUND_MENU_SCROLL					"assets/audio/sounds/menu_scroll.flac"
+		#define SOUND_MENU_SELECT					"assets/audio/sounds/menu_select.flac"
 		#define SOUND_SNAILSOFT						"assets/audio/sounds/snailsoft.flac"
 
 		#define SPRITE_SNAILSOFT					"snailsoft"

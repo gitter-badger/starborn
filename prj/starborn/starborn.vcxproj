@@ -131,7 +131,6 @@ bin\format.exe . .\src\starborn\*.cpp</Command>
     <None Include="..\..\assets\drawables\ui.json" />
     <None Include="..\..\assets\shaders\shaders.json" />
     <None Include="..\..\assets\shaders\pixels.frag" />
-    <None Include="..\..\assets\shaders\vignette.frag" />
     <None Include="..\..\assets\shaders\starfield.frag" />
     <None Include="..\..\assets\shaders\stars.frag" />
   </ItemGroup>

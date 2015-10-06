@@ -36,5 +36,5 @@ void main()
 		star = rand * (0.225 * sin((time * (rand * 5.0)) + (720.0 * rand)) + 0.5);
 	}
 
-	gl_FragColor = vec4(vec3((rand < 0.8) ? vec3(0.0, 1.0, 1.0) : ((rand < 0.85) ? vec3(1.0, 0.0, 0.5) : vec3(0.0, 1.0, 0.5))) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), ((fade_time > 0.0) ? max(0.0, 1.0 - (time - fade_time)) : ((time < 4.0) ? min(1.0, time) : 1.0)) * star);
+	gl_FragColor = vec4(vec3((rand < 0.85) ? vec3(1.0) : ((rand < 0.9) ? vec3(0.0, 1.0, 0.5) : vec3(0.0, 1.0, 1.0))) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), ((fade_time > 0.0) ? max(0.0, 1.0 - (time - fade_time)) : min(1.0, time)) * star);
 }

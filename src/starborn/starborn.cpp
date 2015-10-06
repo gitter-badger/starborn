@@ -166,10 +166,9 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 					wire::string filename = asset["name"];
 
 					auto animations = filename.matchesi("assets/animations/*.json");
-					auto drawables = filename.matchesi("assets/drawables/*.json");
 					auto shaders = filename.matchesi("assets/shaders/*.json");
 
-					if(animations || drawables || shaders)
+					if(animations || shaders)
 					{ $
 						auto data = unpack_asset(asset);
 
@@ -177,11 +176,6 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 						{ $
 							this->load_animations(data);
 							std::cout << "Loaded animations: " << filename << std::endl;
-						}
-						else if(drawables)
-						{ $
-							this->load_drawables(data);
-							std::cout << "Loaded drawables: " << filename << std::endl;
 						}
 						else if(shaders)
 						{ $
@@ -198,18 +192,38 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 
 				if(this->window.isOpen())
 				{ $
-					this->menus[STATE_MAIN_MENU].init(this->textures);
-					this->menus[STATE_NEW_GAME].init(this->textures);
-
-					this->state.switch_state(STATE_SNAILSOFT_LOGO, true, [this]()
+					for(auto &&asset : assets)
 					{ $
-						this->play_sound(SOUND_SNAILSOFT);
-						this->state.switch_state(STATE_STARBORN_LOGO, true, [this]()
+						wire::string filename = asset["name"];
+
+						if(filename.matchesi("assets/drawables/*.json"))
 						{ $
-							this->play_sound(MUSIC_TITLE, true);
-							this->state.switch_state(STATE_MAIN_MENU);
+							auto data = unpack_asset(asset);
+							this->load_drawables(unpack_asset(asset));
+
+							std::cout << "Loaded drawables: " << filename << std::endl;
+							this->state.set_loading_bar_percent(++files_loaded, assets.size());
+						}
+
+						if(!this->window.isOpen())
+							break;
+					}
+
+					if(this->window.isOpen())
+					{ $
+						this->menus[STATE_MAIN_MENU].init(this->textures);
+						this->menus[STATE_NEW_GAME].init(this->textures);
+
+						this->state.switch_state(STATE_SNAILSOFT_LOGO, true, [this]()
+						{ $
+							this->play_sound(SOUND_SNAILSOFT);
+							this->state.switch_state(STATE_STARBORN_LOGO, true, [this]()
+							{ $
+								this->play_sound(MUSIC_TITLE, true);
+								this->state.switch_state(STATE_MAIN_MENU);
+							});
 						});
-					});
+					}
 				}
 			}
 		}
@@ -292,15 +306,15 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 				for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
 					animated_string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);
 			}
-			else if(type == DRAWABLE_TYPE_SPRITE)
-				new_drawable = new Sprite();
-
-			if(type == DRAWABLE_TYPE_BACKGROUND)
+			else if(type == DRAWABLE_TYPE_BACKGROUND)
 			{ $
 				new_drawable = new sf::RectangleShape(sf::Vector2f(static_cast<float>(sf::VideoMode::getDesktopMode().width / SETTING_ZOOM), static_cast<float>(sf::VideoMode::getDesktopMode().height / SETTING_ZOOM)));
 				reinterpret_cast<sf::RectangleShape *>(new_drawable)->setFillColor(sf::Color::Transparent);
 			}
-			else if(type != DRAWABLE_TYPE_ANIMATED_STRING)
+			else if(type == DRAWABLE_TYPE_SPRITE)
+				new_drawable = new Sprite();
+
+			if((type == DRAWABLE_TYPE_ANIMATED_SPRITE) || (type == DRAWABLE_TYPE_SPRITE))
 			{ $
 				auto &sprite = *reinterpret_cast<Sprite *>(new_drawable);
 
@@ -318,7 +332,7 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 			drawable_struct.scale = drawable->value.HasMember("scale") ? drawable->value["scale"].GetBool() : false;
 			drawable_struct.starting_animation = type.starts_with(ANIMATED_DRAWABLE_PREFIX) ? (!i ? drawable->value["starting_animation"].GetString() : "") : "";
 			drawable_struct.type = type;
-			if(type != DRAWABLE_TYPE_ANIMATED_STRING)
+
 			this->state.get_drawables()[states[i].GetString()].push_back(drawable_struct);
 		}
 	}
@@ -360,7 +374,10 @@ void ss::Starborn::on_continue()
 void ss::Starborn::on_down()
 { $
 	if(this->state.get_state() == STATE_MAIN_MENU)
+	{ $
+		this->play_sound(SOUND_MENU_SCROLL);
 		this->menus[this->state.get_state()].scroll_down(this->textures);
+	}
 }
 
 void ss::Starborn::on_escape()
@@ -368,7 +385,10 @@ void ss::Starborn::on_escape()
 	if((this->state.get_state() != STATE_MAIN_MENU) && (this->state.get_state() != STATE_LOADING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
 	{ $
 		if(!this->state.get_next_state().length())
+		{ $
+			this->play_sound(SOUND_MENU_SELECT);
 			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false);
+		}
 	}
 	else if(!this->state.get_next_state().length() || (this->state.get_state() == STATE_LOADING) || (this->state.get_state() == STATE_SNAILSOFT_LOGO) || (this->state.get_state() == STATE_STARBORN_LOGO))
 		this->on_exit();
@@ -399,13 +419,19 @@ void ss::Starborn::on_exit()
 void ss::Starborn::on_left()
 { $
 	if(this->state.get_state() == STATE_NEW_GAME)
+	{ $
+		this->play_sound(SOUND_MENU_SCROLL);
 		this->menus[this->state.get_state()].scroll_up(this->textures);
+	}
 }
 
 void ss::Starborn::on_right()
 { $
 	if(this->state.get_state() == STATE_NEW_GAME)
+	{ $
+		this->play_sound(SOUND_MENU_SCROLL);
 		this->menus[this->state.get_state()].scroll_down(this->textures);
+	}
 }
 
 void ss::Starborn::on_screenshot()
@@ -417,6 +443,8 @@ void ss::Starborn::on_select()
 { $
 	if(!this->state.get_next_state().length() && (this->state.get_state() != STATE_RUNNING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
 	{ $
+		this->play_sound(SOUND_MENU_SELECT);
+
 		auto &menu = this->menus[this->state.get_state()];
 		auto &button_name = menu.get_buttons()[menu.get_position()].name;
 		
@@ -440,7 +468,10 @@ void ss::Starborn::on_select()
 void ss::Starborn::on_up()
 { $
 	if(this->state.get_state() == STATE_MAIN_MENU)
+	{ $
+		this->play_sound(SOUND_MENU_SCROLL);
 		this->menus[this->state.get_state()].scroll_up(this->textures);
+	}
 }
 
 void ss::Starborn::play_sound(wire::string filename, bool music)
