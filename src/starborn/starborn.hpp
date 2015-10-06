@@ -30,6 +30,8 @@
 #include <rapidjson/filereadstream.h>
 
 #include <sand/sand.hpp>
+
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
 #include <Thor/Animations.hpp>
@@ -60,6 +62,7 @@ namespace ss
 	class Starborn
 	{
 		private:
+			sf::Music music;
 			sf::RenderWindow window;
 			sf::View view;
 
@@ -69,16 +72,21 @@ namespace ss
 			std::map<wire::string, Menu> menus;
 
 			std::map<wire::string, sf::Shader> shaders;
+
+			std::map<wire::string, wire::string> raw_music;
 			std::map<wire::string, wire::string> shader_sources;
 
 			std::thread loading_thread;
+			std::vector<sf::Sound *> sounds;
 			
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
 			thor::ResourceHolder<sf::Font, wire::string> fonts;
 			thor::ResourceHolder<sf::Texture, wire::string> textures;
+			thor::ResourceHolder<sf::SoundBuffer, wire::string> raw_sounds;
 
+			void clean_sounds();
 			void load(std::vector<wire::string> &critical_files);
 
 			void load_animations(bundle::string &json_data);
@@ -92,7 +100,6 @@ namespace ss
 			void on_escape();
 			void on_exit();
 			void on_left();
-			void on_reload_shaders();
 			void on_right();
 			void on_screenshot();
 			void on_select();
@@ -104,6 +111,7 @@ namespace ss
 
 			State &get_state();
 
+			void play_sound(wire::string filename, bool music = false);
 			void run();
 	};
 }

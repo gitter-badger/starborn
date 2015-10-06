@@ -26,7 +26,7 @@ ss::Starborn::Starborn()
 { $
 	std::vector<wire::string> critical_files =
 	{
-		"starborn.exe", "starborn.pdb"
+		"openal32.dll", "starborn.exe", "starborn.pdb"
 	};
 
 	ss::handle_updated(critical_files);
@@ -48,7 +48,6 @@ ss::Starborn::Starborn()
 	this->actions[ACTION_ESCAPE] = thor::Action(sf::Keyboard::Escape, thor::Action::PressOnce);
 	this->actions[ACTION_EXIT] = thor::Action(sf::Event::Closed);
 	this->actions[ACTION_LEFT] = thor::Action(sf::Keyboard::Left, thor::Action::PressOnce);
-	this->actions[ACTION_RELOAD_SHADERS] = thor::Action(sf::Keyboard::F9, thor::Action::PressOnce);
 	this->actions[ACTION_RIGHT] = thor::Action(sf::Keyboard::Right, thor::Action::PressOnce);
 	this->actions[ACTION_SCREENSHOT] = thor::Action(sf::Keyboard::F5, thor::Action::PressOnce);
 	this->actions[ACTION_SELECT] = thor::Action(sf::Keyboard::Return, thor::Action::PressOnce);
@@ -58,12 +57,12 @@ ss::Starborn::Starborn()
 	this->callbacks.connect(ACTION_ESCAPE, std::bind(&Starborn::on_escape, this));
 	this->callbacks.connect(ACTION_EXIT, std::bind(&Starborn::on_exit, this));
 	this->callbacks.connect(ACTION_LEFT, std::bind(&Starborn::on_left, this));
-	this->callbacks.connect(ACTION_RELOAD_SHADERS, std::bind(&Starborn::on_reload_shaders, this));
 	this->callbacks.connect(ACTION_RIGHT, std::bind(&Starborn::on_right, this));
 	this->callbacks.connect(ACTION_SCREENSHOT, std::bind(&Starborn::on_screenshot, this));
 	this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
 	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
 
+	this->music.setLoop(true);
 	this->state.switch_state(STATE_LOADING);
 	this->loading_thread = std::thread(&Starborn::load, this, critical_files);
 }
@@ -71,6 +70,18 @@ ss::Starborn::Starborn()
 ss::State &ss::Starborn::get_state()
 { $
 	return this->state;
+}
+
+void ss::Starborn::clean_sounds()
+{ $
+	for(auto i = 0; i < this->sounds.size(); ++i)
+	{ $
+		if(this->sounds[i]->getStatus() == sf::Sound::Stopped)
+		{ $
+			delete this->sounds[i];
+			this->sounds.erase(this->sounds.begin() + i);
+		}
+	}
 }
 
 void ss::Starborn::load(std::vector<wire::string> &critical_files)
@@ -109,7 +120,26 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 				{ $
 					auto data = unpack_asset(asset);
 
-					if(filename.matchesi("assets/shaders/*.frag") || filename.matchesi("assets/shaders/*.vert"))
+					if(filename.matchesi("assets/audio/music/*.flac"))
+					{ $
+						this->raw_music[filename] = base91::decode(data);
+						std::cout << "Loaded music: " << filename << std::endl;
+					}
+					else if(filename.matchesi("assets/audio/sounds/*.flac"))
+					{ $
+						auto sound = base91::decode(data);
+						this->raw_sounds.acquire(filename, thor::Resources::fromMemory<sf::SoundBuffer>(sound.c_str(), sound.size()), thor::Resources::Reuse);
+						
+						std::cout << "Loaded sound: " << filename << std::endl;
+					}
+					else if(filename.matchesi("assets/fonts/*.ttf"))
+					{ $
+						auto font = base91::decode(data);
+						this->fonts.acquire(filename, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
+						
+						std::cout << "Loaded font: " << filename << std::endl;
+					}
+					else if(filename.matchesi("assets/shaders/*.frag") || filename.matchesi("assets/shaders/*.vert"))
 					{ $
 						this->shader_sources[filename] = data;
 						std::cout << "Loaded shader: " << filename << std::endl;
@@ -120,13 +150,6 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 						this->textures.acquire(filename, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
 						
 						std::cout << "Loaded texture: " << filename << std::endl;
-					}
-					else if(filename.matchesi("assets/fonts/*.ttf"))
-					{ $
-						auto font = base91::decode(data);
-						this->fonts.acquire(filename, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
-						
-						std::cout << "Loaded font: " << filename << std::endl;
 					}
 
 					this->state.set_loading_bar_percent(++files_loaded, assets.size());
@@ -180,8 +203,10 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 
 					this->state.switch_state(STATE_SNAILSOFT_LOGO, true, [this]()
 					{ $
+						this->play_sound(SOUND_SNAILSOFT);
 						this->state.switch_state(STATE_STARBORN_LOGO, true, [this]()
 						{ $
+							this->play_sound(MUSIC_TITLE, true);
 							this->state.switch_state(STATE_MAIN_MENU);
 						});
 					});
@@ -262,7 +287,7 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 				animated_string.setColor(sf::Color::White);
 				animated_string.setFont(this->fonts[drawable->value["font"].GetString()]);
 				animated_string.setString(wire::string(drawable->value["text"].GetString()).replace("$branch", GIT_BRANCH).replace("$compile_date", __DATE__).replace("$compile_time", __TIME__).replace("$version", STARBORN_VERSION).c_str());
-				animated_string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
+				//animated_string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
 
 				for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
 					animated_string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);
@@ -293,7 +318,7 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 			drawable_struct.scale = drawable->value.HasMember("scale") ? drawable->value["scale"].GetBool() : false;
 			drawable_struct.starting_animation = type.starts_with(ANIMATED_DRAWABLE_PREFIX) ? (!i ? drawable->value["starting_animation"].GetString() : "") : "";
 			drawable_struct.type = type;
-
+			if(type != DRAWABLE_TYPE_ANIMATED_STRING)
 			this->state.get_drawables()[states[i].GetString()].push_back(drawable_struct);
 		}
 	}
@@ -377,10 +402,6 @@ void ss::Starborn::on_left()
 		this->menus[this->state.get_state()].scroll_up(this->textures);
 }
 
-void ss::Starborn::on_reload_shaders()
-{ $
-}
-
 void ss::Starborn::on_right()
 { $
 	if(this->state.get_state() == STATE_NEW_GAME)
@@ -420,6 +441,29 @@ void ss::Starborn::on_up()
 { $
 	if(this->state.get_state() == STATE_MAIN_MENU)
 		this->menus[this->state.get_state()].scroll_up(this->textures);
+}
+
+void ss::Starborn::play_sound(wire::string filename, bool music)
+{ $
+	this->clean_sounds();
+
+	if(music)
+	{ $
+		this->music.openFromMemory(this->raw_music[filename].c_str(), this->raw_music[filename].size());
+		this->music.play();
+	}
+	else
+	{ $
+		auto sound = new sf::Sound();
+
+		sound->setBuffer(this->raw_sounds[filename]);
+		sound->play();
+
+		this->sounds.push_back(sound);
+	}
+
+	std::cout << "[" << this->state.get_state() << (this->state.get_next_state().length() ? (" => " + this->state.get_next_state()) : "") << "] Playing audio: " << filename << std::endl;
+
 }
 
 void ss::Starborn::run()

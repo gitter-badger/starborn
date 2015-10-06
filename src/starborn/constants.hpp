@@ -23,7 +23,6 @@ namespace ss
 		#define ACTION_ESCAPE						"escape"
 		#define ACTION_EXIT							"exit"
 		#define ACTION_LEFT							"left"
-		#define ACTION_RELOAD_SHADERS				"reload_shaders"
 		#define ACTION_RIGHT						"right"
 		#define ACTION_SCREENSHOT					"screenshot"
 		#define ACTION_SELECT						"select"
@@ -59,7 +58,11 @@ namespace ss
 		#define DRAWABLE_TYPE_BACKGROUND			"background"
 		#define DRAWABLE_TYPE_SPRITE				"sprite"
 
+		#define MUSIC_TITLE							"assets/audio/music/title.flac"
+
 		#define SETTING_ZOOM						3
+
+		#define SOUND_SNAILSOFT						"assets/audio/sounds/snailsoft.flac"
 
 		#define SPRITE_SNAILSOFT					"snailsoft"
 		#define SPRITE_STARBORN_HORIZONTAL			"starborn_horizontal"

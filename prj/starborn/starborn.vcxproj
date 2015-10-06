@@ -50,7 +50,7 @@
       <ImportLibrary>
       </ImportLibrary>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>advapi32.lib;freetype.lib;gdi32.lib;jpeg.lib;opengl32.lib;sfml-graphics-s.lib;sfml-system-s.lib;sfml-window-s.lib;thor-s.lib;user32.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>advapi32.lib;flac.lib;freetype.lib;gdi32.lib;jpeg.lib;ogg.lib;openal32.lib;opengl32.lib;sfml-audio-s.lib;sfml-graphics-s.lib;sfml-system-s.lib;sfml-window-s.lib;thor-s.lib;user32.lib;vorbis.lib;vorbisfile.lib;winmm.lib</AdditionalDependencies>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>

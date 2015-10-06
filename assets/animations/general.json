@@ -1,8 +1,8 @@
 {	
 	"fade": {
-		"duration": 4,
-		"inRatio": 0.25,
-		"outRatio": 0.25,
+		"duration": 5,
+		"inRatio": 0.2,
+		"outRatio": 0.2,
 		"type": "fade"
 	},
 
