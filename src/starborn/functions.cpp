@@ -35,20 +35,24 @@ bool ss::file_exists(wire::string filename)
 	return false;
 }
 
-bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file, std::function<void (wire::string &filename)> callback)
+bool ss::update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file, bool unpack, std::function<void (wire::string &filename)> callback)
 { $
 	if(!file_exists(source_filename) || (cocoa::SHA1(apathy::file(source_filename).read()).str() != flow::download(sha1_url).data))
 	{ $
 		apathy::file file(source_filename);
+		auto data = base91::decode(flow::download(destination_url).data);
+
+		if(unpack)
+			data = unpack_asset(data, source_filename);
 
 		if(file_exists(source_filename))
-			file.patch(base91::decode(unpack_asset(flow::download(destination_url).data, source_filename)), delete_old_file);
+			file.patch(data, delete_old_file);
 
 		else
-			file.overwrite(base91::decode(unpack_asset(flow::download(destination_url).data, source_filename)));
+			file.overwrite(data);
 
 		callback(source_filename);
-		
+
 		return true;
 	}
 
@@ -63,7 +67,7 @@ bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string
 	for(auto &&filename : files)
 	{ $
 		if(!file_exists(filename) || (GIT_REVISION_NUMBER < revision))
-			update_file(filename, github_url + filename + ".sha1", github_url + filename + (filename.ends_with(".zip") ? "" : ".zip") + ".b91");
+			update_file(filename, github_url + filename + ".sha1", github_url + filename + (filename.ends_with(".zip") ? "" : ".zip") + ".b91", true, !filename.ends_with(".zip"));
 
 		callback(++files_updated, filename);
 	}
@@ -74,7 +78,7 @@ bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string
 	{ $
 		if(!file_exists(filename) || (GIT_REVISION_NUMBER < revision))
 		{ $
-			if(update_file(filename, github_url + filename + ".sha1", github_url + filename + ".b91", false))
+			if(update_file(filename, github_url + filename + ".sha1", github_url + filename + (filename.ends_with(".zip") ? "" : ".zip") + ".b91", false, !filename.ends_with(".zip")))
 				restart_required = true;
 
 			callback(++files_updated, filename);
