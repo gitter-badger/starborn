@@ -345,7 +345,7 @@ void ss::Starborn::on_escape()
 		if(!this->state.get_next_state().length())
 			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false);
 	}
-	else
+	else if(!this->state.get_next_state().length())
 		this->on_exit();
 }
 
@@ -394,7 +394,7 @@ void ss::Starborn::on_screenshot()
 
 void ss::Starborn::on_select()
 { $
-	if((this->state.get_state() != STATE_RUNNING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
+	if(!this->state.get_next_state().length() && (this->state.get_state() != STATE_RUNNING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
 	{ $
 		auto &menu = this->menus[this->state.get_state()];
 		auto &button_name = menu.get_buttons()[menu.get_position()].name;
