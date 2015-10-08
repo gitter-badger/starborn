@@ -53,6 +53,10 @@ namespace ss
 
 		#define BUTTON_PREFIX						"button_"
 		#define BUTTON_CONTINUE						BUTTON_PREFIX "continue"
+		#define BUTTON_EXIT							BUTTON_PREFIX "exit"
+		#define BUTTON_MIDNIGHT						BUTTON_PREFIX "midnight"
+		#define BUTTON_NEW_GAME						BUTTON_PREFIX "new_game"
+		#define BUTTON_NIGHTFALL					BUTTON_PREFIX "nightfall"
 
 		#define DRAWABLE_TYPE_ANIMATED_RECTANGLE	ANIMATED_DRAWABLE_PREFIX "rectangle"
 		#define DRAWABLE_TYPE_ANIMATED_SPRITE		ANIMATED_DRAWABLE_PREFIX "sprite"
@@ -60,14 +64,16 @@ namespace ss
 		#define DRAWABLE_TYPE_BACKGROUND			"background"
 		#define DRAWABLE_TYPE_SPRITE				"sprite"
 
-		#define MUSIC_CRYPT							"assets/audio/music/crypt.flac"
-		#define MUSIC_TITLE							"assets/audio/music/title.flac"
+		#define MUSIC_PREFIX						"music."
+		#define MUSIC_CRYPT							MUSIC_PREFIX "crypt"
+		#define MUSIC_TITLE							MUSIC_PREFIX "title"
 
 		#define SETTING_ZOOM						3
 
-		#define SOUND_MENU_SCROLL					"assets/audio/sounds/menu_scroll.flac"
-		#define SOUND_MENU_SELECT					"assets/audio/sounds/menu_select.flac"
-		#define SOUND_SNAILSOFT						"assets/audio/sounds/snailsoft.flac"
+		#define SOUND_PREFIX						"sound."
+		#define SOUND_MENU_SCROLL					SOUND_PREFIX "menu_scroll"
+		#define SOUND_MENU_SELECT					SOUND_PREFIX "menu_select"
+		#define SOUND_SNAILSOFT						SOUND_PREFIX "snailsoft"
 
 		#define SPRITE_SNAILSOFT					"snailsoft"
 		#define SPRITE_STARBORN_HORIZONTAL			"starborn_horizontal"
@@ -80,6 +86,7 @@ namespace ss
 		#define STATE_NEW_GAME						"new_game"
 		#define STATE_OPTIONS						"options"
 		#define STATE_RUNNING						"running"
+		#define STATE_SAVE_GAME						"save_game"
 		#define STATE_SNAILSOFT_LOGO				"snailsoft_logo"
 		#define STATE_STARBORN_LOGO					"starborn_logo"
 	}

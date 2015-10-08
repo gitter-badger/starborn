@@ -32,6 +32,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "format", "prj\format\format
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "assets", "prj\assets\assets.vcxproj", "{F6FDE763-108E-4F61-8C14-09E0E36BA8A0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "updates", "prj\updates\updates.vcxproj", "{16186A43-D442-47F9-A933-563B12FCEEA2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{866D5A6E-B931-4FD5-BB09-ACB9CE39A74D} = {866D5A6E-B931-4FD5-BB09-ACB9CE39A74D}
 		{85470197-F0CF-4474-A631-EAFAF42C25A2} = {85470197-F0CF-4474-A631-EAFAF42C25A2}
@@ -59,6 +61,8 @@ Global
 		{DBB92405-9E4B-4B56-93DA-2CB64E91F511}.Release|x64.Build.0 = Release|x64
 		{F6FDE763-108E-4F61-8C14-09E0E36BA8A0}.Release|x64.ActiveCfg = Release|x64
 		{F6FDE763-108E-4F61-8C14-09E0E36BA8A0}.Release|x64.Build.0 = Release|x64
+		{16186A43-D442-47F9-A933-563B12FCEEA2}.Release|x64.ActiveCfg = Release|x64
+		{16186A43-D442-47F9-A933-563B12FCEEA2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

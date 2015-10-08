@@ -60,40 +60,6 @@
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
-
-bin\sha1.exe bin\bundler.exe patch\bundler.exe.sha1
-
-bin\bundler.exe a patch\bundler.exe.zip bin\bundler.exe -f -i 100 -u all -d zpaq
-bin\base91.exe -e patch\bundler.exe.zip patch\bundler.exe.zip.b91
-
-bin\sha1.exe bin\base91.exe patch\base91.exe.sha1
-
-bin\bundler.exe a patch\base91.exe.zip bin\base91.exe -f -i 100 -u all -d zpaq
-bin\base91.exe -e patch\base91.exe.zip patch\base91.exe.zip.b91
-
-bin\sha1.exe bin\starborn.exe patch\starborn.exe.sha1
-
-bin\bundler.exe a patch\starborn.exe.zip bin\starborn.exe -f -i 100 -u all -d zpaq
-bin\base91.exe -e patch\starborn.exe.zip patch\starborn.exe.zip.b91
-
-bin\sha1.exe bin\starborn.pdb patch\starborn.pdb.sha1
-
-bin\bundler.exe a patch\starborn.pdb.zip bin\starborn.pdb -f -i 100 -u all -d zpaq
-bin\base91.exe -e patch\starborn.pdb.zip patch\starborn.pdb.zip.b91
-
-bin\sha1.exe bin\uuid.exe patch\uuid.exe.sha1
-
-bin\bundler.exe a patch\uuid.exe.zip bin\uuid.exe -f -i 100 -u all -d zpaq
-bin\base91.exe -e patch\uuid.exe.zip patch\uuid.exe.zip.b91
-
-del /Q patch\*.zip
-
-git rev-list --count --first-parent HEAD &gt; patch\revision.txt
-
-set /p REVISION2=&lt;patch\revision.txt
-set /a REVISION=%REVISION2%+1
-echo %REVISION% &gt; patch\revision.txt
-
 scripts\build_assets.bat true</Command>
     </PostBuildEvent>
     <PreBuildEvent>

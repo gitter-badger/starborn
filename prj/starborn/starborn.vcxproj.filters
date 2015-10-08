@@ -34,6 +34,9 @@
     <Filter Include="Resource Files\Assets\drawables">
       <UniqueIdentifier>{e55e6a2d-422e-427c-98d1-61b2aa44965e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Assets\settings">
+      <UniqueIdentifier>{06163f48-11ae-42bb-a8a8-d669958391da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\third_party\sand\sand.hpp">
@@ -181,6 +184,9 @@
     </None>
     <None Include="..\..\assets\drawables\ui.json">
       <Filter>Resource Files\Assets\drawables</Filter>
+    </None>
+    <None Include="..\..\assets\settings\settings.json">
+      <Filter>Resource Files\Assets\settings</Filter>
     </None>
   </ItemGroup>
 </Project>

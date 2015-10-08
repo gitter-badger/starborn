@@ -1,0 +1,12 @@
+{
+	"music": {
+		"crypt": "assets/audio/music/crypt.flac",
+		"title": "assets/audio/music/title.flac"
+	},
+
+	"sound": {
+		"menu_scroll": "assets/audio/sounds/menu_scroll.flac",
+		"menu_select": "assets/audio/sounds/menu_select.flac",
+		"snailsoft": "assets/audio/sounds/snailsoft.flac"
+	}
+}

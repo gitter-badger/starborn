@@ -175,11 +175,7 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 			{ $
 				wire::string filename = asset["name"];
 
-				auto animations = filename.matchesi("assets/animations/*.json");
-				auto drawables = filename.matchesi("assets/drawables/*.json");
-				auto shaders = filename.matchesi("assets/shaders/*.json");
-
-				if(!animations && !drawables && !shaders)
+				if(!filename.matchesi("assets/*.json"))
 				{ $
 					auto data = unpack_asset(asset);
 
@@ -250,9 +246,10 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 					wire::string filename = asset["name"];
 
 					auto animations = filename.matchesi("assets/animations/*.json");
+					auto settings = filename.matchesi("assets/settings/*.json");
 					auto shaders = filename.matchesi("assets/shaders/*.json");
 
-					if(animations || shaders)
+					if(animations || settings || shaders)
 					{ $
 						auto data = unpack_asset(asset);
 
@@ -260,6 +257,11 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 						{ $
 							this->load_animations(data);
 							std::cout << "Loaded animations: " << filename << std::endl;
+						}
+						else if(settings)
+						{ $
+							this->load_settings(data);
+							std::cout << "Loaded settings: " << filename << std::endl;
 						}
 						else if(shaders)
 						{ $
@@ -300,10 +302,10 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 							this->menus[STATE_MAIN_MENU].init(this->textures, 1);
 							this->menus[STATE_NEW_GAME].init(this->textures);
 
-							this->play_sound(SOUND_SNAILSOFT);
+							this->play_sound(this->settings[SOUND_SNAILSOFT]);
 							this->state.switch_state(STATE_STARBORN_LOGO, true, [this]()
 							{ $
-								this->play_sound(MUSIC_TITLE, true);
+								this->play_sound(this->settings[MUSIC_TITLE], true);
 								this->state.switch_state(STATE_MAIN_MENU);
 							});
 						});
@@ -422,6 +424,17 @@ void ss::Starborn::load_drawables(wire::string &json_data)
 	}
 }
 
+void ss::Starborn::load_settings(wire::string &json_data)
+{ $
+	Json json(json_data);
+
+	for(auto setting = json.get_document().MemberBegin(); setting != json.get_document().MemberEnd(); ++setting)
+	{ $
+		for(auto sub_setting = setting->value.MemberBegin(); sub_setting != setting->value.MemberEnd(); ++sub_setting)
+			this->settings[wire::string(setting->name.GetString()) + "." + sub_setting->name.GetString()] = sub_setting->value.GetString();
+	}
+}
+
 void ss::Starborn::load_shaders(wire::string &json_data)
 { $
 	Json json(json_data);
@@ -449,7 +462,7 @@ void ss::Starborn::new_game(bool midnight)
 	this->state.switch_state(STATE_RUNNING, true, [this]()
 	{ $
 		this->get_title_music().pause();
-		this->play_sound(MUSIC_CRYPT, true);
+		this->play_sound(this->settings[MUSIC_CRYPT], true);
 	});
 }
 
@@ -469,7 +482,7 @@ void ss::Starborn::on_down()
 { $
 	if(this->state.get_state() == STATE_MAIN_MENU)
 	{ $
-		this->play_sound(SOUND_MENU_SCROLL);
+		this->play_sound(this->settings[SOUND_MENU_SCROLL]);
 		this->menus[this->state.get_state()].scroll_down(this->textures);
 	}
 }
@@ -486,14 +499,14 @@ void ss::Starborn::on_escape()
 				this->menus[STATE_NEW_GAME].init(this->textures);
 			}
 			else
-				this->play_sound(SOUND_MENU_SELECT);
+				this->play_sound(this->settings[SOUND_MENU_SELECT]);
 
 			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false, [this]()
 			{ $
 				if(this->get_state().get_previous_state() == STATE_RUNNING)
 				{ $
 					this->get_world_music().pause();
-					this->play_sound(MUSIC_TITLE, true);
+					this->play_sound(this->settings[MUSIC_TITLE], true);
 				}
 			});
 		}
@@ -528,7 +541,7 @@ void ss::Starborn::on_left()
 { $
 	if(this->state.get_state() == STATE_NEW_GAME)
 	{ $
-		this->play_sound(SOUND_MENU_SCROLL);
+		this->play_sound(this->settings[SOUND_MENU_SCROLL]);
 		this->menus[this->state.get_state()].scroll_up(this->textures);
 	}
 }
@@ -537,7 +550,7 @@ void ss::Starborn::on_right()
 { $
 	if(this->state.get_state() == STATE_NEW_GAME)
 	{ $
-		this->play_sound(SOUND_MENU_SCROLL);
+		this->play_sound(this->settings[SOUND_MENU_SCROLL]);
 		this->menus[this->state.get_state()].scroll_down(this->textures);
 	}
 }
@@ -551,24 +564,24 @@ void ss::Starborn::on_select()
 { $
 	if(!this->state.get_next_state().length() && (this->state.get_state() != STATE_RUNNING) && (this->state.get_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_state() != STATE_STARBORN_LOGO))
 	{ $
-		this->play_sound(SOUND_MENU_SELECT);
+		this->play_sound(this->settings[SOUND_MENU_SELECT]);
 
 		auto &menu = this->menus[this->state.get_state()];
 		auto &button_name = menu.get_buttons()[menu.get_position()].name;
 		
-		if(button_name == (BUTTON_PREFIX "continue"))
+		if(button_name == BUTTON_CONTINUE)
 			this->on_continue();
 
-		else if(button_name == (BUTTON_PREFIX "exit"))
+		else if(button_name == BUTTON_EXIT)
 			this->on_exit();
 
-		else if(button_name == (BUTTON_PREFIX "midnight"))
+		else if(button_name == BUTTON_MIDNIGHT)
 			this->new_game();
 
-		else if(button_name == (BUTTON_PREFIX "new_game"))
+		else if(button_name == BUTTON_NEW_GAME)
 			this->state.switch_state(STATE_NEW_GAME);
 
-		else if(button_name == (BUTTON_PREFIX "nightfall"))
+		else if(button_name == BUTTON_NIGHTFALL)
 			this->new_game(false);
 	}
 }
@@ -577,7 +590,7 @@ void ss::Starborn::on_up()
 { $
 	if(this->state.get_state() == STATE_MAIN_MENU)
 	{ $
-		this->play_sound(SOUND_MENU_SCROLL);
+		this->play_sound(this->settings[SOUND_MENU_SCROLL]);
 		this->menus[this->state.get_state()].scroll_up(this->textures);
 	}
 }

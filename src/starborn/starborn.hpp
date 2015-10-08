@@ -80,6 +80,7 @@ namespace ss
 			std::map<wire::string, std::pair<wire::string, thor::ResourceHolder<sf::Font, wire::string>>> fonts;
 
 			std::map<wire::string, wire::string> raw_music;
+			std::map<wire::string, wire::string> settings;
 			std::map<wire::string, wire::string> shader_sources;
 
 			std::thread loading_thread;
@@ -98,6 +99,7 @@ namespace ss
 
 			void load_animations(wire::string &json_data);
 			void load_drawables(wire::string &json_data);
+			void load_settings(wire::string &json_data);
 			void load_shaders(wire::string &json_data);
 
 			void new_game(bool midnight = true);
