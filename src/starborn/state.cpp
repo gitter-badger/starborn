@@ -244,7 +244,7 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 			this->background_sprite.setTexture(this->background.getTexture());
 			window.draw(this->background_sprite);
 		}
-		else
+		else if((drawable.name != BUTTON_CONTINUE) || (this->running && (drawable.name == BUTTON_CONTINUE)))
 			window.draw(*drawable.drawable, drawable.render_states);
 	}
 

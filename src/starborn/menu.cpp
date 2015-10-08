@@ -25,6 +25,7 @@ size_t &ss::Menu::get_position()
 ss::Menu::Menu()
 { $
 	this->position = 0;
+	this->start = 0;
 }
 
 std::vector<ss::Button> &ss::Menu::get_buttons()
@@ -32,10 +33,15 @@ std::vector<ss::Button> &ss::Menu::get_buttons()
 	return this->buttons;
 }
 
-void ss::Menu::init(thor::ResourceHolder<sf::Texture, wire::string> &textures)
+void ss::Menu::init(thor::ResourceHolder<sf::Texture, wire::string> &textures, size_t position)
 { $
 	if(this->buttons.size())
+	{ $
+		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].texture]);
+		this->position = position;
+		this->start = position;
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].selected_texture]);
+	}
 }
 
 void ss::Menu::scroll_down(thor::ResourceHolder<sf::Texture, wire::string> &textures)
@@ -43,7 +49,7 @@ void ss::Menu::scroll_down(thor::ResourceHolder<sf::Texture, wire::string> &text
 	if(this->buttons.size())
 	{ $
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].texture]);
-		this->position = (this->position < (this->buttons.size() - 1)) ? (this->position + 1) : 0;
+		this->position = (this->position < (this->buttons.size() - 1)) ? (this->position + 1) : this->start;
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].selected_texture]);
 	}
 }
@@ -53,7 +59,7 @@ void ss::Menu::scroll_up(thor::ResourceHolder<sf::Texture, wire::string> &textur
 	if(this->buttons.size())
 	{ $
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].texture]);
-		this->position = this->position ? (this->position - 1) : (this->buttons.size() - 1);
+		this->position = (this->position > this->start) ? (this->position - 1) : (this->buttons.size() - 1);
 		this->buttons[this->position].animated_sprite->setTexture(textures[this->buttons[this->position].selected_texture]);
 	}
 }

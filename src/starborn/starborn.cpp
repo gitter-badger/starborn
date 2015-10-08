@@ -122,10 +122,10 @@ void ss::Starborn::fade_sounds(bool music)
 
 			std::cout << "fade in: " << this->music_volume * this->state.get_time().asSeconds() << std::endl;
 		}
-		else if(this->title_music.getVolume() < this->music_volume)
+		else if(this->title_music.getVolume() != this->music_volume)
 			this->title_music.setVolume(this->music_volume);
 
-		else if(this->world_music.getVolume() < this->music_volume)
+		else if(this->world_music.getVolume() != this->music_volume)
 			this->world_music.setVolume(this->music_volume);
 	}
 	else
@@ -141,7 +141,7 @@ void ss::Starborn::fade_sounds(bool music)
 			else if(this->state.get_time() < this->animations[ANIMATION_FADE_IN].duration)
 				sound->setVolume(std::max(0.0f, this->sound_volume * this->state.get_time().asSeconds()));
 
-			else if(sound->getVolume() < this->sound_volume)
+			else if(sound->getVolume() != this->sound_volume)
 				sound->setVolume(this->sound_volume);
 		}
 	}
@@ -295,11 +295,11 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 
 					if(this->window.isOpen())
 					{ $
-						this->menus[STATE_MAIN_MENU].init(this->textures);
-						this->menus[STATE_NEW_GAME].init(this->textures);
-
 						this->state.switch_state(STATE_SNAILSOFT_LOGO, true, [this]()
 						{ $
+							this->menus[STATE_MAIN_MENU].init(this->textures, 1);
+							this->menus[STATE_NEW_GAME].init(this->textures);
+
 							this->play_sound(SOUND_SNAILSOFT);
 							this->state.switch_state(STATE_STARBORN_LOGO, true, [this]()
 							{ $
@@ -480,7 +480,12 @@ void ss::Starborn::on_escape()
 	{ $
 		if(!this->state.get_next_state().length())
 		{ $
-			if(this->state.get_state() != STATE_RUNNING)
+			if(this->state.get_state() == STATE_RUNNING)
+			{ $
+				this->menus[STATE_MAIN_MENU].init(this->textures);
+				this->menus[STATE_NEW_GAME].init(this->textures);
+			}
+			else
 				this->play_sound(SOUND_MENU_SELECT);
 
 			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false, [this]()
@@ -488,7 +493,7 @@ void ss::Starborn::on_escape()
 				if(this->get_state().get_previous_state() == STATE_RUNNING)
 				{ $
 					this->get_world_music().pause();
-					this->get_title_music().play();
+					this->play_sound(MUSIC_TITLE, true);
 				}
 			});
 		}

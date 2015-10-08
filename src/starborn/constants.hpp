@@ -52,10 +52,11 @@ namespace ss
 		#define ANIMATION_TYPE_FADE					"fade"
 
 		#define BUTTON_PREFIX						"button_"
+		#define BUTTON_CONTINUE						BUTTON_PREFIX "continue"
 
-		#define DRAWABLE_TYPE_ANIMATED_RECTANGLE	"animated_rectangle"
-		#define DRAWABLE_TYPE_ANIMATED_SPRITE		"animated_sprite"
-		#define DRAWABLE_TYPE_ANIMATED_STRING		"animated_string"
+		#define DRAWABLE_TYPE_ANIMATED_RECTANGLE	ANIMATED_DRAWABLE_PREFIX "rectangle"
+		#define DRAWABLE_TYPE_ANIMATED_SPRITE		ANIMATED_DRAWABLE_PREFIX "sprite"
+		#define DRAWABLE_TYPE_ANIMATED_STRING		ANIMATED_DRAWABLE_PREFIX "string"
 		#define DRAWABLE_TYPE_BACKGROUND			"background"
 		#define DRAWABLE_TYPE_SPRITE				"sprite"
 
