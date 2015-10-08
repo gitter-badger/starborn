@@ -20,6 +20,9 @@
 ss::Starborn::~Starborn()
 { $
 	this->loading_thread.join();
+	this->music.stop();
+
+	ss::log_cpu_usage();
 }
 
 ss::Starborn::Starborn()
@@ -127,17 +130,31 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 					}
 					else if(filename.matchesi("assets/audio/sounds/*.flac"))
 					{ $
-						auto sound = base91::decode(data);
-						this->raw_sounds.acquire(filename, thor::Resources::fromMemory<sf::SoundBuffer>(sound.c_str(), sound.size()), thor::Resources::Reuse);
-						
-						std::cout << "Loaded sound: " << filename << std::endl;
+						try
+						{ $
+							auto sound = base91::decode(data);
+							this->raw_sounds.acquire(filename, thor::Resources::fromMemory<sf::SoundBuffer>(sound.c_str(), sound.size()), thor::Resources::Reuse);
+							
+							std::cout << "Loaded sound: " << filename << std::endl;
+						}
+						catch(thor::ResourceLoadingException& exception)
+						{ $
+							std::cout << "Error loading sound: " << filename << ": " << exception.what() << std::endl;
+						}						
 					}
 					else if(filename.matchesi("assets/fonts/*.ttf"))
 					{ $
-						auto font = base91::decode(data);
-						this->fonts.acquire(filename, thor::Resources::fromMemory<sf::Font>(font.c_str(), font.size()), thor::Resources::Reuse);
-						
-						std::cout << "Loaded font: " << filename << std::endl;
+						try
+						{ $
+							this->fonts[filename].first = base91::decode(data);
+							this->fonts[filename].second.acquire(filename, thor::Resources::fromMemory<sf::Font>(this->fonts[filename].first.c_str(), this->fonts[filename].first.size()), thor::Resources::Reuse);
+							
+							std::cout << "Loaded font: " << filename << std::endl;
+						}
+						catch(thor::ResourceLoadingException& exception)
+						{ $
+							std::cout << "Error loading font: " << filename << ": " << exception.what() << std::endl;
+						}
 					}
 					else if(filename.matchesi("assets/shaders/*.frag") || filename.matchesi("assets/shaders/*.vert"))
 					{ $
@@ -146,10 +163,17 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 					}
 					else if(filename.matchesi("assets/textures/*.png"))
 					{ $
-						auto texture = base91::decode(data);
-						this->textures.acquire(filename, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
-						
-						std::cout << "Loaded texture: " << filename << std::endl;
+						try
+						{ $
+							auto texture = base91::decode(data);
+							this->textures.acquire(filename, thor::Resources::fromMemory<sf::Texture>(texture.c_str(), texture.size()), thor::Resources::Reuse);
+							
+							std::cout << "Loaded texture: " << filename << std::endl;
+						}
+						catch(thor::ResourceLoadingException& exception)
+						{ $
+							std::cout << "Error loading texture: " << filename << ": " << exception.what() << std::endl;
+						}
 					}
 
 					this->state.set_loading_bar_percent(++files_loaded, assets.size());
@@ -299,9 +323,9 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 
 				animated_string.setCharacterSize(drawable->value["size"].GetUint());
 				animated_string.setColor(sf::Color::White);
-				animated_string.setFont(this->fonts[drawable->value["font"].GetString()]);
+				animated_string.setFont(this->fonts[drawable->value["font"].GetString()].second[drawable->value["font"].GetString()]);
 				animated_string.setString(wire::string(drawable->value["text"].GetString()).replace("$branch", GIT_BRANCH).replace("$compile_date", __DATE__).replace("$compile_time", __TIME__).replace("$version", STARBORN_VERSION).c_str());
-				//animated_string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
+				animated_string.set_position(drawable->value["position"]["anchor"].GetString(), drawable->value["position"]["x"].GetDouble(), drawable->value["position"]["y"].GetDouble());
 
 				for(auto animation = drawable->value["animations"].Begin(); animation != drawable->value["animations"].End(); ++animation)
 					animated_string.addAnimation(animation->GetString(), this->animations[animation->GetString()].string_animation, this->animations[animation->GetString()].duration);

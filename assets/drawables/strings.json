@@ -15,7 +15,7 @@
 		"position": {
 			"anchor": "bottom_left",
 			"x": 4,
-			"y": -4
+			"y": -5
 		},
 
 		"states": [
@@ -40,7 +40,7 @@
 		"position": {
 			"anchor": "bottom_right",
 			"x": -4,
-			"y": -4
+			"y": -5
 		},
 
 		"states": [

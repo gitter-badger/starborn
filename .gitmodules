@@ -52,3 +52,9 @@
 [submodule "third_party/fsm"]
 	path = third_party/fsm
 	url = https://github.com/snail23/fsm.git
+[submodule "third_party/Thor"]
+	path = third_party/Thor
+	url = https://github.com/snail23/Thor.git
+[submodule "third_party/SFML"]
+	path = third_party/SFML
+	url = https://github.com/snail23/SFML.git

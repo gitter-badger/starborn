@@ -72,6 +72,7 @@ namespace ss
 			std::map<wire::string, Menu> menus;
 
 			std::map<wire::string, sf::Shader> shaders;
+			std::map<wire::string, std::pair<wire::string, thor::ResourceHolder<sf::Font, wire::string>>> fonts;
 
 			std::map<wire::string, wire::string> raw_music;
 			std::map<wire::string, wire::string> shader_sources;
@@ -82,7 +83,6 @@ namespace ss
 			thor::ActionMap<wire::string> actions;
 			thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
-			thor::ResourceHolder<sf::Font, wire::string> fonts;
 			thor::ResourceHolder<sf::Texture, wire::string> textures;
 			thor::ResourceHolder<sf::SoundBuffer, wire::string> raw_sounds;
 

@@ -27,8 +27,6 @@ int32_t _stdcall WinMain()
 	std::cout << std::endl;
 
 	ss::Starborn().run();
-	ss::log_cpu_usage();
-
 	apathy::ostream::detach(std::cout);
 
 	return EXIT_SUCCESS;

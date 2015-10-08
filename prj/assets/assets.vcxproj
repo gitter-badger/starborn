@@ -6,6 +6,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\scripts\build_assets.bat" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F6FDE763-108E-4F61-8C14-09E0E36BA8A0}</ProjectGuid>
     <RootNamespace>assets</RootNamespace>
@@ -84,10 +87,7 @@ bin\bundler.exe a patch\uuid.exe.zip bin\uuid.exe -f -i 100 -u all -d zpaq
 bin\base91.exe -e patch\uuid.exe.zip patch\uuid.exe.zip.b91
 
 del /Q patch\*.zip
-
-bin\bundler.exe a bin\assets.zip assets -i 100 -r -u all -d zpaq
-bin\sha1.exe bin\assets.zip patch\assets.zip.sha1
-bin\base91.exe -e bin\assets.zip patch\assets.zip.b91
+scripts\build_assets.bat true
 
 git rev-list --count --first-parent HEAD &gt; patch\revision.txt
 
