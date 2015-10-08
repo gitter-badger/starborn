@@ -62,7 +62,12 @@ namespace ss
 	class Starborn
 	{
 		private:
-			sf::Music music;
+			float music_volume;
+			float sound_volume;
+
+			sf::Music title_music;
+			sf::Music world_music;
+
 			sf::RenderWindow window;
 			sf::View view;
 
@@ -87,6 +92,8 @@ namespace ss
 			thor::ResourceHolder<sf::SoundBuffer, wire::string> raw_sounds;
 
 			void clean_sounds();
+			void fade_sounds(bool music = false);
+
 			void load(std::vector<wire::string> &critical_files);
 
 			void load_animations(bundle::string &json_data);
@@ -106,6 +113,9 @@ namespace ss
 			void on_up();
 
 		public:
+			sf::Music &get_title_music();
+			sf::Music &get_world_music();
+
 			~Starborn();
 			Starborn();
 

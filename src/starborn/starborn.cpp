@@ -17,10 +17,22 @@
 
 #include <starborn/starborn.hpp>
 
+sf::Music &ss::Starborn::get_title_music()
+{ $
+	return this->title_music;
+}
+
+sf::Music &ss::Starborn::get_world_music()
+{ $
+	return this->world_music;
+}
+
 ss::Starborn::~Starborn()
 { $
 	this->loading_thread.join();
-	this->music.stop();
+
+	this->title_music.stop();
+	this->world_music.stop();
 
 	ss::log_cpu_usage();
 }
@@ -65,7 +77,12 @@ ss::Starborn::Starborn()
 	this->callbacks.connect(ACTION_SELECT, std::bind(&Starborn::on_select, this));
 	this->callbacks.connect(ACTION_UP, std::bind(&Starborn::on_up, this));
 
-	this->music.setLoop(true);
+	this->music_volume = 100.0f;
+	this->sound_volume = 100.0f;
+
+	this->title_music.setLoop(true);
+	this->world_music.setLoop(true);
+
 	this->state.switch_state(STATE_LOADING);
 	this->loading_thread = std::thread(&Starborn::load, this, critical_files);
 }
@@ -83,6 +100,49 @@ void ss::Starborn::clean_sounds()
 		{ $
 			delete this->sounds[i];
 			this->sounds.erase(this->sounds.begin() + i);
+		}
+	}
+}
+
+void ss::Starborn::fade_sounds(bool music)
+{ $
+	if(music)
+	{ $
+		if((this->state.get_previous_state() != STATE_SNAILSOFT_LOGO) && (this->state.get_fade_time().asSeconds()))
+		{ $
+			this->title_music.setVolume(std::max(0.0f, this->music_volume * (1.0f - (this->state.get_time() - this->state.get_fade_time()).asSeconds())));
+			this->world_music.setVolume(std::max(0.0f, this->music_volume * (1.0f - (this->state.get_time() - this->state.get_fade_time()).asSeconds())));
+
+			std::cout << this->state.get_fade_time().asSeconds() << " fade out: " << this->music_volume * (1.0f - (this->state.get_time() - this->state.get_fade_time()).asSeconds()) << std::endl;
+		}
+		else if((this->state.get_previous_state() != STATE_STARBORN_LOGO) && (this->state.get_time() < this->animations[ANIMATION_FADE_IN].duration))
+		{ $
+			this->title_music.setVolume(std::min(100.0f, this->music_volume * this->state.get_time().asSeconds()));
+			this->world_music.setVolume(std::min(100.0f, this->music_volume * this->state.get_time().asSeconds()));
+
+			std::cout << "fade in: " << this->music_volume * this->state.get_time().asSeconds() << std::endl;
+		}
+		else if(this->title_music.getVolume() < this->music_volume)
+			this->title_music.setVolume(this->music_volume);
+
+		else if(this->world_music.getVolume() < this->music_volume)
+			this->world_music.setVolume(this->music_volume);
+	}
+	else
+	{ $
+		for(auto &&sound : this->sounds)
+		{ $
+			if((this->state.get_state() == STATE_SNAILSOFT_LOGO) && (this->state.get_time() >= (this->animations[ANIMATION_FADE].duration - this->animations[ANIMATION_FADE_OUT].duration)))
+				sound->setVolume(std::max(0.0f, this->music_volume * (1.0f - (this->state.get_time() - (this->animations[ANIMATION_FADE].duration - this->animations[ANIMATION_FADE_OUT].duration)).asSeconds())));
+
+			else if(this->state.get_fade_time().asSeconds())
+				sound->setVolume(std::max(0.0f, this->sound_volume * (1.0f - (this->state.get_time() - this->state.get_fade_time()).asSeconds())));
+
+			else if(this->state.get_time() < this->animations[ANIMATION_FADE_IN].duration)
+				sound->setVolume(std::max(0.0f, this->sound_volume * this->state.get_time().asSeconds()));
+
+			else if(sound->getVolume() < this->sound_volume)
+				sound->setVolume(this->sound_volume);
 		}
 	}
 }
@@ -386,13 +446,23 @@ void ss::Starborn::load_shaders(bundle::string &json_data)
 
 void ss::Starborn::new_game(bool midnight)
 { $
-	this->state.switch_state(STATE_RUNNING);
+	this->state.switch_state(STATE_RUNNING, true, [this]()
+	{ $
+		this->get_title_music().pause();
+		this->play_sound(MUSIC_CRYPT, true);
+	});
 }
 
 void ss::Starborn::on_continue()
 { $
 	if(this->state.is_running())
-		this->state.switch_state(STATE_RUNNING);
+	{ $
+		this->state.switch_state(STATE_RUNNING, true, [this]()
+		{ $
+			this->get_title_music().pause();
+			this->get_world_music().play();
+		});
+	}
 }
 
 void ss::Starborn::on_down()
@@ -410,8 +480,17 @@ void ss::Starborn::on_escape()
 	{ $
 		if(!this->state.get_next_state().length())
 		{ $
-			this->play_sound(SOUND_MENU_SELECT);
-			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false);
+			if(this->state.get_state() != STATE_RUNNING)
+				this->play_sound(SOUND_MENU_SELECT);
+
+			this->state.switch_state(STATE_MAIN_MENU, (this->state.get_state() == STATE_RUNNING) ? true : false, [this]()
+			{ $
+				if(this->get_state().get_previous_state() == STATE_RUNNING)
+				{ $
+					this->get_world_music().pause();
+					this->get_title_music().play();
+				}
+			});
 		}
 	}
 	else if(!this->state.get_next_state().length() || (this->state.get_state() == STATE_LOADING) || (this->state.get_state() == STATE_SNAILSOFT_LOGO) || (this->state.get_state() == STATE_STARBORN_LOGO))
@@ -504,8 +583,20 @@ void ss::Starborn::play_sound(wire::string filename, bool music)
 
 	if(music)
 	{ $
-		this->music.openFromMemory(this->raw_music[filename].c_str(), this->raw_music[filename].size());
-		this->music.play();
+		if(this->state.get_state() == STATE_RUNNING)
+		{ $
+			this->world_music.stop();
+			this->world_music.openFromMemory(this->raw_music[filename].c_str(), this->raw_music[filename].size());
+			this->world_music.play();
+		}
+		else
+		{ $
+			this->title_music.stop();
+			this->title_music.openFromMemory(this->raw_music[filename].c_str(), this->raw_music[filename].size());
+			this->title_music.play();
+		}
+
+		this->fade_sounds(true);
 	}
 	else
 	{ $
@@ -515,6 +606,7 @@ void ss::Starborn::play_sound(wire::string filename, bool music)
 		sound->play();
 
 		this->sounds.push_back(sound);
+		this->fade_sounds();
 	}
 
 	std::cout << "[" << this->state.get_state() << (this->state.get_next_state().length() ? (" => " + this->state.get_next_state()) : "") << "] Playing audio: " << filename << std::endl;
@@ -533,6 +625,9 @@ void ss::Starborn::run()
 
 		this->actions.update(this->window);
 		this->actions.invokeCallbacks(this->callbacks, nullptr);
+
+		this->fade_sounds();
+		this->fade_sounds(true);
 
 		if(this->window.isOpen())
 		{ $

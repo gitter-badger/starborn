@@ -22,6 +22,11 @@ bool &ss::State::is_running()
 	return this->running;
 }
 
+sf::Time &ss::State::get_fade_time()
+{ $
+	return this->fade_time;
+}
+
 sf::Time &ss::State::get_time()
 { $
 	return this->time;
@@ -245,18 +250,14 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 
 	if(this->next_state.length() && this->update_state)
 	{ $
-		if((this->state == STATE_LOADING) || (this->state == STATE_RUNNING) || (this->state == STATE_SNAILSOFT_LOGO) || (this->state == STATE_STARBORN_LOGO))
-		{ $
-			this->fade_time = sf::Time::Zero;
-			this->time = sf::Time::Zero;
-		}
-
 		for(auto &&drawable : this->drawables[this->state])
 		{ $
 			if(drawable.ending_animation.length() && (drawable.ending_animation == ANIMATION_FADE_OUT))
 				this->reset_animation(drawable);
 		}
 
+		this->fade_time = sf::Time::Zero;
+		this->previous_state = this->state;
 		this->state = this->next_state;
 		this->next_state.clear();
 
@@ -267,6 +268,9 @@ void ss::State::update(sf::Time &last_frame_time, sf::RenderWindow &window)
 			if(drawable.starting_animation.length() && (drawable.name.starts_with(BUTTON_PREFIX) || this->play_animations))
 				this->play_animation(drawable, drawable.starting_animation);
 		}
+
+		if((this->previous_state == STATE_RUNNING) || (this->state == STATE_SNAILSOFT_LOGO) || (this->state == STATE_STARBORN_LOGO) || (this->state == STATE_RUNNING))
+				this->time = sf::Time::Zero;
 
 		if(this->state == STATE_RUNNING)
 			this->running = true;
@@ -284,6 +288,11 @@ void ss::State::update_shader_parameters(sf::Shader &shader)
 wire::string &ss::State::get_next_state()
 { $
 	return this->next_state;
+}
+
+wire::string &ss::State::get_previous_state()
+{ $
+	return this->previous_state;
 }
 
 wire::string &ss::State::get_state()

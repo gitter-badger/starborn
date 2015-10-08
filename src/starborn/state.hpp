@@ -38,6 +38,7 @@ namespace ss
 			std::map<wire::string, std::vector<Drawable>> drawables;
 
 			wire::string next_state;
+			wire::string previous_state;
 			wire::string state;
 			
 			void on_update_animated_rectangle(sf::Time &last_frame_time, Drawable &drawable);
@@ -53,12 +54,15 @@ namespace ss
 		public:
 			bool &is_running();
 
+			sf::Time &get_fade_time();
 			sf::Time &get_time();
+
 			State();
 
 			std::map<wire::string, std::vector<Drawable>> &get_drawables();
 
 			wire::string &get_next_state();
+			wire::string &get_previous_state();
 			wire::string &get_state();
 
 			void on_updated();

@@ -44,6 +44,7 @@ namespace ss
 
 		#define ANIMATED_DRAWABLE_PREFIX			"animated_"
 				
+		#define ANIMATION_FADE						"fade"
 		#define ANIMATION_FADE_IN					"fade_in"
 		#define ANIMATION_FADE_OUT					"fade_out"
 
@@ -58,6 +59,7 @@ namespace ss
 		#define DRAWABLE_TYPE_BACKGROUND			"background"
 		#define DRAWABLE_TYPE_SPRITE				"sprite"
 
+		#define MUSIC_CRYPT							"assets/audio/music/crypt.flac"
 		#define MUSIC_TITLE							"assets/audio/music/title.flac"
 
 		#define SETTING_ZOOM						3
