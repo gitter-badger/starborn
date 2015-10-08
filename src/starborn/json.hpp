@@ -24,10 +24,10 @@ namespace ss
 
 		public:
 			Json() = default;
-			Json(bundle::string &json_data, bool file = false);
+			Json(wire::string &json_data, bool file = false);
 
 			rapidjson::Document &get_document();
 
-			void parse(bundle::string &json_data, bool file = false);
+			void parse(wire::string &json_data, bool file = false);
 	};
 }

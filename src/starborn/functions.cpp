@@ -107,30 +107,6 @@ bool ss::update_files(std::vector<wire::string> &files, std::vector<wire::string
 	return false;
 }
 
-bundle::string ss::unpack_asset(bundle::file &asset)
-{ $
-	auto data = asset["data"];
-
-	if(bundle::is_packed(data))
-		bundle::unpack(data, asset["data"]);
-
-	return data;
-}
-
-bundle::string ss::unpack_asset(wire::string data, wire::string &asset_filename)
-{ $
-	bundle::archive assets;
-	assets.bin(data);
-
-	for(auto &&asset : assets)
-	{ $
-		if(asset["name"] == asset_filename)
-			return unpack_asset(asset);
-	}
-
-	return bundle::string();
-}
-
 void ss::handle_updated(std::vector<wire::string> &old_critical_files)
 { $
 	auto updated = false;
@@ -202,4 +178,28 @@ wire::string ss::get_timestamped_filename(wire::string directory, wire::string f
 		apathy::path::md(path);
 
 	return directory + "/" + filename_prefix + "-" + sand::format(sand::now(), "mm-dd-yy-HH-MM-SS") + extension;
+}
+
+wire::string ss::unpack_asset(bundle::file &asset)
+{ $
+	auto data = asset["data"];
+
+	if(bundle::is_packed(data))
+		bundle::unpack(data, asset["data"]);
+
+	return data;
+}
+
+wire::string ss::unpack_asset(wire::string data, wire::string &asset_filename)
+{ $
+	bundle::archive assets;
+	assets.bin(data);
+
+	for(auto &&asset : assets)
+	{ $
+		if(asset["name"] == asset_filename)
+			return unpack_asset(asset);
+	}
+
+	return wire::string();
 }

@@ -21,13 +21,12 @@ namespace ss
 	bool update_file(wire::string source_filename, wire::string sha1_url, wire::string destination_url, bool delete_old_file = true, bool unpack = true, std::function<void (wire::string &filename)> callback = [](wire::string &filename){});
 	bool update_files(std::vector<wire::string> &files, std::vector<wire::string> &critical_files, wire::string github_url, std::function<void (uint32_t file, wire::string &filename)> callback = [](uint32_t file, wire::string &filename){});
 
-	bundle::string unpack_asset(bundle::file &asset);
-	bundle::string unpack_asset(wire::string data, wire::string &asset_filename);
-
 	void handle_updated(std::vector<wire::string> &old_critical_files);
 	void log(bool open, bool feed, bool close, const std::string &line);
 	void log_cpu_usage();
 	void stack_trace();
 
 	wire::string get_timestamped_filename(wire::string directory, wire::string filename_prefix, wire::string extension);
+	wire::string unpack_asset(bundle::file &asset);
+	wire::string unpack_asset(wire::string data, wire::string &asset_filename);
 }

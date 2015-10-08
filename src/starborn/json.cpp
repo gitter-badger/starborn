@@ -22,12 +22,12 @@ rapidjson::Document &ss::Json::get_document()
 	return this->document;
 }
 
-ss::Json::Json(bundle::string &json_data, bool file)
+ss::Json::Json(wire::string &json_data, bool file)
 { $
 	this->parse(json_data, file);
 }
 
-void ss::Json::parse(bundle::string &json_data, bool file)
+void ss::Json::parse(wire::string &json_data, bool file)
 { $
 	if(file)
 	{ $

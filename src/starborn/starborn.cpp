@@ -314,7 +314,7 @@ void ss::Starborn::load(std::vector<wire::string> &critical_files)
 	}
 }
 
-void ss::Starborn::load_animations(bundle::string &json_data)
+void ss::Starborn::load_animations(wire::string &json_data)
 { $
 	Json json(json_data);
 
@@ -341,7 +341,7 @@ void ss::Starborn::load_animations(bundle::string &json_data)
 	}
 }
 
-void ss::Starborn::load_drawables(bundle::string &json_data)
+void ss::Starborn::load_drawables(wire::string &json_data)
 { $
 	Json json(json_data);
 
@@ -422,7 +422,7 @@ void ss::Starborn::load_drawables(bundle::string &json_data)
 	}
 }
 
-void ss::Starborn::load_shaders(bundle::string &json_data)
+void ss::Starborn::load_shaders(wire::string &json_data)
 { $
 	Json json(json_data);
 

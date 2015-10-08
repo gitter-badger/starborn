@@ -96,9 +96,9 @@ namespace ss
 
 			void load(std::vector<wire::string> &critical_files);
 
-			void load_animations(bundle::string &json_data);
-			void load_drawables(bundle::string &json_data);
-			void load_shaders(bundle::string &json_data);
+			void load_animations(wire::string &json_data);
+			void load_drawables(wire::string &json_data);
+			void load_shaders(wire::string &json_data);
 
 			void new_game(bool midnight = true);
 
