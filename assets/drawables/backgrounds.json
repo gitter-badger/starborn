@@ -1,30 +1,30 @@
 {
-	"main_menu_background": {
-		"scale": true,
-		"shader": "stars",
-		"type": "background",
+    "main_menu_background": {
+        "scale": true,
+        "shader": "stars",
+        "type": "background",
 
-		"states": [
-			"main_menu",
-			"new_game"
-		]
-	},
+        "states": [
+            "main_menu",
+            "new_game"
+        ]
+    },
 
-	"snailsoft_background": {
-		"shader": "pixels",
-		"type": "background",
+    "snailsoft_background": {
+        "shader": "pixels",
+        "type": "background",
 
-		"states": [
-			"snailsoft_logo"
-		]
-	},
+        "states": [
+            "snailsoft_logo"
+        ]
+    },
 
-	"starborn_background": {
-		"shader": "starfield",
-		"type": "background",
+    "starborn_background": {
+        "shader": "starfield",
+        "type": "background",
 
-		"states": [
-			"starborn_logo"
-		]
-	}
+        "states": [
+            "starborn_logo"
+        ]
+    }
 }

@@ -1,22 +1,22 @@
-{	
-	"fade": {
-		"duration": 5,
-		"inRatio": 0.2,
-		"outRatio": 0.2,
-		"type": "fade"
-	},
+{
+    "fade": {
+        "duration": 5,
+        "inRatio": 0.2,
+        "outRatio": 0.2,
+        "type": "fade"
+    },
 
-	"fade_in": {
-		"duration": 1,
-		"inRatio": 1,
-		"outRatio": 0,
-		"type": "fade"
-	},
+    "fade_in": {
+        "duration": 1,
+        "inRatio": 1,
+        "outRatio": 0,
+        "type": "fade"
+    },
 
-	"fade_out": {
-		"duration": 1,
-		"inRatio": 0,
-		"outRatio": 1,
-		"type": "fade"
-	}
+    "fade_out": {
+        "duration": 1,
+        "inRatio": 0,
+        "outRatio": 1,
+        "type": "fade"
+    }
 }

@@ -60,7 +60,15 @@
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>cd $(SolutionDir)
-bin\format.exe . .\src\starborn\*.cpp</Command>
+
+bin\format.exe -p . .\src\starborn\*.cpp
+
+bin\format.exe . .\assets\*.frag
+bin\format.exe . .\assets\*.json
+
+bin\format.exe . .\src\*.cpp
+bin\format.exe . .\src\*.hpp
+bin\format.exe . .\src\*.rc</Command>
     </PreBuildEvent>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)src</AdditionalIncludeDirectories>

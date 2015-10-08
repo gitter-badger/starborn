@@ -17,16 +17,16 @@
 
 namespace ss
 {
-	class Sprite : public sf::Sprite
-	{
-		private:
-			bool dynamic_position;
+    class Sprite : public sf::Sprite
+    {
+        private:
+            bool dynamic_position;
 
-		public:
-			bool &has_dynamic_position();
+        public:
+            bool &has_dynamic_position();
 
-			Sprite();
+            Sprite();
 
-			void set_position(wire::string anchor, float x, float y, float width, float height);
-	};
+            void set_position(wire::string anchor, float x, float y, float width, float height);
+    };
 }

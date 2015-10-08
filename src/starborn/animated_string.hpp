@@ -17,9 +17,9 @@
 
 namespace ss
 {
-	class AnimatedString : public sf::Text, public thor::Animator<sf::Text, wire::string>
-	{
-		public:
-			void set_position(wire::string anchor, float x, float y);
-	};
+    class AnimatedString : public sf::Text, public thor::Animator<sf::Text, wire::string>
+    {
+        public:
+            void set_position(wire::string anchor, float x, float y);
+    };
 }

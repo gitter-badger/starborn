@@ -24,46 +24,90 @@
 
 int32_t main(int32_t argc, char *argv[])
 {
-	if(argc > 2)
-	{		
-		std::vector<std::string> masks;
+    if(argc > 2)
+    {
+        auto inject_profiler_code = wire::string(argv[1]) == "-p";
 
-		for(auto i = 2; i < argc; ++i)
-			masks.push_back(argv[i]);
+        std::vector<std::string> masks;
 
-		apathy::folder directory;
-		directory.include(argv[1], masks);
+        for(auto i = (inject_profiler_code ? 3 : 2); i < argc; ++i)
+            masks.push_back(argv[i]);
 
-		for(auto &&file : directory)
-		{
-			wire::string data = file.read();
+        apathy::folder directory;
+        directory.include(argv[inject_profiler_code ? 2 : 1], masks);
 
-			if(data.size())
-			{
-				auto original_sha1 = cocoa::SHA1(data);
-				data = std::regex_replace(data.replace("{ $", "{").replace("{", "{ $"), std::regex("=(\\s*)\\{ \\$"), "=$1{");
-				
-				if(original_sha1 != cocoa::SHA1(data))
-				{
-					if(file.overwrite(data))
-						std::cout << "Formatted file: " << file.name() << std::endl;
+        for(auto &&file : directory)
+        {
+            wire::string data = file.read();
 
-					else
-						std::cout << "Warning: Could not write to file: " << file.name() << std::endl;
-				}
-			}
-			else
-				std::cout << "Warning: Could not read from file: " << file.name() << std::endl;
-		}
-	}
-	else
-	{
-		std::cout << FORMAT_NAME << " " << FORMAT_VERSION << std::endl;
-		std::cout << "Copyright (C) 2013-2015 " << FORMAT_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Usage:" << std::endl;
-		std::cout << "    " << argv[0] << " <directory> <*.cpp> [*.cc] [...]" << std::endl;
-	}
+            if(data.size())
+            {
+                auto original_sha1 = cocoa::SHA1(data);
 
-	return EXIT_SUCCESS;
+                if(inject_profiler_code)
+                    data = std::regex_replace(data.replace("{ $", "{").replace("{", "{ $"), std::regex("=(\\s*)\\{ \\$"), "=$1{");
+
+                data = std::regex_replace(data.replace("\t", "    "), std::regex("(.?)([ \t]+)(\r?\n)+"), "$1$3");
+
+                auto columns = 0;
+                auto length = 0;
+                auto line = 0;
+                auto start = false;
+
+                for(auto i = 0; i < data.size(); ++i)
+                {
+                    if((data[i] == '\n') || (i == (data.size() - 1)))
+                    {
+                        line++;
+
+                        if(columns > 80)
+                        {
+                            std::cout << "Warning: Line is longer than 80 characters in file: " << file.name() << ":" << line << std::endl;
+                            std::cout << "    => " << data.substr(i - length, length) << std::endl;
+                        }
+
+                        columns = 0;
+                        length = 0;
+                        start = false;
+                    }
+                    else
+                    {
+                        columns += (data[i] == '\t') ? 8 : 1;
+
+                        if((start && ((data[i] == ' ') || (data[i] == '\t'))) || ((data[i] != ' ') && (data[i] != '\t')))
+                        {
+                            length++;
+
+                            if(!start && ((data[i] != ' ') && (data[i] != '\t')))
+                                start = true;
+                        }
+                    }
+                }
+
+                if(original_sha1 != cocoa::SHA1(data))
+                {
+                    if(file.overwrite(data))
+                        std::cout << "Formatted file: " << file.name() << std::endl;
+
+                    else
+                        std::cout << "Warning: Could not write to file: " << file.name() << std::endl;
+                }
+            }
+            else
+                std::cout << "Warning: Could not read from file: " << file.name() << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << FORMAT_NAME << " " << FORMAT_VERSION << std::endl;
+        std::cout << "Copyright (C) 2013-2015 " << FORMAT_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Usage:" << std::endl;
+        std::cout << "    " << argv[0] << " [options] <directory> <*.cpp> [*.cc] [...]" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Options:" << std::endl;
+        std::cout << "    -p        inject cpu profiling code" << std::endl;
+    }
+
+    return EXIT_SUCCESS;
 }

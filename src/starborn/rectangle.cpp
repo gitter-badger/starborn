@@ -19,11 +19,11 @@
 
 sf::Color &ss::Rectangle::getColor()
 { $
-	return const_cast<sf::Color &>(this->getFillColor());
+    return const_cast<sf::Color &>(this->getFillColor());
 }
 
 void ss::Rectangle::setColor(sf::Color &color)
 { $
-	this->setFillColor(color);
-	this->setOutlineColor(color);
+    this->setFillColor(color);
+    this->setOutlineColor(color);
 }

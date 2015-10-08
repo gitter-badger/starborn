@@ -17,5 +17,5 @@
 
 namespace ss
 {
-	class AnimatedSprite : public Sprite, public thor::Animator<Sprite, wire::string> {};
+    class AnimatedSprite : public Sprite, public thor::Animator<Sprite, wire::string> {};
 }

@@ -1,69 +1,69 @@
 {
-	"snailsoft": {
-		"dynamic_position": false,
-		"ending_animation": "fade",
-		"starting_animation": "",
-		"texture": "assets/textures/general/snailsoft.png",
-		"type": "animated_sprite",
+    "snailsoft": {
+        "dynamic_position": false,
+        "ending_animation": "fade",
+        "starting_animation": "",
+        "texture": "assets/textures/general/snailsoft.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade"
-		],
+        "animations": [
+            "fade"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 0,
-			"y": 0
-		},
+        "position": {
+            "anchor": "center",
+            "x": 0,
+            "y": 0
+        },
 
-		"states": [
-			"snailsoft_logo"
-		]
-	},
+        "states": [
+            "snailsoft_logo"
+        ]
+    },
 
-	"starborn_horizontal": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/general/starborn_horizontal.png",
-		"type": "animated_sprite",
+    "starborn_horizontal": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/general/starborn_horizontal.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center_top",
-			"x": 0,
-			"y": 0
-		},
+        "position": {
+            "anchor": "center_top",
+            "x": 0,
+            "y": 0
+        },
 
-		"states": [
-			"main_menu",
-			"new_game"
-		]
-	},
+        "states": [
+            "main_menu",
+            "new_game"
+        ]
+    },
 
-	"starborn_vertical": {
-		"dynamic_position": false,
-		"ending_animation": "fade",
-		"starting_animation": "",
-		"texture": "assets/textures/general/starborn_vertical.png",
-		"type": "animated_sprite",
+    "starborn_vertical": {
+        "dynamic_position": false,
+        "ending_animation": "fade",
+        "starting_animation": "",
+        "texture": "assets/textures/general/starborn_vertical.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade"
-		],
+        "animations": [
+            "fade"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 0,
-			"y": 0
-		},
+        "position": {
+            "anchor": "center",
+            "x": 0,
+            "y": 0
+        },
 
-		"states": [
-			"starborn_logo"
-		]
-	}
+        "states": [
+            "starborn_logo"
+        ]
+    }
 }

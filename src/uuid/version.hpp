@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define UUID_AUTHOR			"Snailsoft"
-#define UUID_DESCRIPTION	"UUID Generator"
-#define UUID_NAME			"UUID"
-#define UUID_VERSION		"1.0.0." GIT_REVISION
-#define UUID_VERSION_NUMBER	1, 0, 0, GIT_REVISION_NUMBER
+#define UUID_AUTHOR         "Snailsoft"
+#define UUID_DESCRIPTION    "UUID Generator"
+#define UUID_NAME           "UUID"
+#define UUID_VERSION        "1.0.0." GIT_REVISION
+#define UUID_VERSION_NUMBER 1, 0, 0, GIT_REVISION_NUMBER

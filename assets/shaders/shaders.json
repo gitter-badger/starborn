@@ -1,13 +1,13 @@
 {
-	"pixels": {
-		"fragment": "assets/shaders/pixels.frag"
-	},
+    "pixels": {
+        "fragment": "assets/shaders/pixels.frag"
+    },
 
-	"starfield": {
-		"fragment": "assets/shaders/starfield.frag"
-	},
+    "starfield": {
+        "fragment": "assets/shaders/starfield.frag"
+    },
 
-	"stars": {
-		"fragment": "assets/shaders/stars.frag"
-	}
+    "stars": {
+        "fragment": "assets/shaders/stars.frag"
+    }
 }

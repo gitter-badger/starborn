@@ -20,22 +20,22 @@
 
 1 VERSIONINFO FILEVERSION STARBORN_VERSION_NUMBER
 BEGIN
-	BLOCK "StringFileInfo"
-	BEGIN
-		BLOCK "040901B5"
-		BEGIN
-			VALUE "CompanyName",		STARBORN_AUTHOR
-			VALUE "FileDescription",	STARBORN_DESCRIPTION
-			VALUE "LegalCopyright",		"Copyright (C) 2013-2015 " STARBORN_AUTHOR
-			VALUE "ProductName",		STARBORN_NAME
-			VALUE "ProductVersion",		STARBORN_VERSION
-		END
-	END
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040901B5"
+        BEGIN
+            VALUE "CompanyName",        STARBORN_AUTHOR
+            VALUE "FileDescription",    STARBORN_DESCRIPTION
+            VALUE "LegalCopyright",     "Copyright (C) 2013-2015 " STARBORN_AUTHOR
+            VALUE "ProductName",        STARBORN_NAME
+            VALUE "ProductVersion",     STARBORN_VERSION
+        END
+    END
 
-	BLOCK "VarFileInfo"
-	BEGIN
-		VALUE "Translation", 0x409, 0x01B5
-	END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 0x01B5
+    END
 END
 
 2 ICON "starborn.ico"

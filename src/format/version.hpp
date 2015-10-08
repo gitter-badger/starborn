@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define FORMAT_AUTHOR			"Snailsoft"
-#define FORMAT_DESCRIPTION		"C/C++ Source Code Formatter"
-#define FORMAT_NAME				"Format"
-#define FORMAT_VERSION			"1.0.0." GIT_REVISION
-#define FORMAT_VERSION_NUMBER	1, 0, 0, GIT_REVISION_NUMBER
+#define FORMAT_AUTHOR           "Snailsoft"
+#define FORMAT_DESCRIPTION      "C/C++ Source Code Formatter"
+#define FORMAT_NAME             "Format"
+#define FORMAT_VERSION          "1.0.0." GIT_REVISION
+#define FORMAT_VERSION_NUMBER   1, 0, 0, GIT_REVISION_NUMBER

@@ -17,17 +17,17 @@
 
 namespace ss
 {
-	class Json
-	{
-		private:
-			rapidjson::Document document;
+    class Json
+    {
+        private:
+            rapidjson::Document document;
 
-		public:
-			Json() = default;
-			Json(wire::string &json_data, bool file = false);
+        public:
+            Json() = default;
+            Json(wire::string &json_data, bool file = false);
 
-			rapidjson::Document &get_document();
+            rapidjson::Document &get_document();
 
-			void parse(wire::string &json_data, bool file = false);
-	};
+            void parse(wire::string &json_data, bool file = false);
+    };
 }

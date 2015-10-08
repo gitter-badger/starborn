@@ -1,169 +1,169 @@
 {
-	"button_continue": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"selected_texture": "assets/textures/ui/continue_selected.png",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/ui/continue.png",
-		"type": "animated_sprite",
+    "button_continue": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "selected_texture": "assets/textures/ui/continue_selected.png",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/ui/continue.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 0,
-			"y": -42
-		},
+        "position": {
+            "anchor": "center",
+            "x": 0,
+            "y": -42
+        },
 
-		"states": [
-			"main_menu"
-		]
-	},
+        "states": [
+            "main_menu"
+        ]
+    },
 
-	"button_new_game": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"selected_texture": "assets/textures/ui/new_game_selected.png",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/ui/new_game.png",
-		"type": "animated_sprite",
+    "button_new_game": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "selected_texture": "assets/textures/ui/new_game_selected.png",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/ui/new_game.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 0,
-			"y": -21
-		},
+        "position": {
+            "anchor": "center",
+            "x": 0,
+            "y": -21
+        },
 
-		"states": [
-			"main_menu"
-		]
-	},
+        "states": [
+            "main_menu"
+        ]
+    },
 
-	"button_load_game": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"selected_texture": "assets/textures/ui/load_game_selected.png",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/ui/load_game.png",
-		"type": "animated_sprite",
+    "button_load_game": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "selected_texture": "assets/textures/ui/load_game_selected.png",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/ui/load_game.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 0,
-			"y": 0
-		},
+        "position": {
+            "anchor": "center",
+            "x": 0,
+            "y": 0
+        },
 
-		"states": [
-			"main_menu"
-		]
-	},
+        "states": [
+            "main_menu"
+        ]
+    },
 
-	"button_midnight": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"selected_texture": "assets/textures/ui/midnight_selected.png",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/ui/midnight.png",
-		"type": "animated_sprite",
+    "button_midnight": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "selected_texture": "assets/textures/ui/midnight_selected.png",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/ui/midnight.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": -29,
-			"y": 0
-		},
+        "position": {
+            "anchor": "center",
+            "x": -29,
+            "y": 0
+        },
 
-		"states": [
-			"new_game"
-		]
-	},
+        "states": [
+            "new_game"
+        ]
+    },
 
-	"button_nightfall": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"selected_texture": "assets/textures/ui/nightfall_selected.png",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/ui/nightfall.png",
-		"type": "animated_sprite",
+    "button_nightfall": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "selected_texture": "assets/textures/ui/nightfall_selected.png",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/ui/nightfall.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 30,
-			"y": 0
-		},
+        "position": {
+            "anchor": "center",
+            "x": 30,
+            "y": 0
+        },
 
-		"states": [
-			"new_game"
-		]
-	},
+        "states": [
+            "new_game"
+        ]
+    },
 
-	"button_options": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"selected_texture": "assets/textures/ui/options_selected.png",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/ui/options.png",
-		"type": "animated_sprite",
+    "button_options": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "selected_texture": "assets/textures/ui/options_selected.png",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/ui/options.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 0,
-			"y": 21
-		},
+        "position": {
+            "anchor": "center",
+            "x": 0,
+            "y": 21
+        },
 
-		"states": [
-			"main_menu"
-		]
-	},
+        "states": [
+            "main_menu"
+        ]
+    },
 
-	"button_exit": {
-		"dynamic_position": false,
-		"ending_animation": "fade_out",
-		"selected_texture": "assets/textures/ui/exit_selected.png",
-		"starting_animation": "fade_in",
-		"texture": "assets/textures/ui/exit.png",
-		"type": "animated_sprite",
+    "button_exit": {
+        "dynamic_position": false,
+        "ending_animation": "fade_out",
+        "selected_texture": "assets/textures/ui/exit_selected.png",
+        "starting_animation": "fade_in",
+        "texture": "assets/textures/ui/exit.png",
+        "type": "animated_sprite",
 
-		"animations": [
-			"fade_in",
-			"fade_out"
-		],
+        "animations": [
+            "fade_in",
+            "fade_out"
+        ],
 
-		"position": {
-			"anchor": "center",
-			"x": 0,
-			"y": 42
-		},
+        "position": {
+            "anchor": "center",
+            "x": 0,
+            "y": 42
+        },
 
-		"states": [
-			"main_menu"
-		]
-	}
+        "states": [
+            "main_menu"
+        ]
+    }
 }

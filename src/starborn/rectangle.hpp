@@ -17,11 +17,11 @@
 
 namespace ss
 {
-	class Rectangle : public sf::RectangleShape
-	{
-		public:
-			sf::Color &getColor();
+    class Rectangle : public sf::RectangleShape
+    {
+        public:
+            sf::Color &getColor();
 
-			void setColor(sf::Color &color);
-	};
+            void setColor(sf::Color &color);
+    };
 }

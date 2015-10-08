@@ -23,63 +23,63 @@
 
 int32_t main(int32_t argc, char *argv[])
 {
-	if((argc == 4) && ((wire::string(argv[1]) == "-d") || (wire::string(argv[1]) == "-e")))
-	{
-		auto data = apathy::file(argv[argc - 2]).read();
+    if((argc == 4) && ((wire::string(argv[1]) == "-d") || (wire::string(argv[1]) == "-e")))
+    {
+        auto data = apathy::file(argv[argc - 2]).read();
 
-		if(data.size())
-		{
-			wire::string output_directory(argv[argc - 1]);
+        if(data.size())
+        {
+            wire::string output_directory(argv[argc - 1]);
 
-			auto backslash = output_directory.find_last_of('\\');
-			auto slash = output_directory.find_last_of('/');
+            auto backslash = output_directory.find_last_of('\\');
+            auto slash = output_directory.find_last_of('/');
 
-			if((backslash != wire::string::npos) || (slash != wire::string::npos))
-			{
-				if((backslash != wire::string::npos) && (slash != wire::string::npos))
-					output_directory = output_directory.substr(0, (backslash > slash) ? backslash : slash);
+            if((backslash != wire::string::npos) || (slash != wire::string::npos))
+            {
+                if((backslash != wire::string::npos) && (slash != wire::string::npos))
+                    output_directory = output_directory.substr(0, (backslash > slash) ? backslash : slash);
 
-				else if(backslash != wire::string::npos)
-					output_directory = output_directory.substr(0, backslash);
+                else if(backslash != wire::string::npos)
+                    output_directory = output_directory.substr(0, backslash);
 
-				else
-					output_directory = output_directory.substr(0, slash);
-			}
+                else
+                    output_directory = output_directory.substr(0, slash);
+            }
 
-			apathy::path path(output_directory);
+            apathy::path path(output_directory);
 
-			if(((backslash != wire::string::npos) || (slash != wire::string::npos)) && !path.exists())
-				apathy::path::md(path);
+            if(((backslash != wire::string::npos) || (slash != wire::string::npos)) && !path.exists())
+                apathy::path::md(path);
 
-			auto base91 = (wire::string(argv[1]) == "-d") ? base91::decode(data) : base91::encode(data);
+            auto base91 = (wire::string(argv[1]) == "-d") ? base91::decode(data) : base91::encode(data);
 
-			if(apathy::file(argv[argc - 1]).overwrite(base91))
-				std::cout << ((wire::string(argv[1]) == "-d") ? "Decoded " : "Encoded ");
+            if(apathy::file(argv[argc - 1]).overwrite(base91))
+                std::cout << ((wire::string(argv[1]) == "-d") ? "Decoded " : "Encoded ");
 
-			else
-				std::cout << "Error: Could not write ";
+            else
+                std::cout << "Error: Could not write ";
 
-			std::cout << std::setprecision(2) << std::fixed << ((base91.size() / 1024.0f) / 1024.0f) << " MiB for '" << argv[argc - 2] << "' to file: " << argv[argc - 1] << std::endl;
-		}
-		else
-		{
-			std::cout << "Error: Could not read from file: " << argv[argc - 2] << std::endl;
+            std::cout << std::setprecision(2) << std::fixed << ((base91.size() / 1024.0f) / 1024.0f) << " MiB for '" << argv[argc - 2] << "' to file: " << argv[argc - 1] << std::endl;
+        }
+        else
+        {
+            std::cout << "Error: Could not read from file: " << argv[argc - 2] << std::endl;
 
-			return EXIT_FAILURE;
-		}
-	}
-	else
-	{
-		std::cout << BASE91_NAME << " " << BASE91_VERSION << std::endl;
-		std::cout << "Copyright (C) 2013-2015 " << BASE91_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Usage:" << std::endl;
-		std::cout << "    " << argv[0] << " [options] <input_file> <output_file>" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Options:" << std::endl;
-		std::cout << "    -d        decode file" << std::endl;
-		std::cout << "    -e        encode file" << std::endl;
-	}
+            return EXIT_FAILURE;
+        }
+    }
+    else
+    {
+        std::cout << BASE91_NAME << " " << BASE91_VERSION << std::endl;
+        std::cout << "Copyright (C) 2013-2015 " << BASE91_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Usage:" << std::endl;
+        std::cout << "    " << argv[0] << " [options] <input_file> <output_file>" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Options:" << std::endl;
+        std::cout << "    -d        decode file" << std::endl;
+        std::cout << "    -e        encode file" << std::endl;
+    }
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

@@ -23,59 +23,59 @@
 
 int32_t main(int32_t argc, char *argv[])
 {
-	if(argc == 3)
-	{
-		auto data = apathy::file(argv[argc - 2]).read();
+    if(argc == 3)
+    {
+        auto data = apathy::file(argv[argc - 2]).read();
 
-		if(data.size())
-		{
-			wire::string output_directory(argv[argc - 1]);
+        if(data.size())
+        {
+            wire::string output_directory(argv[argc - 1]);
 
-			auto backslash = output_directory.find_last_of('\\');
-			auto slash = output_directory.find_last_of('/');
+            auto backslash = output_directory.find_last_of('\\');
+            auto slash = output_directory.find_last_of('/');
 
-			if((backslash != wire::string::npos) || (slash != wire::string::npos))
-			{
-				if((backslash != wire::string::npos) && (slash != wire::string::npos))
-					output_directory = output_directory.substr(0, (backslash > slash) ? backslash : slash);
+            if((backslash != wire::string::npos) || (slash != wire::string::npos))
+            {
+                if((backslash != wire::string::npos) && (slash != wire::string::npos))
+                    output_directory = output_directory.substr(0, (backslash > slash) ? backslash : slash);
 
-				else if(backslash != wire::string::npos)
-					output_directory = output_directory.substr(0, backslash);
+                else if(backslash != wire::string::npos)
+                    output_directory = output_directory.substr(0, backslash);
 
-				else
-					output_directory = output_directory.substr(0, slash);
-			}
+                else
+                    output_directory = output_directory.substr(0, slash);
+            }
 
-			apathy::path path(output_directory);
+            apathy::path path(output_directory);
 
-			if(((backslash != wire::string::npos) || (slash != wire::string::npos)) && !path.exists())
-				apathy::path::md(path);
-			
-			auto sha1 = cocoa::SHA1(data);
+            if(((backslash != wire::string::npos) || (slash != wire::string::npos)) && !path.exists())
+                apathy::path::md(path);
 
-			if(apathy::file(argv[argc - 1]).overwrite(sha1))
-				std::cout << "Wrote ";
+            auto sha1 = cocoa::SHA1(data);
 
-			else
-				std::cout << "Error: Could not write ";
+            if(apathy::file(argv[argc - 1]).overwrite(sha1))
+                std::cout << "Wrote ";
 
-			std::cout << "SHA1 (" << sha1 << ") for '" << argv[argc - 2] << "' to file: " << argv[argc - 1] << std::endl;
-		}
-		else
-		{
-			std::cout << "Error: Could not read from file: " << argv[argc - 2] << std::endl;
+            else
+                std::cout << "Error: Could not write ";
 
-			return EXIT_FAILURE;
-		}
-	}
-	else
-	{
-		std::cout << SHA1_NAME << " " << SHA1_VERSION << std::endl;
-		std::cout << "Copyright (C) 2013-2015 " << SHA1_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Usage:" << std::endl;
-		std::cout << "    " << argv[0] << " <input_file> <output_file>" << std::endl;
-	}
+            std::cout << "SHA1 (" << sha1 << ") for '" << argv[argc - 2] << "' to file: " << argv[argc - 1] << std::endl;
+        }
+        else
+        {
+            std::cout << "Error: Could not read from file: " << argv[argc - 2] << std::endl;
 
-	return EXIT_SUCCESS;
+            return EXIT_FAILURE;
+        }
+    }
+    else
+    {
+        std::cout << SHA1_NAME << " " << SHA1_VERSION << std::endl;
+        std::cout << "Copyright (C) 2013-2015 " << SHA1_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Usage:" << std::endl;
+        std::cout << "    " << argv[0] << " <input_file> <output_file>" << std::endl;
+    }
+
+    return EXIT_SUCCESS;
 }

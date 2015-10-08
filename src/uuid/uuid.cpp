@@ -22,17 +22,17 @@
 
 int32_t main(int32_t argc, char *argv[])
 {
-	if(argc == 1)
-		std::cout << sole::uuid4() << std::endl;
+    if(argc == 1)
+        std::cout << sole::uuid4() << std::endl;
 
-	else
-	{
-		std::cout << UUID_NAME << " " << UUID_VERSION << std::endl;
-		std::cout << "Copyright (C) 2013-2015 " << UUID_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
-		std::cout << std::endl;
-		std::cout << "Usage:" << std::endl;
-		std::cout << "    " << argv[0] << std::endl;
-	}
+    else
+    {
+        std::cout << UUID_NAME << " " << UUID_VERSION << std::endl;
+        std::cout << "Copyright (C) 2013-2015 " << UUID_AUTHOR << " <https://github.com/snailsoft/starborn/>" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Usage:" << std::endl;
+        std::cout << "    " << argv[0] << std::endl;
+    }
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

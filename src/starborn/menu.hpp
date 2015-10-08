@@ -17,23 +17,23 @@
 
 namespace ss
 {
-	class Menu
-	{
-		private:
-			size_t position;
-			size_t start;
+    class Menu
+    {
+        private:
+            size_t position;
+            size_t start;
 
-			std::vector<Button> buttons;
+            std::vector<Button> buttons;
 
-		public:
-			Menu();
+        public:
+            Menu();
 
-			size_t &get_position();
-			std::vector<Button> &get_buttons();
+            size_t &get_position();
+            std::vector<Button> &get_buttons();
 
-			void init(thor::ResourceHolder<sf::Texture, wire::string> &textures, size_t position = 0);
+            void init(thor::ResourceHolder<sf::Texture, wire::string> &textures, size_t position = 0);
 
-			void scroll_down(thor::ResourceHolder<sf::Texture, wire::string> &textures);
-			void scroll_up(thor::ResourceHolder<sf::Texture, wire::string> &textures);
-	};
+            void scroll_down(thor::ResourceHolder<sf::Texture, wire::string> &textures);
+            void scroll_up(thor::ResourceHolder<sf::Texture, wire::string> &textures);
+    };
 }

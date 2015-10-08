@@ -20,20 +20,20 @@ uniform vec2 resolution;
 
 void main()
 {
-	vec2 position = (gl_FragCoord - (resolution / 2.0)) / resolution.x;
+    vec2 position = (gl_FragCoord - (resolution / 2.0)) / resolution.x;
 
-	float angle = fract(atan(position.y, position.x) / acos(-1.0));      
-	float color = 0.0;
-	
-	for(float i = 0.0; i < 5.0; ++i)
-	{
-		float angle2 = floor(angle * 360.0) + 1.0;
-		float radian_distance = sqrt(fract(angle2 * fract(angle2 * 0.82657) * 13.724) + i);            
-		float distance = (radian_distance / length(position)) * 0.1;
-		
-		color += (((max(0.0, 0.5 - (((abs(fract(((time + (fract(angle2 * fract(angle2 * 0.7235) * 45.1) * 100.0)) * 0.2) + distance) - 0.5)) * 25.0) / distance)) * (0.5 - abs(fract(angle * 360.0) - 0.5))) * 5.0) / distance) / radian_distance;
-	}
+    float angle = fract(atan(position.y, position.x) / acos(-1.0));
+    float color = 0.0;
 
-	gl_FragColor = vec4(vec3(color) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), (time < 4.0) ? min(1.0, time) : max(0.0, 1.0 - (time - 4.0))) * 0.3;
+    for(float i = 0.0; i < 5.0; ++i)
+    {
+        float angle2 = floor(angle * 360.0) + 1.0;
+        float radian_distance = sqrt(fract(angle2 * fract(angle2 * 0.82657) * 13.724) + i);
+        float distance = (radian_distance / length(position)) * 0.1;
+
+        color += (((max(0.0, 0.5 - (((abs(fract(((time + (fract(angle2 * fract(angle2 * 0.7235) * 45.1) * 100.0)) * 0.2) + distance) - 0.5)) * 25.0) / distance)) * (0.5 - abs(fract(angle * 360.0) - 0.5))) * 5.0) / distance) / radian_distance;
+    }
+
+    gl_FragColor = vec4(vec3(color) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), (time < 4.0) ? min(1.0, time) : max(0.0, 1.0 - (time - 4.0))) * 0.3;
 }
     

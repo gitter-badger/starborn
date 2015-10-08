@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define SHA1_AUTHOR			"Snailsoft"
-#define SHA1_DESCRIPTION	"SHA1 Generator"
-#define SHA1_NAME			"SHA1"
-#define SHA1_VERSION		"1.0.0." GIT_REVISION
-#define SHA1_VERSION_NUMBER	1, 0, 0, GIT_REVISION_NUMBER
+#define SHA1_AUTHOR         "Snailsoft"
+#define SHA1_DESCRIPTION    "SHA1 Generator"
+#define SHA1_NAME           "SHA1"
+#define SHA1_VERSION        "1.0.0." GIT_REVISION
+#define SHA1_VERSION_NUMBER 1, 0, 0, GIT_REVISION_NUMBER

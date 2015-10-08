@@ -17,9 +17,9 @@
 
 namespace ss
 {
-	class AnimatedRectangle : public Rectangle, public thor::Animator<Rectangle, wire::string>
-	{
-		public:
-			using thor::Animator<Rectangle, wire::string>::update;
-	};
+    class AnimatedRectangle : public Rectangle, public thor::Animator<Rectangle, wire::string>
+    {
+        public:
+            using thor::Animator<Rectangle, wire::string>::update;
+    };
 }

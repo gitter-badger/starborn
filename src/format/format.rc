@@ -20,22 +20,22 @@
 
 1 VERSIONINFO FILEVERSION FORMAT_VERSION_NUMBER
 BEGIN
-	BLOCK "StringFileInfo"
-	BEGIN
-		BLOCK "040901B5"
-		BEGIN
-			VALUE "CompanyName",		FORMAT_AUTHOR
-			VALUE "FileDescription",	FORMAT_DESCRIPTION
-			VALUE "LegalCopyright",		"Copyright (C) 2013-2015 " FORMAT_AUTHOR
-			VALUE "ProductName",		FORMAT_NAME
-			VALUE "ProductVersion",		FORMAT_VERSION
-		END
-	END
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040901B5"
+        BEGIN
+            VALUE "CompanyName",        FORMAT_AUTHOR
+            VALUE "FileDescription",    FORMAT_DESCRIPTION
+            VALUE "LegalCopyright",     "Copyright (C) 2013-2015 " FORMAT_AUTHOR
+            VALUE "ProductName",        FORMAT_NAME
+            VALUE "ProductVersion",     FORMAT_VERSION
+        END
+    END
 
-	BLOCK "VarFileInfo"
-	BEGIN
-		VALUE "Translation", 0x409, 0x01B5
-	END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 0x01B5
+    END
 END
 
 2 ICON "format.ico"

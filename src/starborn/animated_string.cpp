@@ -19,74 +19,74 @@
 
 void ss::AnimatedString::set_position(wire::string anchor, float x, float y)
 { $
-	auto new_x = 0.0f;
-	auto new_y = 0.0f;
-	
-	if(anchor == ANCHOR_BOTTOM)
-	{ $
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
-		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getLocalBounds().height) + y;
-	}
-	else if(anchor == ANCHOR_BOTTOM_LEFT)
-	{ $
-		new_x += x;
-		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getLocalBounds().height) + y;
-	}
-	else if(anchor == ANCHOR_BOTTOM_RIGHT)
-	{ $
-		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getLocalBounds().width) + x;
-		new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getLocalBounds().height) + y;
-	}
-	else if(anchor == ANCHOR_CENTER)
-	{ $
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
-	}
-	else if(anchor == ANCHOR_CENTER_BOTTOM)
-	{ $
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
-		new_y += static_cast<float>((((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) * 3.0f) - floor(this->getLocalBounds().height / 2)) + y;
-	}
-	else if(anchor == ANCHOR_CENTER_LEFT)
-	{ $
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
-	}
-	else if(anchor == ANCHOR_CENTER_RIGHT)
-	{ $
-		new_x += static_cast<float>((((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) * 3.0f) - floor(this->getLocalBounds().width / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
-	}
-	else if(anchor == ANCHOR_CENTER_TOP)
-	{ $
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
-	}
-	else if(anchor == ANCHOR_LEFT)
-	{ $
-		new_x += x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
-	}
-	else if(anchor == ANCHOR_RIGHT)
-	{ $
-		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getLocalBounds().width) + x;
-		new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
-	}
-	else if(anchor == ANCHOR_TOP)
-	{ $
-		new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
-		new_y += y;
-	}
-	else if(anchor == ANCHOR_TOP_LEFT)
-	{ $
-		new_x += x;
-		new_y += y;
-	}
-	else if(anchor == ANCHOR_TOP_RIGHT)
-	{ $
-		new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getLocalBounds().width) + x;
-		new_y += y;
-	}
+    auto new_x = 0.0f;
+    auto new_y = 0.0f;
 
-	this->setPosition(new_x, new_y);
+    if(anchor == ANCHOR_BOTTOM)
+    { $
+        new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
+        new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getLocalBounds().height) + y;
+    }
+    else if(anchor == ANCHOR_BOTTOM_LEFT)
+    { $
+        new_x += x;
+        new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getLocalBounds().height) + y;
+    }
+    else if(anchor == ANCHOR_BOTTOM_RIGHT)
+    { $
+        new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getLocalBounds().width) + x;
+        new_y += static_cast<float>((sf::VideoMode::getDesktopMode().height / SETTING_ZOOM) - this->getLocalBounds().height) + y;
+    }
+    else if(anchor == ANCHOR_CENTER)
+    { $
+        new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
+        new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
+    }
+    else if(anchor == ANCHOR_CENTER_BOTTOM)
+    { $
+        new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
+        new_y += static_cast<float>((((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) * 3.0f) - floor(this->getLocalBounds().height / 2)) + y;
+    }
+    else if(anchor == ANCHOR_CENTER_LEFT)
+    { $
+        new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
+        new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
+    }
+    else if(anchor == ANCHOR_CENTER_RIGHT)
+    { $
+        new_x += static_cast<float>((((sf::VideoMode::getDesktopMode().width / 4) / SETTING_ZOOM) * 3.0f) - floor(this->getLocalBounds().width / 2)) + x;
+        new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
+    }
+    else if(anchor == ANCHOR_CENTER_TOP)
+    { $
+        new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
+        new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 4) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
+    }
+    else if(anchor == ANCHOR_LEFT)
+    { $
+        new_x += x;
+        new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
+    }
+    else if(anchor == ANCHOR_RIGHT)
+    { $
+        new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getLocalBounds().width) + x;
+        new_y += static_cast<float>(((sf::VideoMode::getDesktopMode().height / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().height / 2)) + y;
+    }
+    else if(anchor == ANCHOR_TOP)
+    { $
+        new_x += static_cast<float>(((sf::VideoMode::getDesktopMode().width / 2) / SETTING_ZOOM) - floor(this->getLocalBounds().width / 2)) + x;
+        new_y += y;
+    }
+    else if(anchor == ANCHOR_TOP_LEFT)
+    { $
+        new_x += x;
+        new_y += y;
+    }
+    else if(anchor == ANCHOR_TOP_RIGHT)
+    { $
+        new_x += static_cast<float>((sf::VideoMode::getDesktopMode().width / SETTING_ZOOM) - this->getLocalBounds().width) + x;
+        new_y += y;
+    }
+
+    this->setPosition(new_x, new_y);
 }

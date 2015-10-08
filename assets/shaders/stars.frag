@@ -22,19 +22,19 @@ uniform vec2 resolution;
 
 float random(vec2 value)
 {
-	return fract(sin(dot(value, vec2(12.9898, 78.233))) * 43758.5453);
+    return fract(sin(dot(value, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
 void main()
 {
-	float rand = 0.0;
-	float star = 0.0;
+    float rand = 0.0;
+    float star = 0.0;
 
-	if(random(gl_FragCoord / resolution) > 0.995)
-	{
-		rand = random(gl_FragCoord);
-		star = rand * (0.225 * sin((time * (rand * 5.0)) + (720.0 * rand)) + 0.5);
-	}
+    if(random(gl_FragCoord / resolution) > 0.995)
+    {
+        rand = random(gl_FragCoord);
+        star = rand * (0.225 * sin((time * (rand * 5.0)) + (720.0 * rand)) + 0.5);
+    }
 
-	gl_FragColor = vec4(vec3((rand < 0.85) ? vec3(1.0) : ((rand < 0.9) ? vec3(0.0, 1.0, 0.5) : vec3(0.0, 1.0, 1.0))) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), ((fade_time > 0.0) ? max(0.0, 1.0 - (time - fade_time)) : min(1.0, time)) * star);
+    gl_FragColor = vec4(vec3((rand < 0.85) ? vec3(1.0) : ((rand < 0.9) ? vec3(0.0, 1.0, 0.5) : vec3(0.0, 1.0, 1.0))) * (1.6 - length(((gl_FragCoord / resolution) * 2.0) - 1.0)), ((fade_time > 0.0) ? max(0.0, 1.0 - (time - fade_time)) : min(1.0, time)) * star);
 }

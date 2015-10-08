@@ -59,71 +59,71 @@
 
 namespace ss
 {
-	class Starborn
-	{
-		private:
-			float music_volume;
-			float sound_volume;
+    class Starborn
+    {
+        private:
+            float music_volume;
+            float sound_volume;
 
-			sf::Music title_music;
-			sf::Music world_music;
+            sf::Music title_music;
+            sf::Music world_music;
 
-			sf::RenderWindow window;
-			sf::View view;
+            sf::RenderWindow window;
+            sf::View view;
 
-			State state;
+            State state;
 
-			std::map<wire::string, Animation> animations;
-			std::map<wire::string, Menu> menus;
+            std::map<wire::string, Animation> animations;
+            std::map<wire::string, Menu> menus;
 
-			std::map<wire::string, sf::Shader> shaders;
-			std::map<wire::string, std::pair<wire::string, thor::ResourceHolder<sf::Font, wire::string>>> fonts;
+            std::map<wire::string, sf::Shader> shaders;
+            std::map<wire::string, std::pair<wire::string, thor::ResourceHolder<sf::Font, wire::string>>> fonts;
 
-			std::map<wire::string, wire::string> raw_music;
-			std::map<wire::string, wire::string> settings;
-			std::map<wire::string, wire::string> shader_sources;
+            std::map<wire::string, wire::string> raw_music;
+            std::map<wire::string, wire::string> settings;
+            std::map<wire::string, wire::string> shader_sources;
 
-			std::thread loading_thread;
-			std::vector<sf::Sound *> sounds;
-			
-			thor::ActionMap<wire::string> actions;
-			thor::ActionMap<wire::string>::CallbackSystem callbacks;
+            std::thread loading_thread;
+            std::vector<sf::Sound *> sounds;
 
-			thor::ResourceHolder<sf::Texture, wire::string> textures;
-			thor::ResourceHolder<sf::SoundBuffer, wire::string> raw_sounds;
+            thor::ActionMap<wire::string> actions;
+            thor::ActionMap<wire::string>::CallbackSystem callbacks;
 
-			void clean_sounds();
-			void fade_sounds(bool music = false);
+            thor::ResourceHolder<sf::Texture, wire::string> textures;
+            thor::ResourceHolder<sf::SoundBuffer, wire::string> raw_sounds;
 
-			void load(std::vector<wire::string> &critical_files);
+            void clean_sounds();
+            void fade_sounds(bool music = false);
 
-			void load_animations(wire::string &json_data);
-			void load_drawables(wire::string &json_data);
-			void load_settings(wire::string &json_data);
-			void load_shaders(wire::string &json_data);
+            void load(std::vector<wire::string> &critical_files);
 
-			void new_game(bool midnight = true);
+            void load_animations(wire::string &json_data);
+            void load_drawables(wire::string &json_data);
+            void load_settings(wire::string &json_data);
+            void load_shaders(wire::string &json_data);
 
-			void on_continue();
-			void on_down();
-			void on_escape();
-			void on_exit();
-			void on_left();
-			void on_right();
-			void on_screenshot();
-			void on_select();
-			void on_up();
+            void new_game(bool midnight = true);
 
-		public:
-			sf::Music &get_title_music();
-			sf::Music &get_world_music();
+            void on_continue();
+            void on_down();
+            void on_escape();
+            void on_exit();
+            void on_left();
+            void on_right();
+            void on_screenshot();
+            void on_select();
+            void on_up();
 
-			~Starborn();
-			Starborn();
+        public:
+            sf::Music &get_title_music();
+            sf::Music &get_world_music();
 
-			State &get_state();
+            ~Starborn();
+            Starborn();
 
-			void play_sound(wire::string filename, bool music = false);
-			void run();
-	};
+            State &get_state();
+
+            void play_sound(wire::string setting, bool music = false);
+            void run();
+    };
 }

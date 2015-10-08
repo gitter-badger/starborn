@@ -17,33 +17,33 @@
 
 namespace ss
 {
-	struct Animation
-	{
-		sf::Time duration;
+    struct Animation
+    {
+        sf::Time duration;
 
-		std::function<void (sf::Text &, float)> string_animation;
-		std::function<void (Sprite &, float)> sprite_animation;
-	};
+        std::function<void (sf::Text &, float)> string_animation;
+        std::function<void (Sprite &, float)> sprite_animation;
+    };
 
-	struct Button
-	{
-		AnimatedSprite *animated_sprite;
+    struct Button
+    {
+        AnimatedSprite *animated_sprite;
 
-		wire::string name;
-		wire::string selected_texture;
-		wire::string texture;
-	};
+        wire::string name;
+        wire::string selected_texture;
+        wire::string texture;
+    };
 
-	struct Drawable
-	{
-		bool scale;
+    struct Drawable
+    {
+        bool scale;
 
-		sf::Drawable *drawable;
-		sf::RenderStates render_states;
+        sf::Drawable *drawable;
+        sf::RenderStates render_states;
 
-		wire::string ending_animation;
-		wire::string name;
-		wire::string starting_animation;
-		wire::string type;
-	};
+        wire::string ending_animation;
+        wire::string name;
+        wire::string starting_animation;
+        wire::string type;
+    };
 }

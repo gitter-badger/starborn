@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define STARBORN_AUTHOR			"Snailsoft"
-#define STARBORN_DESCRIPTION	"Starborn"
-#define STARBORN_NAME			"Starborn"
-#define STARBORN_VERSION		"0.1.0." GIT_REVISION
-#define STARBORN_VERSION_NUMBER	0, 1, 0, GIT_REVISION_NUMBER
+#define STARBORN_AUTHOR         "Snailsoft"
+#define STARBORN_DESCRIPTION    "Starborn"
+#define STARBORN_NAME           "Starborn"
+#define STARBORN_VERSION        "0.1.0." GIT_REVISION
+#define STARBORN_VERSION_NUMBER 0, 1, 0, GIT_REVISION_NUMBER

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define BASE91_AUTHOR			"Snailsoft"
-#define BASE91_DESCRIPTION		"Base91 Generator"
-#define BASE91_NAME				"Base91"
-#define BASE91_VERSION			"1.0.0." GIT_REVISION
-#define BASE91_VERSION_NUMBER	1, 0, 0, GIT_REVISION_NUMBER
+#define BASE91_AUTHOR           "Snailsoft"
+#define BASE91_DESCRIPTION      "Base91 Generator"
+#define BASE91_NAME             "Base91"
+#define BASE91_VERSION          "1.0.0." GIT_REVISION
+#define BASE91_VERSION_NUMBER   1, 0, 0, GIT_REVISION_NUMBER
