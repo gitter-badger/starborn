@@ -87,13 +87,14 @@ bin\bundler.exe a patch\uuid.exe.zip bin\uuid.exe -f -i 100 -u all -d zpaq
 bin\base91.exe -e patch\uuid.exe.zip patch\uuid.exe.zip.b91
 
 del /Q patch\*.zip
-scripts\build_assets.bat true
 
 git rev-list --count --first-parent HEAD &gt; patch\revision.txt
 
 set /p REVISION2=&lt;patch\revision.txt
 set /a REVISION=%REVISION2%+1
-echo %REVISION% &gt; patch\revision.txt</Command>
+echo %REVISION% &gt; patch\revision.txt
+
+scripts\build_assets.bat true</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
